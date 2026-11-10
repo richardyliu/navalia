@@ -4,11 +4,11 @@ Status (updated 2026-11-06, Round 4): **B and C are implemented; A exists only a
 
 | Option | State | Where |
 |---|---|---|
-| **A** — HET minutes | **Estimate only, opt-in (Round 4, X3 approved).** Default off → 0 minutes. When the user turns on 「允许评估」, the Runtime `[agent_funding]` transport produces LLM verdicts and anchors turn them into minutes shown as 「估计」 + anchor version. This is **not** Performance, not a grade and not time saved; 「表现」 does not use HET minutes. First real run: 3 tasks → 5.1 / 3.0 / 27.0 min (`HET-X3.md` §6). | `src/main/het/agentFundingTransport.ts`, `tests/het/{agentFundingTransport,c23-transport}.test.ts` |
-| **B** — count view, owner-only | **Done**, twice. (1) S1-R3-04 / S1-R4-04: the Home card 「本周 AI 工作计数」 (details below). (2) S1-FULL C16: the 「表现」 page counts per day / per ISO week: HET corrections (`accepted` / `rejected` / `not_agent`), `git commit` *calls* seen in Claude Code / Codex transcripts (with the hash only when git's own output shows it), and commits by the user's email in local repos the user adds (read-only `git log`). Every number opens the rows behind it. A source that is not configured or cannot be read shows 「未知 / 未接入」, never 0. | `src/main/performance/{het,git,transcriptHash,service}.ts`, `pages/Performance.tsx`, log `docs/design/s1full-log/C16-C17.md` |
+| **A** — HET minutes | **Estimate only, opt-in (Round 4, X3 approved).** Default off → 0 minutes. When the user turns on "Allow assessment", the Runtime `[agent_funding]` transport produces LLM verdicts and anchors turn them into minutes shown as "Estimate" + anchor version. This is **not** Performance, not a grade and not time saved; "Performance" does not use HET minutes. First real run: 3 tasks → 5.1 / 3.0 / 27.0 min (`HET-X3.md` §6). | `src/main/het/agentFundingTransport.ts`, `tests/het/{agentFundingTransport,c23-transport}.test.ts` |
+| **B** — count view, owner-only | **Done**, twice. (1) S1-R3-04 / S1-R4-04: the Home card "AI work counts this week" (details below). (2) S1-FULL C16: the "Performance" page counts per day / per ISO week: HET corrections (`accepted` / `rejected` / `not_agent`), `git commit` *calls* seen in Claude Code / Codex transcripts (with the hash only when git's own output shows it), and commits by the user's email in local repos the user adds (read-only `git log`). Every number opens the rows behind it. A source that is not configured or cannot be read shows "Unknown / not connected", never 0. | `src/main/performance/{het,git,transcriptHash,service}.ts`, `pages/Performance.tsx`, log `docs/design/s1full-log/C16-C17.md` |
 | **C** — long-horizon projects | **Done as an activity view only** (S1-FULL C16, D-C16b). The user writes the goal and milestones in `<LensStore>/performance/projects.json` (0600). Lens lists dated activity that matches the user's keywords / paths / repos. There is no % complete and no ETA. Only the user's tick marks a milestone done. | `src/main/performance/store.ts`, `components/performance/ProjectsPanel.tsx` |
 
-This supersedes the 2026-11-05 line "A and C were not chosen". The S1-FULL brief asked for C, built as above. The user-facing word is 「表现」, and the English word "Performance" still does not appear in the renderer. Owner-only still holds: no Broker tool or route, Card, `.lensskill` or weekly letter carries 「表现」 data (`tests/performance/static.test.ts`, `tests/home/x4-owner-only.test.ts`).
+This supersedes the 2026-11-05 line "A and C were not chosen". The S1-FULL brief asked for C, built as above. The user-facing word is the Chinese label for "Performance", and the English word "Performance" still does not appear in the renderer. Owner-only still holds: no Broker tool or route, Card, `.lensskill` or weekly letter carries Performance data (`tests/performance/static.test.ts`, `tests/home/x4-owner-only.test.ts`).
 
 Known limits (from C16): a transcript `git commit` is a command call, not a confirmed commit. HET keeps a bounded set of evidence per task, so heavy-commit tasks can undercount. Project activity from memory uses Runtime `search` (top 20 per keyword, then a literal filter).
 
@@ -16,11 +16,11 @@ Previous status (2026-11-05): **X4 decided = B (count view, owner-only)** — us
 
 What B is, exactly (the boundary from the ledger):
 
-- Home card 「本周 AI 工作计数」: for HET tasks that ended in the current ISO week, the number marked `accepted`, `rejected`, `not_agent` by the user, and the number with a `git_commit` signal (`src/main/het/weekCounts.ts`). No minutes, rate, trend or score.
+- Home card "AI work counts this week": for HET tasks that ended in the current ISO week, the number marked `accepted`, `rejected`, `not_agent` by the user, and the number with a `git_commit` signal (`src/main/het/weekCounts.ts`). No minutes, rate, trend or score.
 - Every number opens the HET page filtered to exactly those tasks (`countFilter.ts`, `FilteredTaskList.tsx`).
-- The card says literally 「这是计数，不是绩效分，不代表节省时间」 (`aiCountsView.ts` `AI_COUNTS_DISCLAIMER`). It is never called a score or Performance.
+- The card says literally "These are counts, not a rating of your work, and do not represent time saved" (`aiCountsView.ts` `AI_COUNTS_DISCLAIMER`). It is never called a score or Performance.
 - Owner-only: no Broker MCP tool and no Broker REST route serves the counts; the Card, `.lensskill` and the weekly letter do not contain them (`tests/home/x4-owner-only.test.ts`). Caveat [INFERRED]: the pre-existing OG-08 HET REST routes on the Broker (`GET /het/tasks`, `/het/period`) return task rows that include `correction` and `signals`, so a connected agent with HET access could recount them itself. The count view adds nothing to that surface.
-- The HET page eyebrow is now `HET · 等效人工时间（未测量）`; the word Performance no longer appears in the renderer.
+- The HET page eyebrow is now `HET · Human equivalent time (unmeasured)`; the word Performance no longer appears in the renderer.
 
 Everything below is the **historical** S2-11 analysis that led to the decision. It is kept for the reasoning; its "BLOCKED" wording and recommendations are superseded by the status above.
 
@@ -30,14 +30,14 @@ Everything below is the **historical** S2-11 analysis that led to the decision. 
 
 - **No Performance metric is implemented in Lens.** No code computes, stores or shows a "Performance" number, score, rate or trend.
 - **The UI must not promise Performance.** No page, chip, empty state or export may say or imply that Lens measures how well the user (or their agents) perform.
-- **Today's 「下一步」 / 「明天建议」 is not Performance.** It restates explicit todo markers (`- [ ]`, `TODO:`, `待办：`, `下一步：` …; regex at `src/main/library/brief.ts:113`) and verbatim learned patterns, and each line is labelled 「未核实」 (`brief.ts:13`, `:187-188`). It measures nothing (GAP-vs-S1-R2 §2, S2-08).
+- **Today's "Next steps" / "Suggestions for tomorrow" is not Performance.** It restates explicit todo markers (`- [ ]`, `TODO:`, and the Chinese "to-do:" and "next step:" markers …; regex at `src/main/library/brief.ts:113`) and verbatim learned patterns, and each line is labelled "Unverified" (`brief.ts:13`, `:187-188`). It measures nothing (GAP-vs-S1-R2 §2, S2-08).
 - **HET minutes are not Performance either.** HET is off by default and produces 0 minutes (see option A).
 
-Where the word comes from: the S1 article title is 《…Personal Agent 要从 Context 走向 Performance》. DECISIONS X4 records that the article does not define Performance (`docs/design/DECISIONS.md:10`). The "长程项目" reading in option C is taken from DECISIONS-ROUND2 X4. I did not re-read the article for this doc, and I have no quote from it that defines Performance.
+Where the word comes from: the S1 article title is "…Personal Agents must move from Context to Performance" (translated from Chinese). DECISIONS X4 records that the article does not define Performance (`docs/design/DECISIONS.md:10`). The "long-horizon project" reading in option C is taken from DECISIONS-ROUND2 X4. I did not re-read the article for this doc, and I have no quote from it that defines Performance.
 
 ## Existing UI wording that conflicted with this doc (resolved)
 
-- *Resolved S1-R4-04:* `src/renderer/src/pages/Het.tsx` used to render the eyebrow **`Performance · HET`** (later `HET · Human Equivalent Time`). It now reads `HET · 等效人工时间（未测量）`.
+- *Resolved S1-R4-04:* `src/renderer/src/pages/Het.tsx` used to render the eyebrow **`Performance · HET`** (later `HET · Human Equivalent Time`). It now reads `HET · Human equivalent time (unmeasured)`.
 - `docs/design/DESIGN.md:64,79,260,418` calls HET the "Performance Plane". That is v2.1 architecture naming and not user-facing text. Since option A was not chosen, the plane name is historical.
 
 ## Option A — Performance = HET time (human-equivalent minutes) (X3 approved as an opt-in *estimate*; still not Performance)
@@ -98,7 +98,7 @@ Where the word comes from: the S1 article title is 《…Personal Agent 要从 C
 - **Privacy.** Outcome data about colleagues' reviews or PRs would need network access or more capture. Even a local "effectiveness score" invites managerial use (X4 also asks *who can see it*).
 - **LLM cost.** Low if purely deterministic. Grading quality with an LLM brings back X3/X7.
 
-## Option C — Performance = long-horizon project completion (长程项目) (historical analysis; implemented as an activity view in C16, see Status)
+## Option C — Performance = long-horizon project completion (historical analysis; implemented as an activity view in C16, see Status)
 
 **What it would mean.** For a multi-week project: is it progressing toward done? Milestones reached, open items shrinking, time spent per project over weeks.
 
@@ -127,11 +127,11 @@ Where the word comes from: the S1 article title is 《…Personal Agent 要从 C
 ## Recommendation (historical; the user chose recommendation 2)
 
 1. **Keep X4 BLOCKED until the user decides.** Ship nothing called Performance. Fix the `Het.tsx:67` eyebrow as above.
-2. If the user wants a first step, **prefer a narrow, honest version of B**: a local, owner-only *count* view with no rate or score, e.g. "this week: N tasks you marked 采纳, M marked 不采纳, K with a commit signal". Every number must trace to rows in `het_tasks` / `het_events`, and the page must say what the numbers are not. It needs no LLM and no network. It still depends on the user actually correcting tasks, so it will often show 0 and must say so.
-3. **A only after X3 is decided.** HET minutes are an LLM-backed estimate. If X3 is approved they can be shown as 「估计」 with the anchor version, never as a performance grade.
+2. If the user wants a first step, **prefer a narrow, honest version of B**: a local, owner-only *count* view with no rate or score, e.g. "this week: N tasks you marked Accepted, M marked Rejected, K with a commit signal". Every number must trace to rows in `het_tasks` / `het_events`, and the page must say what the numbers are not. It needs no LLM and no network. It still depends on the user actually correcting tasks, so it will often show 0 and must say so.
+3. **A only after X3 is decided.** HET minutes are an LLM-backed estimate. If X3 is approved they can be shown as "Estimate" with the anchor version, never as a performance grade.
 4. **C only with user-declared goals.** The user writes the project goal and milestones themselves (e.g. as a Workflow or a Lens-local note). Lens then shows activity *against* them without computing "% complete".
 
-Whichever option is chosen, X4's second question ("谁能看") must be answered before any number leaves the owner's machine (Card, `.lensskill`, weekly letter, Broker tool).
+Whichever option is chosen, X4's second question ("who can see it") must be answered before any number leaves the owner's machine (Card, `.lensskill`, weekly letter, Broker tool).
 
 ## Open questions for the user (X4) — answered 2026-11-05: B, owner only, a count view is acceptable
 

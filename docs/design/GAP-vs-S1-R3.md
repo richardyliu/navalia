@@ -1,53 +1,53 @@
-# Persome Lens — GAP vs S1, Round 3（DEPLOY-2026-11-05 之后）
+# Navalia — GAP vs S1, Round 3 (after DEPLOY-2026-11-05)
 
-> 审计员草稿，位于 `docs/test-evidence/DEPLOY-2026-11-05/05-verify/GAP-vs-S1-R3.md`。审计员只能写 `docs/test-evidence/**`，所以没有直接放进 `docs/design/`；由 lead 执行 `cp` 发布（命令见文末）。
+> Auditor draft, located at `docs/test-evidence/DEPLOY-2026-11-05/05-verify/GAP-vs-S1-R3.md`. The auditor can only write to `docs/test-evidence/**`, so it was not placed directly in `docs/design/`; the lead publishes it with `cp` (command at the end of this file).
 
-起点：`docs/design/GAP-vs-S1-R2.md`（2026-11-05 Round 2）。本轮只改与上游 Runtime 有关的行：R1–R6 已部署到真实 `~/.persome`（be0a0bc，tag `deploy/2026-11-05-r1r6`，schema `2026-11-05.3`）。其余行与 R2 相同，这里不重复，见 R2。
-证据：`docs/test-evidence/DEPLOY-2026-11-05/05-verify/`（`records.txt`、`evidence-sha256.txt`）。
+Starting point: `docs/design/GAP-vs-S1-R2.md` (2026-11-05 Round 2). This round only changes the rows that concern the upstream Runtime: R1–R6 have been deployed to the real `~/.persome` (be0a0bc, tag `deploy/2026-11-05-r1r6`, schema `2026-11-05.3`). All other rows are the same as in R2 and are not repeated here; see R2.
+Evidence: `docs/test-evidence/DEPLOY-2026-11-05/05-verify/` (`records.txt`, `evidence-sha256.txt`).
 
-R2 里没有出现 “FIX READY / NOT DEPLOYED” 字样；R2 中依赖上游的行是「证据链 BLOCKED 上游（MOD-07）」和「习惯 ≥3 日期 PARTIAL / BLOCKED（X6、X10）」，下表逐条更新。
+R2 contains no "FIX READY / NOT DEPLOYED" wording; the rows in R2 that depend on upstream are "Evidence chain BLOCKED upstream (MOD-07)" and "Habit ≥3 dates PARTIAL / BLOCKED (X6, X10)". The table below updates them one by one.
 
-## 1. 依赖上游的 S1 目标（R2 → R3）
+## 1. S1 goals that depend on upstream (R2 → R3)
 
-| 目标 | R2 状态 | R3 状态 | 理由 | 证据 |
+| Goal | R2 status | R3 status | Reason | Evidence |
 |---|---|---|---|---|
-| 证据链（U1） | BLOCKED 上游（MOD-07） | **PARTIAL（已部署）** | 代码：真实 Runtime 上 296/296 条 candidate 回执都能解析（含 quote、session、窗口）；§15 重跑中 MOD-01/02/07/08 全部通过。真实数据：49 个 Point 和 46 条 Line 全部 `sources=[]`，因为这批数据是部署前（0.3.2，08:49Z）构建的，新的关联表 `model_candidate_points` / `relation_edge_evidence` 为 0 行，也没有回填。要等部署后重新构建或上游回填，现有对象才会有来源。Lens 对这些 Point 显示「证据未解析 / no_sources」，并附带区分版本的说明。 | `BF-real-runtime-summary.txt`、`BCF-lens-viewmodel-over-real.txt`、`I-rerun15/check_results.txt` |
-| 习惯 ≥3 日期（U2） | PARTIAL / BLOCKED（X6、X10） | **DEPLOYED / PASS（临时根）** | Runtime 只有在 ≥3 个不同日期时才把 Face 升为 active，2 个日期时仍是 shadow；`behavior_patterns` 返回 `observation_dates`；Lens 按 Face 标「稳定习惯 · 3 个不同日期 / 观察中 / 日期未知」。**真实数据目前 Face 为 0**，所以只能在临时根上验证。 | `I-rerun15/faces3/`、`E-habit-labels.txt`、`E-real-behavior-patterns-counts.json` |
-| 「为什么不完整」（U1 降级说明，MOD-13） | Lens 只显示 `model_contract` +「仅 CLI」 | **DEPLOYED / PASS** | 真实 `/model/graph` 返回 `issues=[no_faces,no_volumes,no_root]`；运行中的 Model 页逐字显示原因码和中文解释。 | `C-model-page-issues-dom.json` |
-| 「查看当时」as-of（证据抽屉，MOD-12） | Lens 用 D48 标注缺口 | **DEPLOYED / PASS（R7）** | R7（`03698b5`）部署后，T=2026-11-01 时 49/49 个 Point 都返回 `not_yet_effective`，T=11-06 时 42 个 active、7 个 superseded。在 be0a0bc 上 14 个 entry-backed Point 的缺口已修复。 | `07-r7-deploy/mod12-real-recheck.txt` |
-| owner 别名确认（MOD-11） | 上游自动激活 | **DEPLOYED / PASS** | 只有用户确认才会激活，确认后 entity_graph 解析为 self；拒绝后不解析，Agent 再次建议也不会重新打开。真实数据别名为 0（all/pending/active/rejected 都是 0）。 | `G-owner-aliases-real-rest.txt`、`G-temp-reject/` |
-| Agent 分页读记忆（MEM-10） | Lens 在 50k 处截断，没有 cursor | **DEPLOYED / PASS** | 真实 Runtime 经 Broker：`limit=2` 时 has_more=true；cursor 84 字符，与 Runtime 原值逐字节相同，没有被 scrub；第 2 页与第 1 页 0 重叠；一页 59,735 字符完整送达。 | `H-broker-paging-real.json` |
-| 常驻层不混入 search（MEM-05）/ 事实核验（MEM-09）/ 冲突 supersede（MOD-09）/ 实体类型（MOD-14） | FAIL（上游） | **DEPLOYED / PASS（临时根）** | §15 重跑全部通过。MOD-14 已知的限制：entity_graph 不解析组织名。 | `I-rerun15/check_results.txt` |
-| Workflow 任务结构有内容（U2） | PARTIAL（上游只写 Pattern/Context/Evidence） | **PARTIAL（不变）** | R1–R6 不涉及 pattern_detector 的结构化输出。 | — |
-| 采集 L2/L3（U1） | BLOCKED（TCC 人工） | **BLOCKED（不变）** | 与部署无关，仍然需要人工授权。 | — |
+| Evidence chain (U1) | BLOCKED upstream (MOD-07) | **PARTIAL (deployed)** | Code: on the real Runtime, 296/296 candidate receipts resolve (including quote, session, window); in the §15 rerun MOD-01/02/07/08 all pass. Real data: all 49 Points and 46 Lines have `sources=[]`, because this data was built before the deploy (0.3.2, 08:49Z); the new link tables `model_candidate_points` / `relation_edge_evidence` have 0 rows and were not backfilled. Existing objects will only get sources after a post-deploy rebuild or an upstream backfill. Lens shows "Evidence unresolved / no_sources" for these Points, with a version-specific explanation. | `BF-real-runtime-summary.txt`, `BCF-lens-viewmodel-over-real.txt`, `I-rerun15/check_results.txt` |
+| Habit ≥3 dates (U2) | PARTIAL / BLOCKED (X6, X10) | **DEPLOYED / PASS (temp root)** | The Runtime only promotes a Face to active with ≥3 distinct dates; with 2 dates it stays shadow; `behavior_patterns` returns `observation_dates`; Lens labels each Face "Stable habit · 3 distinct dates / Observing / Dates unknown". **Real data currently has 0 Faces**, so this could only be verified on a temp root. | `I-rerun15/faces3/`, `E-habit-labels.txt`, `E-real-behavior-patterns-counts.json` |
+| "Why it is incomplete" (U1 degradation explanation, MOD-13) | Lens only shows `model_contract` + "CLI only" | **DEPLOYED / PASS** | The real `/model/graph` returns `issues=[no_faces,no_volumes,no_root]`; the running Model page shows the reason codes verbatim with a Chinese explanation. | `C-model-page-issues-dom.json` |
+| "View as of then" as-of (evidence drawer, MOD-12) | Lens marks the gap with D48 | **DEPLOYED / PASS (R7)** | After the R7 (`03698b5`) deploy, at T=2026-11-01 all 49/49 Points return `not_yet_effective`; at T=11-06, 42 are active and 7 superseded. The gap for the 14 entry-backed Points on be0a0bc is fixed. | `07-r7-deploy/mod12-real-recheck.txt` |
+| Owner alias confirmation (MOD-11) | Upstream auto-activates | **DEPLOYED / PASS** | Activation happens only after user confirmation, after which entity_graph resolves it to self; after rejection it does not resolve, and the Agent suggesting it again does not reopen it. Real data has 0 aliases (all/pending/active/rejected are all 0). | `G-owner-aliases-real-rest.txt`, `G-temp-reject/` |
+| Agent paged memory reads (MEM-10) | Lens truncates at 50k, no cursor | **DEPLOYED / PASS** | Real Runtime via Broker: with `limit=2`, has_more=true; the cursor is 84 characters, byte-for-byte identical to the Runtime's original value, not scrubbed; page 2 has 0 overlap with page 1; a 59,735-character page is delivered in full. | `H-broker-paging-real.json` |
+| Resident layer not mixed into search (MEM-05) / fact verification (MEM-09) / conflict supersede (MOD-09) / entity types (MOD-14) | FAIL (upstream) | **DEPLOYED / PASS (temp root)** | §15 rerun all passes. Known MOD-14 limitation: entity_graph does not resolve organization names. | `I-rerun15/check_results.txt` |
+| Workflow task structure has content (U2) | PARTIAL (upstream only writes Pattern/Context/Evidence) | **PARTIAL (unchanged)** | R1–R6 do not touch pattern_detector's structured output. | — |
+| Capture L2/L3 (U1) | BLOCKED (manual TCC) | **BLOCKED (unchanged)** | Unrelated to the deploy; still needs manual authorization. | — |
 
-## 2. Phase 2（S1-R3-01..09）— 2026-11-05 收尾
+## 2. Phase 2 (S1-R3-01..09) — wrap-up on 2026-11-05
 
-Lead 最终门禁（`docs/test-evidence/PHASE2-FINAL/`）：typecheck ✓；vitest 1457 通过 / 5 跳过 / 0 失败（含第二轮安全修复，见 `s1-log/S1-R3-SEC.md`）；build ✓；e2e 41 通过 / 1 跳过（可选项）。
+Lead final gate (`docs/test-evidence/PHASE2-FINAL/`): typecheck ✓; vitest 1457 passed / 5 skipped / 0 failed (including the second round of security fixes, see `s1-log/S1-R3-SEC.md`); build ✓; e2e 41 passed / 1 skipped (optional).
 
-| ID | 标题 | 状态 |
+| ID | Title | Status |
 |---|---|---|
-| S1-R3-01 | Owner alias UI（R3 配套） | **DONE**（只用 mock 验证；真实数据里有 0 个别名）（`s1-log/S1-R3-01.md`） |
-| S1-R3-02 | Broker 工具目录刷新 | **DONE**（29 个工具都有 scope、描述和审计；model:search 授权能读到 pending 别名；read_memory 分 3 页，cursor 原样往返）（`s1-log/S1-R3-02.md`） |
-| S1-R3-03 | Workflow 自动内容 | **PARTIAL**：上游分支 `og/r8-workflow-structure`（4e83ce8）在 fixture 上测试通过（4 个步骤、3 个产物、1 条规则、1 个问题，都能追溯到证据），Lens 已映射。还没有部署，也还没有真实 LLM 运行；部署需要用户批准，而今天的 LLM 日上限已用完（`s1-log/S1-R3-03.md`） |
-| S1-R3-04 | AI 工作计数视图（Option B） | **DONE**（只是计数，不是绩效分；commit 信号 = Agent 的 shell 命令里匹配到 `git commit`）（`s1-log/S1-R3-04.md`） |
-| S1-R3-05 | Shared moments 深度 | **DONE**（共同话题和共同经历都标「未核实」并能链回证据；语义匹配用的是 Runtime 搜索的前 3 条，没有相关度阈值）（`s1-log/S1-R3-05.md`） |
-| S1-R3-06 | Personal Database 完整性（导入/备份） | **DONE**，有一处上游限制：同一来源重新导入不会产生重复，但 Runtime 不能就地覆盖旧版本（旧的时间线块会保留）（`s1-log/S1-R3-06.md`） |
-| S1-R3-07 | 本地连接器（.ics / 健康 CSV·JSON） | **DONE**（在临时根上用真实 Runtime 验收，网络隔离）；.eml 没有做（`s1-log/S1-R3-07.md`） |
-| S1-R3-08 | 主动层 / 长程 project | **DONE（只有文档）**：`PROACTIVE.md`；X9/X4 没批，所以什么都没实现（`s1-log/S1-R3-08.md`） |
-| S1-R3-09 | Ask / 微信闭环 | **DONE**（保存到记忆要先预览，有一次性 token 和 main 侧确认；Capture、Ask、Search 都显示 OCR 状态和微信警告）（`s1-log/S1-R3-09.md`） |
+| S1-R3-01 | Owner alias UI (R3 companion) | **DONE** (verified with mocks only; real data has 0 aliases) (`s1-log/S1-R3-01.md`) |
+| S1-R3-02 | Broker tool catalog refresh | **DONE** (all 29 tools have a scope, description and audit; a model:search grant can read pending aliases; read_memory over 3 pages, cursor round-trips unchanged) (`s1-log/S1-R3-02.md`) |
+| S1-R3-03 | Workflow automatic content | **PARTIAL**: the upstream branch `og/r8-workflow-structure` (4e83ce8) passes its tests on fixtures (4 steps, 3 artifacts, 1 rule, 1 question, all traceable to evidence), and Lens maps it. Not deployed yet, and no real LLM run yet; deploying needs user approval, and today's LLM daily limit is used up (`s1-log/S1-R3-03.md`) |
+| S1-R3-04 | AI work count view (Option B) | **DONE** (counts only, not a performance score; commit signal = `git commit` matched in the Agent's shell commands) (`s1-log/S1-R3-04.md`) |
+| S1-R3-05 | Shared moments depth | **DONE** (shared topics and shared experiences are both labeled "Unverified" and link back to evidence; semantic matching uses the top 3 Runtime search results, with no relevance threshold) (`s1-log/S1-R3-05.md`) |
+| S1-R3-06 | Personal Database completeness (import/backup) | **DONE**, with one upstream limitation: re-importing the same source creates no duplicates, but the Runtime cannot overwrite the old version in place (old timeline blocks remain) (`s1-log/S1-R3-06.md`) |
+| S1-R3-07 | Local connectors (.ics / health CSV/JSON) | **DONE** (accepted on a temp root with the real Runtime, network isolated); .eml not done (`s1-log/S1-R3-07.md`) |
+| S1-R3-08 | Proactive layer / long-range project | **DONE (docs only)**: `PROACTIVE.md`; X9/X4 were not approved, so nothing was implemented (`s1-log/S1-R3-08.md`) |
+| S1-R3-09 | Ask / WeChat loop | **DONE** (saving to memory requires a preview first, with a one-time token and main-side confirmation; Capture, Ask and Search all show OCR status and the WeChat warning) (`s1-log/S1-R3-09.md`) |
 
-建议在 Phase 2 定义中加入以下两条（根据本轮发现）：
-- ~~上游：`_resolve_entry` 要支持 as-of 状态~~ → R7 已修复并部署。
-- 现有数据的来源怎么补：部署后重新构建，或者上游提供回填（`model_candidate_points` / `relation_edge_evidence`）。
+Suggested additions to the Phase 2 definition (based on this round's findings):
+- ~~Upstream: `_resolve_entry` should support as-of status~~ → fixed and deployed in R7.
+- How to fill in sources for existing data: rebuild after the deploy, or have upstream provide a backfill (`model_candidate_points` / `relation_edge_evidence`).
 
-## 3. 本轮门禁
+## 3. This round's gate
 
-| 项 | 结果 |
+| Item | Result |
 |---|---|
 | `npm run typecheck` | rc=0 |
-| `npx vitest run` | 119 个文件通过 / 4 个跳过；1242 个测试通过 / 5 个跳过 / 0 失败 |
-| dev Lens 连真实 Runtime | 启动无报错；Broker 在 127.0.0.1:8750；SIGTERM 后 1 秒内全部退出 |
-| §15 上游重跑 | 63/63 PASS（01-upstream 写的 “67/67” 是加法错误，逐项相加是 63） |
+| `npx vitest run` | 119 files passed / 4 skipped; 1242 tests passed / 5 skipped / 0 failed |
+| dev Lens against the real Runtime | Starts with no errors; Broker on 127.0.0.1:8750; everything exits within 1 second of SIGTERM |
+| §15 upstream rerun | 63/63 PASS (the "67/67" written in 01-upstream is an addition error; summing item by item gives 63) |
 
-发布：`cp docs/test-evidence/DEPLOY-2026-11-05/05-verify/GAP-vs-S1-R3.md docs/design/GAP-vs-S1-R3.md`
+Publish: `cp docs/test-evidence/DEPLOY-2026-11-05/05-verify/GAP-vs-S1-R3.md docs/design/GAP-vs-S1-R3.md`

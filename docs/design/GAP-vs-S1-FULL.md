@@ -1,218 +1,218 @@
-# Persome Lens — GAP vs S1-FULL（opt-in 云轮收尾，2026-11-06）
+# Navalia — GAP vs S1-FULL (opt-in cloud round wrap-up, 2026-11-06)
 
-上一轮：`GAP-vs-S1-R4.md`（下表「before」列）。本轮架构：`S1-FULL-ARCH.md`。决定：`DECISIONS.md` S1F-1 … S1F-15。偏离：`DEVIATIONS.md` D71 起。
-每个 C 项的过程记录在 `docs/design/s1full-log/`（下文简写为 `log/`）。最终门禁数字由 lead 在 2026-11-06 给出，见 §2。
+Previous round: `GAP-vs-S1-R4.md` (the "before" column below). This round's architecture: `S1-FULL-ARCH.md`. Decisions: `DECISIONS.md` S1F-1 … S1F-15. Deviations: `DEVIATIONS.md` from D71 on.
+The process log for each C item is in `docs/design/s1full-log/` (abbreviated below as `log/`). The final gate numbers were given by the lead on 2026-11-06; see §2.
 
-判定规则（本文统一）：
-- **DONE**：验收要求的行为有自动测试或真实运行证据，不依赖用户尚未提供的真实账号 / 密钥 / 硬件。
-- **PARTIAL**：机制做完并测过，但验收的一部分只在 fake / mock 上验证过，或上游缺接口。
-- **BLOCKED**：验收本身需要用户的真实账号、密钥、证书、硬件或批准，当前无法满足。
-- 只在 fake / mock 上测过的，一律写明「fake」「mock」。真实 LLM、Soniox、SMTP 收件箱、IMAP 邮箱、Notification Center / Tray / 全局快捷键、真实麦克风、Docker 构建、Developer ID 都**没有**在真实环境验证过，不会记成 DONE。
+Verdict rules (used throughout this document):
+- **DONE**: the behavior the acceptance criteria require has automated tests or real-run evidence, and does not depend on real accounts / keys / hardware the user has not yet provided.
+- **PARTIAL**: the mechanism is built and tested, but part of the acceptance was verified only against a fake / mock, or the upstream lacks an interface.
+- **BLOCKED**: the acceptance itself needs the user's real account, key, certificate, hardware or approval, and cannot currently be met.
+- Anything tested only against a fake / mock is always labeled "fake" or "mock". Real LLM, Soniox, an SMTP inbox, an IMAP mailbox, Notification Center / Tray / global shortcuts, a real microphone, the Docker build and Developer ID have **not** been verified in a real environment, and are never counted as DONE.
 
-## 0. 基线（R4 收尾 → 本轮收尾）
+## 0. Baseline (R4 wrap-up → this round's wrap-up)
 
-| 项 | R4 最终（2026-11-05） | S1-FULL 最终（2026-11-06） |
+| Item | R4 final (2026-11-05) | S1-FULL final (2026-11-06) |
 |---|---|---|
 | Lens typecheck | rc=0 | exit 0 |
-| Lens vitest | 152 个文件通过、4 跳过；1578 通过 / 5 跳过 / 0 失败 | **194 个文件通过、4 跳过；2042 通过 / 6 跳过 / 0 失败**（lead 收尾修复后最终一次；此前 193 / 2040 连续 2 次） |
+| Lens vitest | 152 files passed, 4 skipped; 1578 passed / 5 skipped / 0 failed | **194 files passed, 4 skipped; 2042 passed / 6 skipped / 0 failed** (final run after the lead's wrap-up fixes; before that, 193 / 2040 twice in a row) |
 | Lens build | rc=0 | OK |
-| Lens e2e（`E2E_NO_FOCUS=1`） | 37 PASS / 5 SKIP | **37 PASS / 5 SKIP**，其中包括「云端关闭时 15 s 内没有非 loopback socket」（`tests/e2e/smoke.e2e.mjs:757`） |
-| `cloud/` 测试 | 不存在 | **118 / 118 pass**（`cd cloud && npm test`） |
-| 上游 pytest | 2622 passed / 0 failed / 1 skipped @ `462361d` | 本轮**没有重跑**（上游没有新提交，见 C22） |
-| §15 上游复测 | 63/63（R4 时用 worktree venv） | **63/63**，这次在**部署后的 venv** 上跑（`docs/test-evidence/S1FULL-C22/check_results.txt`） |
-| Runtime | `462361d`，schema `2026-11-05.3` | 不变：`462361d` = tag `deploy/2026-11-05-r1r9`，部署 venv 与源码逐字节一致，schema `2026-11-05.3`，无迁移，`/health ok` |
-| 真实数据（consolidated 副本） | relation_edges 187 | entries 138 / evo_nodes 96 / captures 3152 / relation_edges 302（`S1FULL-C22/summary.md` §2） |
-| 备份 | `20261105-173654-pre-r8`、`20261105-180023-pre-r9` | 新增 `/Users/ryl/Persome Backups/20261106-101058-pre-c22`（`manifest.sha256` 39 个文件，`shasum -c` 0 失败） |
+| Lens e2e (`E2E_NO_FOCUS=1`) | 37 PASS / 5 SKIP | **37 PASS / 5 SKIP**, including "no non-loopback socket within 15 s while cloud is off" (`tests/e2e/smoke.e2e.mjs:757`) |
+| `cloud/` tests | did not exist | **118 / 118 pass** (`cd cloud && npm test`) |
+| Upstream pytest | 2622 passed / 0 failed / 1 skipped @ `462361d` | **not re-run** this round (no new upstream commits, see C22) |
+| §15 upstream retest | 63/63 (in R4, with the worktree venv) | **63/63**, this time on the **deployed venv** (`docs/test-evidence/S1FULL-C22/check_results.txt`) |
+| Runtime | `462361d`, schema `2026-11-05.3` | Unchanged: `462361d` = tag `deploy/2026-11-05-r1r9`, deployed venv byte-identical to source, schema `2026-11-05.3`, no migration, `/health ok` |
+| Real data (consolidated copy) | relation_edges 187 | entries 138 / evo_nodes 96 / captures 3152 / relation_edges 302 (`S1FULL-C22/summary.md` §2) |
+| Backups | `20261105-173654-pre-r8`, `20261105-180023-pre-r9` | Added `/Users/ryl/Persome Backups/20261106-101058-pre-c22` (`manifest.sha256` 39 files, `shasum -c` 0 failures) |
 
-## 1. S1-FULL 目标 / C 项 × before / after
+## 1. S1-FULL goals / C items × before / after
 
-### 1.1 验收目标（brief 的 acceptance 行，§3 计分用）
+### 1.1 Acceptance goals (the brief's acceptance lines, used for scoring in §3)
 
-| # | 目标 | R4（before） | S1-FULL（after） | 状态 | 证据 |
+| # | Goal | R4 (before) | S1-FULL (after) | Status | Evidence |
 |---|---|---|---|---|---|
-| G1 | **local-only 零出网**（默认模式） | 本地唯一模式；所有 socket 在 127.0.0.1 | 云端默认关；关闭时每个云入口在发请求前就返回 `disabled`（全局 fetch spy 0 次）；静态扫描：`src/main/cloud` 只有 `client.ts` 调 fetch，connectors 只有 `imap/tls.ts` 用 `node:tls`；真实 Electron dev build 上 e2e 用 lsof 采样整个进程树 15 s，0 个非 loopback socket。打包版本轮没有重跑 `e2e:packaged` | **DONE** | `tests/cloud/disabled.test.ts`、`tests/connectors/no-network.test.ts`、`tests/e2e/smoke.e2e.mjs:757`、`log/C2.md` |
-| G2 | **云端 challenge / verify 登录** | BLOCKED（X1 未批准） | Ed25519 设备密钥 challenge → verify → Bearer；audience 绑定、challenge 单次、token 只存 sha256；lead 在 gate 发现并修复**小阶公钥伪造**（S1F-2）；Lens 客户端对真实 `cloud/` 子进程完成登录 → 注销 → 再登录 → 删账号 | **DONE**（TLS / 反向代理 / Docker 是部署项，未验证） | `cloud/test/auth.test.ts`、`tests/cloud/e2e-real-server.test.ts`、`tests/cloud/auth.test.ts`、`log/C0-C1.md` |
-| G3 | **Chat：带引用的回答 + 发送前预览 + 写回记忆 + 截图不出机** | BLOCKED | 预览逐条可去掉、renderer 不能注入文本；真实 `cloud/`（**mock LLM**）上：线上 context 与预览逐字节一致，不含 token / `data:image` / `.png` / `screenshots/` / `index.db` / 手机号；引用对应已发送快照；「记住这条」经 native confirm 走 MCP `remember`。openai 适配器只对**测试内 fake 上游**验证 | **PARTIAL**：真实 LLM **未在真实环境验证**（需要用户的 LLM key） | `tests/cloud/e2e-chat-real-server.test.ts`、`tests/cloud/chat.test.ts`、`cloud/test/{chat,llm}.test.ts`、`log/C3-C7.md`、`log/C4.md` |
-| G4 | **订阅：测试收件箱收到周信、退订生效、伪造卡片 / 周信被拒、无阅读追踪** | 本地文件夹订阅（D38）；周信只有草稿 | 真实 `cloud/` + **outbox 模式（`.eml` 文件充当测试收件箱）**：双重确认（GET 不确认）、周信送达（List-Unsubscribe + One-Click、无 `<img>`、只有一个 href）、RFC 8058 POST 退订后第二封 0 收件人、伪造卡 / 伪造周信两端都拒、Bob 离线验签。真实 SMTP 只对 **fake SMTP 服务器**验证 | **PARTIAL**：真实收件箱投递 **BLOCKED**（需要用户的 SMTP + SPF/DKIM/DMARC） | `tests/cloud/e2e-subs-real-server.test.ts`、`cloud/test/{letters,subscribe,mail-unit}.test.ts`、`log/C8-C9.md`、`log/C8-C10.md` |
-| G5 | **会议：录音 → 转写 → 写回；两端删除；没有同意就不录音** | BLOCKED（PRIV-10 无麦克风） | 真实 `cloud/`（**mock STT**）：无 consent / 拒绝 confirm → 不建会议、mic 拒绝；mic gate 只放行 audio + app URL + 已武装；2×30 s 分片 → ready；服务器音频目录清空、本机音频删除；Markdown → **真实 `persome import-data`（临时根）** imported 1；删除后服务器 404、本机目录消失。Runtime 内按条目删除上游没有接口 | **PARTIAL**：真实麦克风 + MediaRecorder 轮换没跑过；Soniox 只对 fake server；导入内容不能按条目删除（`runtimeRemains: true` 如实提示） | `tests/cloud/e2e-meetings-real-server.test.ts`、`tests/cloud/meetings{,-pure}.test.ts`、`cloud/test/{meetings,stt-soniox}.test.ts`、`log/C12-C14.md`、`log/C13-server.md` |
-| G6 | **Workflow 有真实步骤** | PARTIAL（R8 已部署，真实运行 BLOCKED 于 LLM 预算） | 两条路径都做完：上游映射（R8 fixture 有 steps，空上游给 0 个、不编造）；云端抽取（会话预览 → 只发勾选条目 → 严格 zod 校验 → 用户编辑 → 保存，provenance `cloud_extracted`）。但 2026-11-06 真实 `behavior_patterns().skills = []`；云端抽取只在 **mock LLM** 上跑过，mock 的 step 是把条目标题抄过去，不是真实步骤 | **BLOCKED**：真实数据上没有任何一个带真实 steps 的 Workflow；需要 Runtime LLM 额度（R8 pattern_detector）或用户的云端 LLM key | `tests/workflows/cloud-extract{,-real-server}.test.ts`、`log/C15.md`、`log/C18-C15-server.md` |
-| G7 | **表现可回溯** | 「本周 AI 工作计数」（X4 = B）已 DONE | C16：按天 / 周的 accepted / rejected / not_agent、会话里的 `git commit` 调用、用户添加仓库的提交；每个数字 = 可点开的行数；读不到的来源是 `null`（「未知 / 未接入」）不是 0；项目只列活动不算进度；只给本人看（静态扫描）。只在 fixture het.db / fixture transcript / 临时 git 仓库上测过；截图是空 store | **DONE**（fixture 验证；真实数据未看过） | `tests/performance/*`、`log/C16-C17.md`、`log/phase4-performance-empty.png` |
-| G8 | **通知可以关闭** | X9 本机通知 DONE（T5 部分），没跑过真实 Notification Center | C17：总开关关闭即清 timer、注销快捷键、清空托盘项、丢弃待发事件；默认全关（含 v1 迁移）；上下文不足就沉默并记录原因。全部用 **fake** Notification / globalShortcut / Tray 测试 | **PARTIAL**：关闭语义有测试，但真实 Notification Center / Tray / 全局快捷键**未在真实环境验证** | `tests/proactive/{c17,gates,no-network}.test.ts`、`log/C16-C17.md`、`docs/test-evidence/CAP-L2L3-CHECKLIST.md` B2（NOT RUN） |
-| G9 | **共同经历不是字面重合** | 字面重合 + 相关度门槛（D67） | C18：双方签名对象，服务器只转发，客户端每次读都离线验两个签名；陌生签名者不能接受；周信只引用 `visibility:"letters"` 的已接受条目；字面重合降级为「关键词重合（未核实，不是共同经历）」且不进任何信。真实 `cloud/` 两把真实密钥 e2e，并用服务器的 `verifyMomentText` / `verifyAcceptanceText` 交叉验证 Lens 产出的对象 | **DONE** | `tests/cloud/e2e-moments-real-server.test.ts`、`tests/cloud/moments{,-sign,-letter}.test.ts`、`cloud/test/moments.test.ts`、`log/C18-C11.md`、`log/PHASE4-GATE.md` |
-| G10 | **连接器：导入 + 删除** | 本地 `.ics` / 健康 CSV-JSON / `.eml` / mbox，只能导入 | C19：每个连接器单独 consent；Apple Health XML/zip、通用 CSV、只读 IMAP（隐式 TLS，**只对 loopback 自签证书 TLS 服务器验证**）；删除：健康记录在**真实 Runtime（临时根）**上删除成功；remember 记忆只在 evomem 写入权限下可删（默认 markdown 下列为剩余）；时间线文档上游没有按来源删除的接口；OAuth 没有 client id | **PARTIAL** | `tests/connectors/{consent,imap,apple-health,csv-import,delete,real-runtime}.test.ts`、`log/C19.md` |
-| G11 | **备份能恢复 cards + 历史** | cards 恢复；Workflow 以新 `imp-*` id 恢复且只有最新版本（D36） | C21：manifest 用身份密钥签名；本人签名 → Workflow 按原 id 逐字节恢复全部版本；卡片逐张验签、字节一致；可选 AES-256-GCM（scrypt）单文件加密；篡改 / 错口令 / 截断全部拒绝且不写入。另一身份（新电脑）签名的备份 → 恢复成重新编号的副本（含全部历史） | **DONE**（新电脑后果见 §5 第 9 条） | `tests/backup/c21-archive.test.ts`、`log/C20-C21.md` |
-| G12 | **MOD / MEM 复测 PASS 或 BLOCKED** | 63/63（worktree venv） | 部署后 venv 上 63/63 PASS（MOD-01/02/04/07/08/09/11/12/13/14、MEM-05/09/10；MEM-09 按已记录做法在全新根上单独跑）；LLM 全程 mock，证明的是门槛与数据契约，不是模型质量 | **DONE** | `docs/test-evidence/S1FULL-C22/{summary.md,check_results.txt}` |
+| G1 | **local-only, zero outbound traffic** (default mode) | Local was the only mode; every socket on 127.0.0.1 | Cloud off by default; when off, every cloud entry point returns `disabled` before sending a request (global fetch spy: 0 calls); static scan: in `src/main/cloud` only `client.ts` calls fetch, and among connectors only `imap/tls.ts` uses `node:tls`; e2e on a real Electron dev build samples the whole process tree with lsof for 15 s, 0 non-loopback sockets. `e2e:packaged` was not re-run on the packaged build this round | **DONE** | `tests/cloud/disabled.test.ts`, `tests/connectors/no-network.test.ts`, `tests/e2e/smoke.e2e.mjs:757`, `log/C2.md` |
+| G2 | **Cloud challenge / verify sign-in** | BLOCKED (X1 not approved) | Ed25519 device-key challenge → verify → Bearer; audience binding, single-use challenges, token stored only as sha256; at the gate the lead found and fixed **small-order public key forgery** (S1F-2); the Lens client completes sign-in → sign-out → sign-in again → delete account against a real `cloud/` child process | **DONE** (TLS / reverse proxy / Docker are deployment items, not verified) | `cloud/test/auth.test.ts`, `tests/cloud/e2e-real-server.test.ts`, `tests/cloud/auth.test.ts`, `log/C0-C1.md` |
+| G3 | **Chat: answers with citations + preview before sending + write back to memory + screenshots never leave the machine** | BLOCKED | Preview items can be removed one by one, and the renderer cannot inject text; on a real `cloud/` (**mock LLM**): the context on the wire is byte-identical to the preview and contains no token / `data:image` / `.png` / `screenshots/` / `index.db` / phone numbers; citations map to the sent snapshot; "Remember this" goes through a native confirm to MCP `remember`. The openai adapter was verified only against an **in-test fake upstream** | **PARTIAL**: real LLM **not verified in a real environment** (needs the user's LLM key) | `tests/cloud/e2e-chat-real-server.test.ts`, `tests/cloud/chat.test.ts`, `cloud/test/{chat,llm}.test.ts`, `log/C3-C7.md`, `log/C4.md` |
+| G4 | **Subscriptions: test inbox receives the weekly letter, unsubscribe works, forged cards / letters rejected, no read tracking** | Local folder subscriptions (D38); weekly letters only as drafts | Real `cloud/` + **outbox mode (`.eml` files act as the test inbox)**: double opt-in (GET does not confirm), weekly letter delivered (List-Unsubscribe + One-Click, no `<img>`, only one href), after an RFC 8058 POST unsubscribe the second letter has 0 recipients, forged cards / forged letters rejected on both ends, Bob verifies signatures offline. Real SMTP verified only against a **fake SMTP server** | **PARTIAL**: delivery to a real inbox **BLOCKED** (needs the user's SMTP + SPF/DKIM/DMARC) | `tests/cloud/e2e-subs-real-server.test.ts`, `cloud/test/{letters,subscribe,mail-unit}.test.ts`, `log/C8-C9.md`, `log/C8-C10.md` |
+| G5 | **Meetings: record → transcribe → write back; delete on both ends; no recording without consent** | BLOCKED (PRIV-10, no microphone) | Real `cloud/` (**mock STT**): no consent / declined confirm → no meeting created, mic denied; the mic gate allows only audio + app URL + armed; 2×30 s chunks → ready; server audio directory emptied, local audio deleted; Markdown → **real `persome import-data` (temp root)** imported 1; after deletion the server returns 404 and the local directory is gone. Upstream has no interface for deleting individual entries inside the Runtime | **PARTIAL**: real microphone + MediaRecorder rotation never run; Soniox only against a fake server; imported content cannot be deleted per entry (`runtimeRemains: true` says so honestly) | `tests/cloud/e2e-meetings-real-server.test.ts`, `tests/cloud/meetings{,-pure}.test.ts`, `cloud/test/{meetings,stt-soniox}.test.ts`, `log/C12-C14.md`, `log/C13-server.md` |
+| G6 | **Workflows have real steps** | PARTIAL (R8 deployed, real run BLOCKED on LLM budget) | Both paths built: upstream mapping (the R8 fixture has steps; an empty upstream yields 0, nothing invented); cloud extraction (session preview → send only ticked items → strict zod validation → user edits → save, provenance `cloud_extracted`). But on 2026-11-06 the real `behavior_patterns().skills = []`; cloud extraction has only run on a **mock LLM**, whose steps just copy the item titles and are not real steps | **BLOCKED**: no Workflow on real data has real steps; needs Runtime LLM quota (R8 pattern_detector) or the user's cloud LLM key | `tests/workflows/cloud-extract{,-real-server}.test.ts`, `log/C15.md`, `log/C18-C15-server.md` |
+| G7 | **Traceable Performance** | "AI work counts this week" (X4 = B) already DONE | C16: accepted / rejected / not_agent by day / week, `git commit` calls in sessions, commits in repos the user added; each number = the count of rows you can open; unreadable sources are `null` ("unknown / not connected"), not 0; projects list activity only, no progress; visible to the owner only (static scan). Tested only on a fixture het.db / fixture transcript / temporary git repo; the screenshot is of an empty store | **DONE** (fixture-verified; real data not reviewed) | `tests/performance/*`, `log/C16-C17.md`, `log/phase4-performance-empty.png` |
+| G8 | **Notifications can be turned off** | X9 local notifications DONE (T5 partial), never run on the real Notification Center | C17: turning off the master switch clears timers, unregisters shortcuts, empties tray items and drops pending events; everything off by default (including the v1 migration); stays silent and records the reason when context is insufficient. All tested with **fake** Notification / globalShortcut / Tray | **PARTIAL**: the off semantics are tested, but the real Notification Center / Tray / global shortcuts are **not verified in a real environment** | `tests/proactive/{c17,gates,no-network}.test.ts`, `log/C16-C17.md`, `docs/test-evidence/CAP-L2L3-CHECKLIST.md` B2 (NOT RUN) |
+| G9 | **Shared moments are not literal overlap** | Literal overlap + relevance threshold (D67) | C18: objects signed by both parties; the server only relays, and the client verifies both signatures offline on every read; unknown signers cannot be accepted; weekly letters cite only accepted items with `visibility:"letters"`; literal overlap is demoted to "Keyword overlap (Unverified, not shared moments)" and never goes into any letter. e2e on a real `cloud/` with two real keys, cross-checking the objects Lens produces with the server's `verifyMomentText` / `verifyAcceptanceText` | **DONE** | `tests/cloud/e2e-moments-real-server.test.ts`, `tests/cloud/moments{,-sign,-letter}.test.ts`, `cloud/test/moments.test.ts`, `log/C18-C11.md`, `log/PHASE4-GATE.md` |
+| G10 | **Connectors: import + delete** | Local `.ics` / health CSV-JSON / `.eml` / mbox, import only | C19: separate consent per connector; Apple Health XML/zip, generic CSV, read-only IMAP (implicit TLS, **verified only against a loopback TLS server with a self-signed certificate**); deletion: health records deleted successfully on a **real Runtime (temp root)**; remember memories can be deleted only with evomem write permission (under the default markdown they are listed as remaining); upstream has no interface to delete timeline documents by source; no client id for OAuth | **PARTIAL** | `tests/connectors/{consent,imap,apple-health,csv-import,delete,real-runtime}.test.ts`, `log/C19.md` |
+| G11 | **Backups restore cards + history** | Cards restored; Workflows restored under new `imp-*` ids with only the latest version (D36) | C21: manifest signed with the identity key; signed by the owner → Workflows restored byte-for-byte under their original ids with all versions; each card's signature verified, bytes identical; optional AES-256-GCM (scrypt) single-file encryption; tampering / wrong passphrase / truncation all rejected with nothing written. A backup signed by another identity (new computer) → restored as renumbered copies (with full history) | **DONE** (for the new-computer consequence see §5 item 9) | `tests/backup/c21-archive.test.ts`, `log/C20-C21.md` |
+| G12 | **MOD / MEM retests PASS or BLOCKED** | 63/63 (worktree venv) | 63/63 PASS on the deployed venv (MOD-01/02/04/07/08/09/11/12/13/14, MEM-05/09/10; MEM-09 run separately on a fresh root, as previously documented); LLM mocked throughout, so this proves thresholds and data contracts, not model quality | **DONE** | `docs/test-evidence/S1FULL-C22/{summary.md,check_results.txt}` |
 
-### 1.2 C 项明细
+### 1.2 C item details
 
-| C | 内容 | before（R4） | after | 状态 | 证据 |
+| C | Content | before (R4) | after | Status | Evidence |
 |---|---|---|---|---|---|
-| C0 | 云架构文档（决策翻转、出境清单、STRIDE、API、保留） | 无 | `S1-FULL-ARCH.md`。（Round 4 复核：ARCH 已写 404，与 `cloud/src/moments.ts` `answerable` 和 `cloud/test/moments.test.ts:282` 一致；剩下的 403 指发起者回应自己的时刻，是正确的） | DONE | `docs/design/S1-FULL-ARCH.md`、`log/PHASE4-GATE.md` |
-| C1 | `cloud/` Phase 0：登录 / 会话 / 删账号 / 限流 / 无敏感日志 / 迁移 | 无 | 实现；小阶公钥伪造由 lead 修复（S1F-2）；Dockerfile 已写，**未构建**（Docker daemon 未运行） | DONE（Docker PARTIAL） | `cloud/test/*.test.ts`、`log/C0-C1.md` |
-| C2 | Lens 云客户端（默认关、token 加密、SSE、IPC） | 无 | 实现；gate 追加：关闭 / 换服务器时注销服务器会话（3 s）、token 绑定身份指纹、loopback http 只在未打包构建允许 | DONE | `tests/cloud/{config,disabled,auth,ipc,sse}.test.ts`、`log/C2.md`、`log/C3-C7.md` |
-| C3 | Chat 上下文组装 + 脱敏 + 上限 | 无 | ≤40 条 / 60 000 字 / 每条 8 000；redaction 顺序固定 | DONE | `tests/cloud/context.test.ts` |
-| C4 | 服务器 Chat（SSE、OpenAI-compatible / mock、每日预算） | 无 | 实现；**只对 fake 上游**；真实供应商可能要求 `max_completion_tokens` 或拒绝 `stream_options`（未测） | DONE（真实 LLM 未验证） | `cloud/test/{chat,llm}.test.ts`、`log/C4.md` |
-| C5 | 流式 + 本机持久化对话 | 无 | `chat/c-*.json` 0600 | DONE | `tests/cloud/chat.test.ts` |
-| C6 | 「记住这条」写回 | 无 | native confirm → MCP `remember`（tags `lens-chat,cloud-chat`） | DONE | `tests/cloud/e2e-chat-real-server.test.ts` |
-| C7 | 微信群整理 | 只有给外部 Agent 的 prompt（D33） | 只用本周 WeChat capture 的 `search_captures` 片段，按窗口标题分组；不读完整 capture（避免截图字段）；**真实微信窗口标题行为未核对** [INFERRED] | PARTIAL | `log/C3-C7.md` R3 |
-| C8 | 云端名片（发布 / 按指纹获取） | 无 | 服务器验签 + Lens 离线再验 + 走 Peers 导入；e2e 真实服务器 | DONE | `cloud/test/cards.test.ts`、`tests/cloud/cards.test.ts`、`tests/cloud/e2e-subs-real-server.test.ts` |
-| C9 | 周信 + 邮件订阅服务器 | 无 | 双重确认、退订 / 抑制、outbox worker、保留期；`nodemailer` 10.2.1（S1F-3）；smtp 模式必须设 pepper（lead 修复，S1F-4） | DONE（真实 SMTP BLOCKED） | `log/C8-C9.md` |
-| C10 | 「订阅」页 | 本地文件夹订阅 | 草稿（固定模板、无 LLM）→ 预览将要签名的字节 → native confirm → 签名发布；lead 在 gate 加了**周信草稿脱敏**（`redactForCloud`，`src/main/cloud/subs.ts:283-303`） | DONE | `tests/cloud/subs{,-letter,-view}.test.ts`、`log/C8-C10.md` |
-| C11 | 周信加入共同经历 | 引用勾选的字面重合条目 | 只列已接受、双签、`letters` 可见、日期落在窗口内的共同经历；备注默认不附 | DONE | `tests/cloud/moments-letter.test.ts`、`log/C18-C11.md` |
-| C12 | 录音（consent + mic gate） | 无（PRIV-10） | 主进程 mic gate；lead 在 gate 发现 `build/after-pack.cjs` 会删掉 `NSMicrophoneUsageDescription`（打包版将无法录音），已修复（S1F-6）。**recorder 浏览器胶水没在 Electron 里跑过，真实麦克风没碰过** | PARTIAL | `tests/cloud/meetings-pure.test.ts`、`log/C12-C14.md` |
-| C13 | 分片上传 + 服务器转写 | 无 | mock STT e2e 通过；Soniox 适配器按 2026-11-05 文档实现，只对 fake server | DONE（Soniox BLOCKED） | `cloud/test/{meetings,stt-soniox}.test.ts`、`log/C13-server.md` |
-| C14 | 转写 → Markdown → Runtime | 无 | 真实 CLI（临时根）导入成功；按条目删除上游无接口，如实提示 | PARTIAL | `log/C12-C14.md`「Runtime deletion」 |
-| C15 | Workflow 自动内容 | 外部 Agent 粘贴（D37） | 见 G6 | PARTIAL（代码）/ 验收 BLOCKED | `log/C15.md` |
-| C16 | 表现（B + C，不做 A） | B 计数卡 | 见 G7 | DONE | `log/C16-C17.md` |
-| C17 | 主动层扩展（事件触发、门槛、决定日志、快捷键、托盘） | T1–T5 | 见 G8；lead 改了事件语义：「我提议的」共同经历被接受时在 `sync()` 首次看到才发布 | PARTIAL（真实 OS 未验证） | `log/C16-C17.md`、`log/PHASE4-GATE.md` |
-| C18 | 共同经历 | 字面重合 | 见 G9；lead 修复第三方 accept/decline 403 → 404 | DONE | `log/C18-C11.md`、`log/C18-C15-server.md`、`log/PHASE4-GATE.md` |
-| C19 | 连接器 | 本地文件 | 见 G10 | PARTIAL | `log/C19.md` |
-| C20 | 导入完整性 | 工具调用默认关；按 hash 去重 | 工具名 / 命令首行 / 路径默认保留（脱敏）；front matter `dedupe_key`；**真实 CLI** 连续导入两次：`{imported:1}` → `{imported:0, unchanged:1}` | DONE | `tests/import/c20-dedupe.test.ts`、`tests/import/real-runtime.test.ts`、`log/C20-C21.md` |
-| C21 | 备份 | 见 G11 before | 见 G11；签名 manifest 门控原 id 恢复是 lead 决定（S1F-11） | DONE | `log/C20-C21.md` |
-| C22 | 上游部署 / 复测 | R1–R9 已部署 | 用户 2026-11-06 批准；上游无新提交；先备份；63/63 | DONE | `docs/test-evidence/S1FULL-C22/summary.md` |
-| C23 | CAP 人工清单、X3、onboarding 资料库预览、文案 | — | 清单写完，**每一行都是 NOT RUN**；X3 仍 BLOCKED（transport 默认关，有测试钉住）；onboarding 预览读真实计数；W1–W6 文案修改已在代码中（`App.tsx:71`、`Settings.tsx:111`、`LocalClaim.tsx`、`peers/api.ts:318`、`PrivacySection.tsx:70`、`Chat.tsx:129`，本文作者 2026-11-06 grep 核对） | DONE（清单本身）/ X3 BLOCKED | `docs/test-evidence/CAP-L2L3-CHECKLIST.md`、`tests/{onboarding/c23-*,het/c23-transport}.test.ts`、`log/C23.md` |
+| C0 | Cloud architecture doc (decision reversal, outbound data list, STRIDE, API, retention) | none | `S1-FULL-ARCH.md`. (Round 4 review: ARCH now says 404, consistent with `answerable` in `cloud/src/moments.ts` and `cloud/test/moments.test.ts:282`; the remaining 403 is for the initiator responding to their own moment, which is correct) | DONE | `docs/design/S1-FULL-ARCH.md`, `log/PHASE4-GATE.md` |
+| C1 | `cloud/` Phase 0: sign-in / sessions / account deletion / rate limiting / no sensitive logs / migrations | none | Implemented; small-order public key forgery fixed by the lead (S1F-2); Dockerfile written, **not built** (Docker daemon not running) | DONE (Docker PARTIAL) | `cloud/test/*.test.ts`, `log/C0-C1.md` |
+| C2 | Lens cloud client (off by default, encrypted token, SSE, IPC) | none | Implemented; added at the gate: sign out of the server session when turning off / switching servers (3 s), token bound to the identity fingerprint, loopback http allowed only in unpackaged builds | DONE | `tests/cloud/{config,disabled,auth,ipc,sse}.test.ts`, `log/C2.md`, `log/C3-C7.md` |
+| C3 | Chat context assembly + redaction + limits | none | ≤40 items / 60 000 chars / 8 000 per item; fixed redaction order | DONE | `tests/cloud/context.test.ts` |
+| C4 | Server Chat (SSE, OpenAI-compatible / mock, daily budget) | none | Implemented; **only against a fake upstream**; real providers may require `max_completion_tokens` or reject `stream_options` (untested) | DONE (real LLM not verified) | `cloud/test/{chat,llm}.test.ts`, `log/C4.md` |
+| C5 | Streaming + locally persisted conversations | none | `chat/c-*.json` 0600 | DONE | `tests/cloud/chat.test.ts` |
+| C6 | "Remember this" write-back | none | native confirm → MCP `remember` (tags `lens-chat,cloud-chat`) | DONE | `tests/cloud/e2e-chat-real-server.test.ts` |
+| C7 | WeChat group digest | Only a prompt for an external Agent (D33) | Uses only `search_captures` snippets from this week's WeChat captures, grouped by window title; never reads full captures (to avoid screenshot fields); **real WeChat window-title behavior not checked** [INFERRED] | PARTIAL | `log/C3-C7.md` R3 |
+| C8 | Cloud cards (publish / fetch by fingerprint) | none | Server verifies signatures + Lens re-verifies offline + imports through Peers; e2e against a real server | DONE | `cloud/test/cards.test.ts`, `tests/cloud/cards.test.ts`, `tests/cloud/e2e-subs-real-server.test.ts` |
+| C9 | Weekly letter + email subscription server | none | Double opt-in, unsubscribe / suppression, outbox worker, retention; `nodemailer` 10.2.1 (S1F-3); smtp mode requires a pepper (lead fix, S1F-4) | DONE (real SMTP BLOCKED) | `log/C8-C9.md` |
+| C10 | "Subscriptions" page | Local folder subscriptions | Draft (fixed template, no LLM) → preview the bytes to be signed → native confirm → sign and publish; at the gate the lead added **weekly letter draft redaction** (`redactForCloud`, `src/main/cloud/subs.ts:283-303`) | DONE | `tests/cloud/subs{,-letter,-view}.test.ts`, `log/C8-C10.md` |
+| C11 | Shared moments in weekly letters | Cites ticked literal-overlap items | Lists only shared moments that are accepted, double-signed, `letters`-visible and dated within the window; notes not attached by default | DONE | `tests/cloud/moments-letter.test.ts`, `log/C18-C11.md` |
+| C12 | Recording (consent + mic gate) | none (PRIV-10) | Main-process mic gate; at the gate the lead found that `build/after-pack.cjs` strips `NSMicrophoneUsageDescription` (the packaged build would be unable to record), fixed (S1F-6). **The recorder browser glue has never run inside Electron, and a real microphone has never been touched** | PARTIAL | `tests/cloud/meetings-pure.test.ts`, `log/C12-C14.md` |
+| C13 | Chunked upload + server transcription | none | mock STT e2e passes; Soniox adapter implemented per the 2026-11-05 docs, only against a fake server | DONE (Soniox BLOCKED) | `cloud/test/{meetings,stt-soniox}.test.ts`, `log/C13-server.md` |
+| C14 | Transcript → Markdown → Runtime | none | Imported successfully with the real CLI (temp root); upstream has no per-entry deletion interface, which the UI states honestly | PARTIAL | `log/C12-C14.md` "Runtime deletion" |
+| C15 | Automatic Workflow content | Paste from an external Agent (D37) | See G6 | PARTIAL (code) / acceptance BLOCKED | `log/C15.md` |
+| C16 | Performance (B + C, not A) | B count card | See G7 | DONE | `log/C16-C17.md` |
+| C17 | Proactive layer extensions (event triggers, thresholds, decision log, shortcuts, tray) | T1–T5 | See G8; the lead changed the event semantics: a shared moment "I proposed" being accepted is published the first time `sync()` sees it | PARTIAL (real OS not verified) | `log/C16-C17.md`, `log/PHASE4-GATE.md` |
+| C18 | Shared moments | Literal overlap | See G9; the lead changed third-party accept/decline from 403 → 404 | DONE | `log/C18-C11.md`, `log/C18-C15-server.md`, `log/PHASE4-GATE.md` |
+| C19 | Connectors | Local files | See G10 | PARTIAL | `log/C19.md` |
+| C20 | Import completeness | Tool calls off by default; dedupe by hash | Tool names / first line of commands / paths kept by default (redacted); front matter `dedupe_key`; **real CLI** importing twice in a row: `{imported:1}` → `{imported:0, unchanged:1}` | DONE | `tests/import/c20-dedupe.test.ts`, `tests/import/real-runtime.test.ts`, `log/C20-C21.md` |
+| C21 | Backup | See G11 before | See G11; gating original-id restore on a signed manifest was the lead's decision (S1F-11) | DONE | `log/C20-C21.md` |
+| C22 | Upstream deploy / retest | R1–R9 deployed | Approved by the user on 2026-11-06; no new upstream commits; backed up first; 63/63 | DONE | `docs/test-evidence/S1FULL-C22/summary.md` |
+| C23 | CAP manual checklist, X3, onboarding library preview, copy | — | Checklist written, **every row is NOT RUN**; X3 still BLOCKED (transport off by default, pinned by a test); onboarding preview reads real counts; W1–W6 copy changes are in the code (`App.tsx:71`, `Settings.tsx:111`, `LocalClaim.tsx`, `peers/api.ts:318`, `PrivacySection.tsx:70`, `Chat.tsx:129`, checked by grep by the author of this document on 2026-11-06) | DONE (the checklist itself) / X3 BLOCKED | `docs/test-evidence/CAP-L2L3-CHECKLIST.md`, `tests/{onboarding/c23-*,het/c23-transport}.test.ts`, `log/C23.md` |
 
-### 1.3 仍然 BLOCKED 的老项
+### 1.3 Older items still BLOCKED
 
-| 项 | 状态 |
+| Item | Status |
 |---|---|
-| CAP L2/L3（TCC 人工） | BLOCKED（不变）；清单 `CAP-L2L3-CHECKLIST.md` Part A 全部 NOT RUN |
-| HET 分钟（X3） | BLOCKED（未批准 transport） |
-| 签名 / 公证 / 自动更新 | BLOCKED（没有 Developer ID） |
+| CAP L2/L3 (TCC, manual) | BLOCKED (unchanged); Part A of the checklist `CAP-L2L3-CHECKLIST.md` is all NOT RUN |
+| HET minutes (X3) | BLOCKED (transport not approved) |
+| Signing / notarization / auto-update | BLOCKED (no Developer ID) |
 
-## 2. 门禁（最终，lead 2026-11-06）
+## 2. Gates (final, lead 2026-11-06)
 
-| 项 | 结果 |
+| Item | Result |
 |---|---|
 | `cd cloud && npm test` | **118 / 118 pass** |
 | `npm run typecheck` | exit 0 |
-| `npx vitest run` | 194 个文件通过 / 4 跳过；**2042 通过 / 6 跳过 / 0 失败**（最终；此前 193 / 2040 连续 2 次）。输出：`docs/test-evidence/S1FULL-FINAL/` |
+| `npx vitest run` | 194 files passed / 4 skipped; **2042 passed / 6 skipped / 0 failed** (final; before that, 193 / 2040 twice in a row). Output: `docs/test-evidence/S1FULL-FINAL/` |
 | `npm run build` | OK |
-| `E2E_NO_FOCUS=1 npm run e2e` | **37 PASS / 5 SKIP**，含「no non-loopback sockets over 15 s」（云端关闭） |
-| 真实 `cloud/` 子进程 e2e（vitest） | `tests/cloud/e2e-real-server`、`e2e-chat-real-server`、`e2e-subs-real-server`、`e2e-meetings-real-server`、`e2e-moments-real-server`、`tests/workflows/cloud-extract-real-server`（LLM / STT / 邮件均为 mock / outbox） |
-| C22 §15 复测（部署后 venv） | **63 / 63 PASS** |
+| `E2E_NO_FOCUS=1 npm run e2e` | **37 PASS / 5 SKIP**, including "no non-loopback sockets over 15 s" (cloud off) |
+| Real `cloud/` child-process e2e (vitest) | `tests/cloud/e2e-real-server`, `e2e-chat-real-server`, `e2e-subs-real-server`, `e2e-meetings-real-server`, `e2e-moments-real-server`, `tests/workflows/cloud-extract-real-server` (LLM / STT / email all mock / outbox) |
+| C22 §15 retest (deployed venv) | **63 / 63 PASS** |
 
-这些数字来自 lead 的最终运行；本文作者没有重跑，仓库里也没有对应的单独证据目录（每个 Phase gate 的中间数字在各 `log/*.md` 末尾）。
+These numbers come from the lead's final run; the author of this document did not re-run them, and the repo has no separate evidence directory for them (the intermediate numbers for each Phase gate are at the end of each `log/*.md`).
 
-各 Phase gate 的中间数字（来自 log，用于看趋势）：Phase 1 cloud 61、vitest 1730；Phase 2 cloud 86、vitest 1777；Phase 3 cloud 108、vitest 1832；Phase 4 cloud 118、vitest 1930。
+Intermediate numbers per Phase gate (from the logs, to show the trend): Phase 1 cloud 61, vitest 1730; Phase 2 cloud 86, vitest 1777; Phase 3 cloud 108, vitest 1832; Phase 4 cloud 118, vitest 1930.
 
-gate 中 lead 做的修复：
-1. 小阶 Ed25519 公钥可伪造签名（单位点 + `R=单位点, S=0` 256/256 通过）→ `isWeakPublicKey` 拒绝（S1F-2，`log/C0-C1.md`）。
-2. `build/after-pack.cjs` 删除 `NSMicrophoneUsageDescription` → 打包版无法录音 → 从删除列表移除（S1F-6，`log/C12-C14.md`）。
-3. smtp 模式必须设置 `CLOUD_EMAIL_PEPPER`（S1F-4）。
-4. 周信草稿逐字引用本机记忆（含路径 / id）→ 加 `redactForCloud`（`src/main/cloud/subs.ts:283`）。
-5. 第三方 accept / decline 共同经历 403 → 404，不泄露存在（`log/PHASE4-GATE.md`）。
-6. 共同经历接受事件改为「我提议的被接受」时发布（`log/PHASE4-GATE.md`）。
-7. `e2e-subs-real-server` 偶发失败的根因：测试对整封邮件做 header unfold，把 QP 软换行合并导致 UTF-8 解码失败；只是测试代码问题，改为只 unfold header 块，之后连续 8 次通过（`log/PHASE4-GATE.md`）。
-8. 备份按原 id 恢复只对「用户自己的身份签名的 manifest」开放（C21 修订，S1F-11）。
+Fixes the lead made at the gates:
+1. Small-order Ed25519 public keys could forge signatures (identity point + `R=identity point, S=0` passed 256/256) → rejected by `isWeakPublicKey` (S1F-2, `log/C0-C1.md`).
+2. `build/after-pack.cjs` stripped `NSMicrophoneUsageDescription` → the packaged build could not record → removed from the strip list (S1F-6, `log/C12-C14.md`).
+3. smtp mode must set `CLOUD_EMAIL_PEPPER` (S1F-4).
+4. Weekly letter drafts quoted local memories verbatim (including paths / ids) → added `redactForCloud` (`src/main/cloud/subs.ts:283`).
+5. Third-party accept / decline of a shared moment 403 → 404, so existence is not leaked (`log/PHASE4-GATE.md`).
+6. The shared-moment accepted event is now published when "a moment I proposed was accepted" (`log/PHASE4-GATE.md`).
+7. Root cause of the intermittent `e2e-subs-real-server` failure: the test unfolded headers across the whole email, merging QP soft line breaks and breaking UTF-8 decoding; a test-code-only problem, changed to unfold only the header block, after which it passed 8 times in a row (`log/PHASE4-GATE.md`).
+8. Restoring backups under original ids is allowed only for "manifests signed by the user's own identity" (C21 revision, S1F-11).
 
-## 3. 计分
+## 3. Scoring
 
-权重：12 个验收目标每个权重 1。理由：brief 没有给权重；任何加权都需要我替用户判断哪个目标更重要，而且容易被调成「刚好过线」。DONE = 1，PARTIAL = 0.5，BLOCKED = 0。
+Weights: each of the 12 acceptance goals has weight 1. Reason: the brief gives no weights; any weighting would require me to judge for the user which goals matter more, and is easy to tune so it "just passes". DONE = 1, PARTIAL = 0.5, BLOCKED = 0.
 
-| # | 目标 | 状态 | 分 |
+| # | Goal | Status | Score |
 |---|---|---|---|
-| G1 | local-only 零出网 | DONE | 1 |
-| G2 | 云端 challenge / verify | DONE | 1 |
+| G1 | local-only, zero outbound traffic | DONE | 1 |
+| G2 | Cloud challenge / verify | DONE | 1 |
 | G3 | Chat | PARTIAL | 0.5 |
-| G4 | 订阅 | PARTIAL | 0.5 |
-| G5 | 会议 | PARTIAL | 0.5 |
-| G6 | Workflow 真实步骤 | BLOCKED | 0 |
-| G7 | 表现可回溯 | DONE | 1 |
-| G8 | 通知可关闭 | PARTIAL | 0.5 |
-| G9 | 共同经历非字面重合 | DONE | 1 |
-| G10 | 连接器导入 + 删除 | PARTIAL | 0.5 |
-| G11 | 备份恢复 cards + 历史 | DONE | 1 |
-| G12 | MOD / MEM 复测 | DONE | 1 |
+| G4 | Subscriptions | PARTIAL | 0.5 |
+| G5 | Meetings | PARTIAL | 0.5 |
+| G6 | Workflow real steps | BLOCKED | 0 |
+| G7 | Traceable Performance | DONE | 1 |
+| G8 | Notifications can be turned off | PARTIAL | 0.5 |
+| G9 | Shared moments are not literal overlap | DONE | 1 |
+| G10 | Connector import + delete | PARTIAL | 0.5 |
+| G11 | Backups restore cards + history | DONE | 1 |
+| G12 | MOD / MEM retests | DONE | 1 |
 
-计算：DONE 6 个 × 1 = 6；PARTIAL 5 个 × 0.5 = 2.5；BLOCKED 1 个 × 0 = 0。合计 6 + 2.5 + 0 = **8.5 / 12 = 70.8%**（8.5 ÷ 12 = 0.70833…）。
+Calculation: 6 DONE × 1 = 6; 5 PARTIAL × 0.5 = 2.5; 1 BLOCKED × 0 = 0. Total 6 + 2.5 + 0 = **8.5 / 12 = 70.8%** (8.5 ÷ 12 = 0.70833…).
 
-**Lead 复核**：权重与算术正确。唯一有争议的是 G6（Workflow 真实 steps）：抽取机制已完整实现并在真实 `cloud/`（mock LLM）上端到端跑通，缺的是真实数据 + 真实 LLM 的一次运行（需要 LLM key 或 Runtime 额度）——lead 判为 PARTIAL 而非 BLOCKED，得 9 / 12 = **75.0%**。两种判法都**未达 90%**；不为凑数调整权重。
+**Lead review**: weights and arithmetic are correct. The only contested item is G6 (Workflow real steps): the extraction mechanism is fully implemented and runs end to end on a real `cloud/` (mock LLM); what is missing is one run with real data + a real LLM (needs an LLM key or Runtime quota). The lead rates it PARTIAL rather than BLOCKED, giving 9 / 12 = **75.0%**. Under either rating the result is **below 90%**; the weights are not adjusted to make the numbers work.
 
-**没有达到 brief 的 90% 目标。**
+**The brief's 90% target was not met.**
 
-敏感性（不改变结论）：如果把 G6 记为 PARTIAL、G8 记为 DONE（这是我能找到的最宽松但仍能自圆其说的判法），合计 7 + 2.5 = 9.5 / 12 = 79.2%，仍低于 90%。差距主要来自需要用户真实账号 / 密钥 / 硬件的项（LLM、SMTP、Soniox、麦克风、通知中心），以及上游缺少按条目删除的接口。
+Sensitivity (does not change the conclusion): counting G6 as PARTIAL and G8 as DONE (the most lenient rating I can find that still holds together), the total is 7 + 2.5 = 9.5 / 12 = 79.2%, still below 90%. The gap comes mainly from items that need the user's real accounts / keys / hardware (LLM, SMTP, Soniox, microphone, Notification Center), plus the upstream lacking a per-entry deletion interface.
 
-## 4. 什么会离开这台 Mac，怎么预览，怎么删除
+## 4. What leaves this Mac, how to preview it, how to delete it
 
-来源：`S1-FULL-ARCH.md` §4 / §8 与各 log。所有云功能默认关闭；只有在设置里填了服务器地址、确认开启、登录之后，被开启的那一项才发请求。
+Sources: `S1-FULL-ARCH.md` §4 / §8 and the logs. All cloud features are off by default; a feature sends requests only after a server address has been entered in settings, it has been confirmed and turned on, and the user has signed in.
 
-| 数据 | 功能 | 去哪 | 发送前怎么预览 | 怎么删除 | 服务器保留 |
+| Data | Feature | Where it goes | How to preview before sending | How to delete | Server retention |
 |---|---|---|---|---|---|
-| Ed25519 公钥 + 签名 | 登录 | 你的 `cloud/` | 云端面板（`CloudSetup.tsx`，Chat / 订阅 / 会议共用）登录后显示账号指纹（= 身份指纹，`fingerprintShort`）——lead 收尾补上 | 云端面板「删除云端账号…」→ `DELETE /v1/account`（renderer `confirm:true` + 主进程 native confirm）——lead 收尾补上，`tests/cloud/cloudsetup-account.test.ts` | 账号存续期 |
-| Bearer token（服务器只存 sha256） | 全部云 API | 你的 `cloud/` | 不展示 | 退出登录 / 关闭云端（会先尝试注销）/ 删账号 | 30 d 或注销 |
-| Chat 上下文条目 + 问题 | 云端对话 | `cloud/` → LLM 供应商 | 发送前逐条显示将发送的完整文本，可去掉 | 服务器不落盘；本机 `chat/c-*.json` 在 Lens 里删 | 0（只在请求内存）；`chat_usage` 只有计数 |
-| Workflow 抽取的会话片段 | Playbook「云端抽取」 | `cloud/` → LLM 供应商 | 同 Chat 的逐条预览 | 服务器不落盘 | 0 |
-| 会议音频分片（~30 s） | 会议 | `cloud/`；soniox 模式再到 Soniox | 开始前勾选「已告知参会者」+ native confirm；录音中常驻指示 | 会议详情「删除」（服务器 + 本机）；删账号 | 转写成功即删，最长 24 h；Soniox 侧 best effort 删除 |
-| 会议标题 + 转写 | 会议 | `cloud/` | 结果回到本机显示 | 同上 | 7 d 后整条删除 |
-| 会议摘要用的转写片段（可选） | 会议 | `cloud/` → LLM | 逐条勾选 | 服务器不落盘 | 0 |
-| 签名的周信 | 订阅 | `cloud/` → SMTP → 订阅者邮箱 | 发布前显示将要签名的完整字节 | 发出后无法撤回；删账号 | 正文在投递终态后 30 d 删除；投递记录 90 d |
-| 订阅者邮箱 | 订阅 | 订阅者自己提交到 `cloud/` | 发布者只看到打码地址 | 退订 / 发布者移除 / 删账号 | 退订后只留 HMAC |
-| 签名的个人卡片 | 订阅页「发布卡片」 | `cloud/`，持有指纹的人可取 | 显示可读字段 + 原文 | 「撤回」`DELETE /v1/cards` | 最近 20 版 |
-| 签名的共同经历 + 接受 | 朋友页 | `cloud/`（对方可见） | 发起 / 接受前显示完整内容 | 任一方删除，双方都删；对方本机副本要等对方同步后自己删 | 直到删除 |
-| IMAP 登录与只读读取 | 连接器（IMAP） | 你填写的 IMAP 主机（993，隐式 TLS） | 单独 consent；读出的邮件先预览再写入 | 撤销同意即删除保存的凭据 | 不经过 `cloud/` |
+| Ed25519 public key + signature | Sign-in | your `cloud/` | After sign-in the cloud panel (`CloudSetup.tsx`, shared by Chat / Subscriptions / Meetings) shows the account fingerprint (= identity fingerprint, `fingerprintShort`), added by the lead at wrap-up | Cloud panel "Delete cloud account…" → `DELETE /v1/account` (renderer `confirm:true` + main-process native confirm), added by the lead at wrap-up, `tests/cloud/cloudsetup-account.test.ts` | for the life of the account |
+| Bearer token (server stores only sha256) | All cloud APIs | your `cloud/` | not shown | Sign out / turn off cloud (tries to sign out first) / delete account | 30 d or until sign-out |
+| Chat context items + question | Cloud chat | `cloud/` → LLM provider | Before sending, each item's full text to be sent is shown and can be removed | Not stored on the server; local `chat/c-*.json` deleted in Lens | 0 (in request memory only); `chat_usage` holds counts only |
+| Session snippets for Workflow extraction | Playbook "Cloud extracted" | `cloud/` → LLM provider | Same per-item preview as Chat | Not stored on the server | 0 |
+| Meeting audio chunks (~30 s) | Meetings | `cloud/`; in soniox mode, also Soniox | Before starting, tick that participants have been told + native confirm; a persistent indicator while recording | "Delete" in meeting details (server + local); delete account | Deleted once transcription succeeds, at most 24 h; best-effort deletion on the Soniox side |
+| Meeting title + transcript | Meetings | `cloud/` | Results shown locally when they come back | Same as above | Whole record deleted after 7 d |
+| Transcript snippets for the meeting summary (optional) | Meetings | `cloud/` → LLM | Ticked item by item | Not stored on the server | 0 |
+| Signed weekly letter | Subscriptions | `cloud/` → SMTP → subscribers' mailboxes | The full bytes to be signed are shown before publishing | Cannot be recalled once sent; delete account | Body deleted 30 d after delivery reaches a final state; delivery records 90 d |
+| Subscriber email addresses | Subscriptions | Submitted by subscribers themselves to `cloud/` | The publisher sees only masked addresses | Unsubscribe / removed by the publisher / delete account | Only an HMAC kept after unsubscribing |
+| Signed personal card | Subscriptions page "publish card" | `cloud/`, retrievable by anyone holding the fingerprint | Readable fields + raw text shown | "Withdraw" `DELETE /v1/cards` | Latest 20 versions |
+| Signed shared moments + acceptances | Peers page | `cloud/` (visible to the other party) | Full content shown before proposing / accepting | Deleted for both when either side deletes; the other party's local copy is deleted only after they sync and delete it themselves | Until deleted |
+| IMAP sign-in and read-only reads | Connectors (IMAP) | The IMAP host you enter (993, implicit TLS) | Separate consent; fetched emails are previewed before being written | Revoking consent deletes the saved credentials | Does not go through `cloud/` |
 
-**永不出机**（任何模式）：截图原图、Runtime `index.db`、Ed25519 私钥、Runtime token、Broker token、Access log 原文、未经预览的内容。服务器**不是端到端加密**：运营方技术上能读到 Chat（请求内存中）、转写、周信、订阅者邮箱、共同经历内容。
+**Never leaves the machine** (in any mode): original screenshots, the Runtime `index.db`, the Ed25519 private key, the Runtime token, the Broker token, raw Access log text, anything not previewed. The server is **not end-to-end encrypted**: the operator can technically read Chat (in request memory), transcripts, weekly letters, subscriber email addresses and shared-moment content.
 
-本机侧删除仍有上游限制：写进 Runtime 的会议 Markdown、connector 写入的 remember 记忆（默认 markdown 写入权限）和时间线文档不能按条目删除，只能用「设置 → 隐私」的整体删除或 `persome clean …`，界面会列出剩余内容。
+Local deletion still has upstream limits: meeting Markdown written into the Runtime, remember memories written by connectors (default markdown write permission) and timeline documents cannot be deleted per entry, only by the full deletion in "Settings → Privacy" or `persome clean …`; the UI lists what remains.
 
-## 5. 需要用户决定的事
+## 5. Decisions needed from the user
 
-1. **X3 HET transport**：仍未批准。批准需要：每日调用 / token 预算与耗尽行为；固定的供应商与模型（按 anchor 版本钉住、温度 0）；哪些文本出机、给谁、对方保留条款（建议与 Chat 一样逐条预览）；是否复用云端 `/v1/chat/completions` 加 `task:"het_assess"`（只在 X3 批准且云端已开时）；分钟显示为「估计」+ anchor 版本。未批准前 HET 与 `src/main/cloud` 互不 import，有测试（`tests/het/c23-transport.test.ts`）。打包版里 `LENS_HET_FAKE_ASSESSOR` 在运行时被忽略，但 fixture 代码仍在 bundle 里。
-2. **上游按条目删除**：Runtime 需要「按 entry id 删除 Markdown 记忆」和「按来源删除导入的时间线文档」的接口，否则会议导入、connector 记忆、导入文档只能整体删。是否向上游提。
-3. **OAuth client ID**（Google / Notion / Outlook）：没有，相关连接器 BLOCKED。
-4. **SMTP / DKIM**：真实周信投递需要 SMTP relay、From 域名的 SPF / DKIM / DMARC，以及生产 `CLOUD_EMAIL_PEPPER`。
-5. **Soniox key**：真实转写需要 `CLOUD_SONIOX_API_KEY`；适配器未对真实 API 跑过。
-6. **LLM key**：真实 Chat / Workflow 抽取 / 会议摘要需要 `CLOUD_LLM_*`；另外 Runtime 侧 R8 pattern_detector 需要 Runtime LLM 额度才能产出第一个真实结构化 Workflow。
-7. **Developer ID**：签名 / 公证 / 自动更新仍 BLOCKED。
-8. **遗留的临时目录**：`$TMPDIR` 里有 136 个 `lens-upstream-*` 目录（共约 34 MB），来自连接器真实 Runtime 测试（`tests/connectors/upstream.ts:38` 的 `tempRoot` 只建不删）。lead 的清理命令被权限分类器拦下，需要你决定是否删除。
-9. **C21 新电脑后果**：身份私钥不进备份。在新电脑（新身份、没有旧密钥的退休记录）上恢复时，所有备份都是「别人签名」，Workflow 会恢复成重新编号的 `imp-*` 副本（历史完整，但 id 变了、provenance 是 `imported`）。只有同一身份或同一 store 上重置身份后，才能按原 id 恢复。是否接受，或者是否要设计私钥迁移。
-10. **Docker / 部署**：`cloud/Dockerfile` 未构建；TLS、反向代理、多实例限流、服务器备份轮换都是部署项。
-11. ~~删除云账号的入口~~ **已补（lead，收尾）**：云端面板登录后有「删除云端账号…」按钮和账号指纹显示（`src/renderer/src/components/chat/CloudSetup.tsx`）。仍未有独立的「设置 → 云端」页；云端面板目前只出现在 Chat / 订阅 / 会议页。
-12. **人工清单**：`CAP-L2L3-CHECKLIST.md` 的 Part A（TCC）和 Part B（麦克风、通知、Soniox、SMTP、IMAP、LLM、Docker 等）需要人来跑。
+1. **X3 HET transport**: still not approved. Approval needs: a daily call / token budget and behavior on exhaustion; a fixed provider and model (pinned per anchor version, temperature 0); which text leaves the machine, to whom, and the recipient's retention terms (suggested: per-item preview, as in Chat); whether to reuse the cloud `/v1/chat/completions` with `task:"het_assess"` (only if X3 is approved and cloud is on); minutes shown as "Estimate" + anchor version. Until approved, HET and `src/main/cloud` do not import each other, enforced by a test (`tests/het/c23-transport.test.ts`). In the packaged build `LENS_HET_FAKE_ASSESSOR` is ignored at runtime, but the fixture code is still in the bundle.
+2. **Upstream per-entry deletion**: the Runtime needs interfaces to "delete a Markdown memory by entry id" and "delete imported timeline documents by source"; otherwise meeting imports, connector memories and imported documents can only be deleted wholesale. Whether to raise this upstream.
+3. **OAuth client ID** (Google / Notion / Outlook): none, so those connectors are BLOCKED.
+4. **SMTP / DKIM**: real weekly letter delivery needs an SMTP relay, SPF / DKIM / DMARC for the From domain, and a production `CLOUD_EMAIL_PEPPER`.
+5. **Soniox key**: real transcription needs `CLOUD_SONIOX_API_KEY`; the adapter has not been run against the real API.
+6. **LLM key**: real Chat / Workflow extraction / meeting summaries need `CLOUD_LLM_*`; separately, on the Runtime side, R8 pattern_detector needs Runtime LLM quota to produce the first real structured Workflow.
+7. **Developer ID**: signing / notarization / auto-update still BLOCKED.
+8. **Leftover temp directories**: `$TMPDIR` holds 136 `lens-upstream-*` directories (about 34 MB in total), from the connectors' real-Runtime tests (`tempRoot` in `tests/connectors/upstream.ts:38` creates them but never deletes them). The lead's cleanup command was blocked by the permission classifier; you need to decide whether to delete them.
+9. **C21 new-computer consequence**: the identity private key is not included in backups. When restoring on a new computer (new identity, no retirement record for the old key), every backup counts as "signed by someone else", and Workflows are restored as renumbered `imp-*` copies (full history, but changed ids and provenance `imported`). Only the same identity, or a reset identity on the same store, can restore under the original ids. Whether to accept this, or design private key migration.
+10. **Docker / deployment**: `cloud/Dockerfile` not built; TLS, reverse proxy, multi-instance rate limiting and server backup rotation are all deployment items.
+11. ~~Entry point for deleting the cloud account~~ **Added (lead, at wrap-up)**: after sign-in the cloud panel has a "Delete cloud account…" button and shows the account fingerprint (`src/renderer/src/components/chat/CloudSetup.tsx`). There is still no separate "Settings → Cloud" page; the cloud panel currently appears only on the Chat / Subscriptions / Meetings pages.
+12. **Manual checklist**: Part A (TCC) and Part B (microphone, notifications, Soniox, SMTP, IMAP, LLM, Docker, etc.) of `CAP-L2L3-CHECKLIST.md` need a person to run them.
 
-## 6. 事故（如实记录）
+## 6. Incidents (recorded as they happened)
 
-1. **Phase 1：`$TMPDIR` 顶层内容被删**。C3-C7 agent 早期的测试清理对 `path.dirname(mkdtemp 目录)` 做了递归删除，也就是对 `os.tmpdir()` 本身。约 2026-11-05 21:36，删掉了用户 `$TMPDIR` 下能删的顶层内容（约 20 个 macOS 守护进程缓存目录被清空），在目录本身上 EPERM 停下。**不可恢复**。仓库、`~/.persome`、Lens Store 不在 `$TMPDIR` 下，未受影响。之后所有新测试的清理都加了前缀守卫并拒绝删除 `os.tmpdir()` 本身（`log/C3-C7.md` INCIDENT）。是否所有守护进程都已恢复，没有核实。
-2. **Phase 2：一个 agent 运行了 `pkill -f "src/server.ts"`**。这会杀掉同一台机器上所有匹配该命令行的进程，不只是它自己的测试服务器（lead 记录；log 中没有更多细节）。
-3. **136 个 `lens-upstream-*` 临时目录（约 34 MB）** 留在 `$TMPDIR`，见 §5 第 8 条。
+1. **Phase 1: top-level contents of `$TMPDIR` deleted**. Early test cleanup by the C3-C7 agent recursively deleted `path.dirname(the mkdtemp directory)`, that is, `os.tmpdir()` itself. Around 2026-11-05 21:36 it deleted every deletable top-level item under the user's `$TMPDIR` (about 20 macOS daemon cache directories were emptied) and stopped with EPERM on the directory itself. **Not recoverable**. The repo, `~/.persome` and the Lens Store are not under `$TMPDIR` and were unaffected. Since then every new test's cleanup has a prefix guard and refuses to delete `os.tmpdir()` itself (`log/C3-C7.md` INCIDENT). Whether all daemons have recovered was not checked.
+2. **Phase 2: an agent ran `pkill -f "src/server.ts"`**. This kills every process on the machine whose command line matches, not just its own test server (recorded by the lead; the logs have no further detail).
+3. **136 `lens-upstream-*` temp directories (about 34 MB)** left in `$TMPDIR`; see §5 item 8.
 
 ## Final report
 
-### (1) 每个 Phase 的状态
+### (1) Status of each Phase
 
-| Phase | 内容 | 状态 |
+| Phase | Content | Status |
 |---|---|---|
-| Phase 0 | C0 架构、C1 `cloud/` 登录、C2 Lens 云客户端 | DONE（Docker 未构建） |
-| Phase 1 | C3–C7 Chat（+ C4 服务器） | DONE，C7 PARTIAL；真实 LLM 未验证 |
-| Phase 2 | C8 名片、C9 周信服务器、C10 订阅页 | DONE；真实 SMTP 收件箱 BLOCKED |
-| Phase 3 | C12–C14 会议（+ C13 服务器） | PARTIAL：真实麦克风 / Soniox 未验证，Runtime 按条目删除上游无接口 |
-| Phase 4 | C15 Workflow、C16 表现、C17 主动层、C18 共同经历、C11 周信共同经历 | C16 / C18 / C11 DONE；C17 PARTIAL（真实 OS 未验证）；C15 代码完成、验收 BLOCKED（无真实 steps） |
-| Phase 5 | C19 连接器、C20 导入、C21 备份、C22 部署复测、C23 清单 / X3 / onboarding / 文案 | C20 / C21 / C22 DONE；C19 PARTIAL；C23 清单完成但全部 NOT RUN，X3 BLOCKED |
+| Phase 0 | C0 architecture, C1 `cloud/` sign-in, C2 Lens cloud client | DONE (Docker not built) |
+| Phase 1 | C3–C7 Chat (+ C4 server) | DONE, C7 PARTIAL; real LLM not verified |
+| Phase 2 | C8 cards, C9 weekly letter server, C10 Subscriptions page | DONE; real SMTP inbox BLOCKED |
+| Phase 3 | C12–C14 Meetings (+ C13 server) | PARTIAL: real microphone / Soniox not verified, upstream has no Runtime per-entry deletion interface |
+| Phase 4 | C15 Workflow, C16 Performance, C17 proactive layer, C18 shared moments, C11 shared moments in weekly letters | C16 / C18 / C11 DONE; C17 PARTIAL (real OS not verified); C15 code complete, acceptance BLOCKED (no real steps) |
+| Phase 5 | C19 connectors, C20 import, C21 backup, C22 deploy retest, C23 checklist / X3 / onboarding / copy | C20 / C21 / C22 DONE; C19 PARTIAL; C23 checklist complete but all NOT RUN, X3 BLOCKED |
 
-计分：**8.5 / 12 = 70.8%，未达 90%**（§3）。
+Score: **8.5 / 12 = 70.8%, below 90%** (§3).
 
-### (2) 云端 Chat / 会议 / 订阅的端到端证据
+### (2) End-to-end evidence for cloud Chat / Meetings / Subscriptions
 
-都是 Lens 客户端代码对**真实 `cloud/` 子进程**的 vitest e2e；第三方一律 mock：
-- Chat：`tests/cloud/e2e-chat-real-server.test.ts`（mock LLM）。问「我这周在做什么」，线上 context 与预览逐字节一致；不含 token / 截图 / `index.db` / 手机号；引用对应已发送快照；「记住这条」经 native confirm 走 MCP `remember`；服务器输出不含问题、上下文和回答。
-- 会议：`tests/cloud/e2e-meetings-real-server.test.ts`（mock STT）。consent / confirm 门、mic gate、2 个分片 → ready、两端音频删除、Markdown 导入、删除后服务器 404 + 本机目录消失 + `runtimeRemains` 提示。另有真实 `persome import-data`（临时根）导入成功（`log/C12-C14.md` Phase 3 gate）。
-- 订阅：`tests/cloud/e2e-subs-real-server.test.ts`（outbox `.eml` 充当测试收件箱）。卡片 / 周信签名两端互验、伪造被拒、双重确认、投递、RFC 8058 退订、抑制、无追踪像素。
+All are vitest e2e tests of the Lens client code against a **real `cloud/` child process**; every third party is mocked:
+- Chat: `tests/cloud/e2e-chat-real-server.test.ts` (mock LLM). Asks "what am I working on this week"; the context on the wire is byte-identical to the preview; no token / screenshots / `index.db` / phone numbers; citations map to the sent snapshot; "Remember this" goes through a native confirm to MCP `remember`; server output contains none of the question, context or answer.
+- Meetings: `tests/cloud/e2e-meetings-real-server.test.ts` (mock STT). consent / confirm gates, mic gate, 2 chunks → ready, audio deleted on both ends, Markdown import, after deletion the server returns 404 + the local directory is gone + the `runtimeRemains` notice. Separately, a real `persome import-data` (temp root) import succeeded (`log/C12-C14.md` Phase 3 gate).
+- Subscriptions: `tests/cloud/e2e-subs-real-server.test.ts` (outbox `.eml` files act as the test inbox). Card / weekly letter signatures verified by both ends, forgeries rejected, double opt-in, delivery, RFC 8058 unsubscribe, suppression, no tracking pixel.
 
-真实 LLM、真实 Soniox、真实 SMTP 收件箱、真实麦克风：**都没有跑过**。
+Real LLM, real Soniox, a real SMTP inbox, a real microphone: **none of them have been run**.
 
-### (3) 出机数据与预览 / 删除
+### (3) Outbound data and preview / deletion
 
-见 §4。要点：默认什么都不出机（e2e lsof 15 s 验证）；每个云功能单独开启；发送的内容在发送前逐条或逐字节预览；服务器非端到端加密；Runtime 内的写入有一部分不能按条目删除。
+See §4. Key points: by default nothing leaves the machine (verified by e2e lsof over 15 s); each cloud feature is turned on separately; sent content is previewed item by item or byte for byte before sending; the server is not end-to-end encrypted; some writes inside the Runtime cannot be deleted per entry.
 
-### (4) 测试数字
+### (4) Test numbers
 
-cloud 118/118；typecheck exit 0；vitest 194 文件 / 4 跳过，2042 通过 / 6 跳过 / 0 失败（最终；此前 193 / 2040 连续 2 次）；build OK；e2e 37 PASS / 5 SKIP；§15 复测 63/63（部署后 venv）。详见 §2。
+cloud 118/118; typecheck exit 0; vitest 194 files / 4 skipped, 2042 passed / 6 skipped / 0 failed (final; before that, 193 / 2040 twice in a row); build OK; e2e 37 PASS / 5 SKIP; §15 retest 63/63 (deployed venv). Details in §2.
 
-### (5) 未完成项与待决定
+### (5) Unfinished items and pending decisions
 
-未完成：真实环境验证（LLM、Soniox、SMTP、IMAP 真实邮箱、麦克风、通知中心 / 托盘 / 快捷键、Docker、打包版 e2e）；Workflow 真实步骤；Runtime 按条目删除；OAuth；CAP L2/L3；签名公证；删除云账号没有 UI 入口。
-待决定：§5 的 12 项（X3、上游删除接口、OAuth、SMTP/DKIM、Soniox key、LLM key、Developer ID、临时目录清理、C21 新电脑后果、部署、删除云账号入口、人工清单）。
+Unfinished: verification in real environments (LLM, Soniox, SMTP, a real IMAP mailbox, microphone, Notification Center / tray / shortcuts, Docker, packaged-build e2e); real Workflow steps; Runtime per-entry deletion; OAuth; CAP L2/L3; signing and notarization; no UI entry point for deleting the cloud account.
+Pending decisions: the 12 items in §5 (X3, upstream deletion interface, OAuth, SMTP/DKIM, Soniox key, LLM key, Developer ID, temp directory cleanup, C21 new-computer consequence, deployment, cloud account deletion entry point, manual checklist).
 
 
-> Round 4（2026-11-06）后续见 `GAP-vs-S1-R5.md`。
+> For what follows Round 4 (2026-11-06), see `GAP-vs-S1-R5.md`.

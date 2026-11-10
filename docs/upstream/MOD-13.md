@@ -35,7 +35,7 @@ Better: move the two build-status codes into `model_status()` itself so CLI and 
 
 ## Lens side (done)
 `src/renderer/src/lib/modelIssues.ts` reads `model_status.issues` from `/model/graph` if present and renders
-each literal code next to a Chinese explanation (Overview 模型构建 card → 降级原因; Model page → 降级原因 card).
+each literal code next to a Chinese explanation (Overview Model build card → Degraded reasons; Model page → Degraded reasons card).
 Lens never derives codes from counts. Against Runtime 0.3.2 the field is absent, so Lens shows the literal
 `degraded_stages` (`model_contract` + explanation) and a note that per-layer codes are printed only by
 `persome model status`. Tests: `tests/model/mod13-issues.test.ts`.

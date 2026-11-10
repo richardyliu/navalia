@@ -78,16 +78,16 @@ on-accent/accent 6.7, warn/warn-soft 6.1, bad/bad-soft 5.6. `--faint` (3.3) is d
 ## Structure (2026-11-05 "UI pass")
 
 - Sidebar is grouped: `NAV_GROUPS` in `src/renderer/src/lib/navigation.tsx` is the only nav source. Five groups
-  (今日 / 记忆 / 采集 / 身份与连接 / 系统), 28px rows, 15px Lucide icons. Group labels are 11px `--muted`
+  (Today / Memory / Capture / Identity & connections / System), 28px rows, 15px Lucide icons. Group labels are 11px `--muted`
   (10px `--faint` failed contrast at 3.4:1 and the 11px text floor), no uppercase tracking; they encode grouping,
   not decoration. `.nav-item[data-page]` survives for e2e.
 - ⌘K palette (`components/CommandPalette.tsx`, cmdk + Base UI Dialog) is the escape hatch for the 19 pages;
-  the sidebar footer carries a visible 快速跳转 button. Keep the palette data derived from `NAV_GROUPS`.
+  the sidebar footer carries a visible Quick jump button. Keep the palette data derived from `NAV_GROUPS`.
 - Overlays: `components/Modal.tsx` and `EvidenceDrawer` both wrap Base UI Dialog. Do not hand-roll a backdrop,
   `role="dialog"`, Escape handling or a focus trap again — Base UI owns focus trap, dismissal, scroll lock and
   focus restoration. Enter/exit uses `data-starting-style` / `data-ending-style` + transitions, not keyframes.
 - Loading: `components/Skeleton.tsx` for card bodies (same height as the text it replaces). Do not use
-  「读取中…」 as the only loading state.
+  "Loading…" as the only loading state.
 - Toasts: `components/Toaster.tsx` (Sonner, tokenised). Copy confirmations and completed writes use
   `copiedToast()` / `doneToast()`; errors stay as inline `.banner` because they need reading time.
 - Type scale: page title 24/650, card title 14/600, body 13, eyebrow 11. A stat value is `--ink`; tone classes
@@ -96,7 +96,7 @@ on-accent/accent 6.7, warn/warn-soft 6.1, bad/bad-soft 5.6. `--faint` (3.3) is d
   `prefers-reduced-motion` collapses all animation/transition durations globally.
 - Anti-pattern removed: the 3px `border-left` accent on `.schema-item.volume` (Impeccable `detect` flagged it).
 
-Screens from this pass: `docs/design/v3-shots/` (home light/dark, 今天, settings, ⌘K).
+Screens from this pass: `docs/design/v3-shots/` (home light/dark, Today, settings, ⌘K).
 
 Page-level audit (catches contrast / text-size problems the regex scan cannot):
 

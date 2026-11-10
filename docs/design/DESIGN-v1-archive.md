@@ -1,72 +1,72 @@
-# Persome Lens — 本地可视化壳设计文档
+# Navalia — Local Visual Shell Design Document
 
-> 版本：v1.0 Draft
-> 日期：2026-11-04
-> 目标：一个**不需要登录、不依赖官方云端** 的本地 Electron 应用，直接读取开源 Runtime（`personal-model`）的本地数据，做模型总览、证据回溯、人物/项目视图。
-> 状态：设计评审中，未开始实现。
+> Version: v1.0 Draft
+> Date: 2026-11-04
+> Goal: a local Electron app that **needs no sign-in and does not depend on the official cloud**, reads the open-source Runtime's (`personal-model`) local data directly, and provides a model overview, evidence tracing, and people/project views.
+> Status: in design review, implementation not started.
 
 ---
 
-## 1. 背景
+## 1. Background
 
-开源 Runtime（`~/Documents/GitHub/personal-model`，v0.3.2）已经具备完整能力：
+The open-source Runtime (`~/Documents/GitHub/personal-model`, v0.3.2) already has the full capability set:
 
 ```
-AX/OCR 采集 → 1 分钟时间线 → 5 分钟会话归约 → 证据门控记忆
+AX/OCR capture → 1-minute timeline → 5-minute session reduction → evidence-gated memory
       → Point/Line/Face/Volume/Root → SQLite + HUMAN.md
-      → 本地 REST /model 查看器 + MCP 21 tools
+      → local REST /model viewer + MCP 21 tools
 ```
 
-但它只有两种“界面”：
+But it has only two "interfaces":
 
-1. **命令行**（`persome` 的 40+ 个子命令）；
-2. **官方 Web 查看器**（`persome model open` 打开的 `/model` 页面）。
+1. **Command line** (the 40+ subcommands of `persome`);
+2. **Official web viewer** (the `/model` page opened by `persome model open`).
 
-官方查看器是完整的，但它是 runtime 的一部分：启动依赖 daemon、浏览器短时 capability、不可定制。产品版 DMG 的 Electron 壳又要求登录官方云端。
+The official viewer is complete, but it is part of the runtime: it depends on the daemon to start, uses a short-lived browser capability, and cannot be customized. The Electron shell of the product DMG, meanwhile, requires signing in to the official cloud.
 
-所以这里要补的是：**一个独立的、只读的、本地优先的桌面查看器**，把 Runtime 的数据以更清晰的方式呈现出来，并且给后续功能（搜索、纠正、导出）留出扩展位。
+So what is missing here is **a standalone, read-only, local-first desktop viewer** that presents the Runtime's data more clearly and leaves room for later features (search, correction, export).
 
 ---
 
-## 2. 目标与非目标
+## 2. Goals and non-goals
 
-### 2.1 目标（v1）
+### 2.1 Goals (v1)
 
-| # | 目标 | 验收 |
+| # | Goal | Acceptance |
 |---|---|---|
-| G1 | 不需要任何账号/登录/云 key | 断网、无官方云端账号也能启动并显示数据 |
-| G2 | 自动发现本地 Runtime | 读取 `~/.persome`，探测 `127.0.0.1:8742`，显示健康状态 |
-| G3 | 模型总览 | Root 叙事、Face/Volume 列表、Point 计数、构建状态 |
-| G4 | 证据回溯 | 点任意 Root/Face/Point，看到 quote、来源应用/窗口/URL、receipt 状态 |
-| G5 | 关系浏览 | 点一个 Point，看到它的关系树与原始 receipts |
-| G6 | 空态与降级 | 未安装/未启动/未建模/权限不足都有明确说明与下一步 |
-| G7 | 可打包 | `npm run dist` 产出可双击运行的 DMG |
-| G8 | 安全 | token 不进渲染层、无远程内容、无遥测 |
+| G1 | No account/sign-in/cloud key required | Starts and shows data offline and without an official cloud account |
+| G2 | Automatically discover the local Runtime | Read `~/.persome`, probe `127.0.0.1:8742`, show health status |
+| G3 | Model overview | Root narrative, Face/Volume lists, Point counts, build status |
+| G4 | Evidence tracing | Click any Root/Face/Point to see the quote, source app/window/URL, receipt status |
+| G5 | Relation browsing | Click a Point to see its relation tree and raw receipts |
+| G6 | Empty states and degradation | Not installed/not started/not modeled/insufficient permissions each have a clear explanation and next step |
+| G7 | Packageable | `npm run dist` produces a DMG that runs on double-click |
+| G8 | Security | The token never reaches the renderer, no remote content, no telemetry |
 
-### 2.2 非目标（v1）
+### 2.2 Non-goals (v1)
 
-- ❌ 不做登录、账号、云同步、好友卡片、周报、会议转写。
-- ❌ 不做写入（纠正/删除/导入），v1 只读；写入放到 v1.2。
-- ❌ **不做 HET**：`het/` 只存在于产品版私有分支，开源 Runtime 没有这个模块。若以后要做，需要自己从 Point/时间线重新计算，属于独立项目。
-- ❌ 不内嵌官方 `/model` 查看器（见 §4.2），但提供“打开官方查看器”按钮。
-- ❌ 不做移动端、Windows、Linux（Runtime 本身 macOS-only）。
+- ❌ No sign-in, accounts, cloud sync, friend cards, weekly reports, or meeting transcription.
+- ❌ No writes (correct/delete/import); v1 is read-only; writes move to v1.2.
+- ❌ **No HET**: `het/` exists only in the product's private branch; the open-source Runtime has no such module. Doing it later would mean recomputing it ourselves from Points/the timeline, which is a separate project.
+- ❌ Do not embed the official `/model` viewer (see §4.2), but provide an "Open official viewer" button.
+- ❌ No mobile, Windows, or Linux (the Runtime itself is macOS-only).
 
 ---
 
-## 3. 用户与场景
+## 3. Users and scenarios
 
-| 用户 | 场景 | 关键动作 |
+| User | Scenario | Key action |
 |---|---|---|
-| 开发者（已装 Runtime） | “我想看看它到底记住了什么” | 打开 App → 总览 → 点 Root → 看证据 |
-| 隐私敏感用户 | “我不想登录，也不想数据上云” | 全程本地，无网络请求 |
-| 研究者/评估者 | “我要检查一条结论是否可靠” | 搜索/定位 → 证据链 → 原文与 receipt |
-| 未来的自己 | “上个月我对这个项目的判断是什么” | （v1.2）as-of 时间旅行 |
+| Developer (Runtime installed) | "I want to see what it actually remembers" | Open the app → Overview → click Root → view evidence |
+| Privacy-sensitive user | "I don't want to sign in, and I don't want my data in the cloud" | Fully local, no network requests |
+| Researcher/evaluator | "I need to check whether a conclusion is reliable" | Search/locate → evidence chain → original text and receipt |
+| Future self | "What was my judgment on this project last month?" | (v1.2) as-of time travel |
 
 ---
 
-## 4. 方案总览
+## 4. Solution overview
 
-### 4.1 架构
+### 4.1 Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -89,40 +89,40 @@ AX/OCR 采集 → 1 分钟时间线 → 5 分钟会话归约 → 证据门控记
                                    └─────────────────────┘
 ```
 
-- **Main process 是唯一能读 token、发 HTTP 的地方。**
-- Renderer 只通过 preload 暴露的窄接口拿数据，永远看不到 token。
-- 默认**不启动** Runtime（避免偷偷开始录屏）；只在用户点“启动 Runtime”时执行 `persome start`。
+- **The main process is the only place that can read the token and send HTTP.**
+- The renderer gets data only through the narrow interface exposed by preload and never sees the token.
+- By default the Runtime is **not started** (to avoid silently starting screen recording); `persome start` runs only when the user clicks "Start Runtime".
 
-### 4.2 关键决策
+### 4.2 Key decisions
 
-| 决策 | 选择 | 理由 |
+| Decision | Choice | Rationale |
 |---|---|---|
-| 数据通道 | **HTTP REST** | `/model/graph`、`/model/evidence`、`/status` 已是稳定 JSON；无需 MCP 协议栈 |
-| 是否内嵌官方 `/model` | **否，自建 UI + “打开官方查看器”按钮** | 官方页面依赖 capability cookie 和 daemon，难以嵌入；自建可控、可扩展 |
-| 启动 Runtime | **默认只连接，不自动启动** | 启动意味着开始采集屏幕；必须是显式动作 |
-| v1 读写 | **只读** | 先把“看”做好；build/correct/删除都放到 v1.1+，v1 只显示命令 |
-| 搜索 | **v1.1 通过 MCP stdio** | 公开 REST 没有 search 路由；MCP 的 `search` 是唯一稳定入口 |
-| 端口 | 优先 `8742`，其次读 `config.toml [mcp].port` | Runtime 默认端口；产品版用 8823，不会冲突 |
-| 数据根 | `PERSOME_ROOT` > `~/.persome` | 与 Runtime 一致，支持 dev 隔离 |
-| 渲染技术 | React + TypeScript + CSS Modules | 体量小、无重型 UI 库；图表用 SVG |
+| Data channel | **HTTP REST** | `/model/graph`, `/model/evidence`, `/status` are already stable JSON; no MCP protocol stack needed |
+| Embed the official `/model`? | **No; own UI + an "Open official viewer" button** | The official page depends on a capability cookie and the daemon and is hard to embed; our own UI is controllable and extensible |
+| Starting the Runtime | **Connect only by default, no auto-start** | Starting means screen capture begins; it must be an explicit action |
+| v1 read/write | **Read-only** | Get "viewing" right first; build/correct/delete move to v1.1+, v1 only shows the commands |
+| Search | **v1.1 via MCP stdio** | The public REST has no search route; MCP `search` is the only stable entry point |
+| Port | Prefer `8742`, then read `config.toml [mcp].port` | The Runtime default port; the product uses 8823, so no conflict |
+| Data root | `PERSOME_ROOT` > `~/.persome` | Consistent with the Runtime, supports dev isolation |
+| Rendering | React + TypeScript + CSS Modules | Small footprint, no heavy UI library; charts in SVG |
 
 ---
 
-## 5. Runtime 集成
+## 5. Runtime integration
 
-### 5.1 发现顺序
+### 5.1 Discovery order
 
 ```
 1. process.env.PERSOME_ROOT
 2. ~/.persome
 ```
 
-校验：
+Checks:
 
-- 目录存在且属主是当前用户；
-- `<root>/env` 存在、权限 0600、不是符号链接；
-- 能解析出 `PERSOME_LOCAL_API_TOKEN`；
-- 端口可用：先读 `<root>/config.toml` 的 `[mcp].port`，读不到用 8742。
+- The directory exists and is owned by the current user;
+- `<root>/env` exists, has permissions 0600, and is not a symlink;
+- `PERSOME_LOCAL_API_TOKEN` can be parsed from it;
+- Port available: first read `[mcp].port` from `<root>/config.toml`; if that fails, use 8742.
 
 ### 5.2 Token
 
@@ -140,66 +140,66 @@ export function readLocalToken(root: string): string {
 }
 ```
 
-规则：
+Rules:
 
-- 只存在主进程内存；
-- 不写日志、不进 IPC 返回值、不进崩溃上报；
-- 重新读取只在启动或 token 失效（401）时发生。
+- Kept only in main-process memory;
+- Never logged, never in IPC return values, never in crash reports;
+- Re-read only at startup or when the token becomes invalid (401).
 
-### 5.3 生命周期
+### 5.3 Lifecycle
 
-| 状态 | 判定 | UI |
+| State | Detection | UI |
 |---|---|---|
-| `not_installed` | 找不到 `<root>` 或 `persome` 可执行文件 | 显示安装指引 |
-| `stopped` | `/health` 连接被拒 | “启动 Runtime”按钮 |
-| `running` | `/health` 200 + `/status` 200 | 正常 |
-| `unauthorized` | `/status` 401 | “token 无效，重新生成” |
-| `version_mismatch` | `/status.version` 不在支持范围 | 提示升级 |
-| `degraded` | `/health` 返回 degraded | 顶部黄条 + 具体项 |
+| `not_installed` | `<root>` or the `persome` executable not found | Show installation guide |
+| `stopped` | `/health` connection refused | "Start Runtime" button |
+| `running` | `/health` 200 + `/status` 200 | Normal |
+| `unauthorized` | `/status` 401 | "Token invalid, regenerate it" |
+| `version_mismatch` | `/status.version` outside the supported range | Prompt to upgrade |
+| `degraded` | `/health` returns degraded | Yellow bar at the top + specific items |
 
-启动动作（显式）：
+Start action (explicit):
 
 ```bash
-persome start        # 后台启动；不阻塞
+persome start        # start in background; non-blocking
 ```
 
-实现：`spawn(persomeBin, ['start'], { detached: true, stdio: 'ignore' })`，然后轮询 `/health` 最多 30 秒。
+Implementation: `spawn(persomeBin, ['start'], { detached: true, stdio: 'ignore' })`, then poll `/health` for up to 30 seconds.
 
-停止动作不在 v1（避免误停用户正在用的 daemon）。
+A stop action is not in v1 (to avoid accidentally stopping a daemon the user is relying on).
 
-### 5.4 API 契约
+### 5.4 API contract
 
-除 `/health` 外，所有请求带 `Authorization: Bearer <token>`；超时 5s（`/model/graph` 15s）。
+Except for `/health`, every request carries `Authorization: Bearer <token>`; timeout 5s (`/model/graph` 15s).
 
-| 方法 | 路径 | 用途 | 返回 |
+| Method | Path | Purpose | Returns |
 |---|---|---|---|
-| GET | `/health` | 存活/降级（无鉴权） | `{status, ocr, index, capture}` |
-| GET | `/status` | 版本、root、daemon、capture、last_capture、内存/会话/时间线、LLM profile | `ApiResponse<StatusData>` |
+| GET | `/health` | Liveness/degradation (no auth) | `{status, ocr, index, capture}` |
+| GET | `/status` | Version, root, daemon, capture, last_capture, memory/sessions/timeline, LLM profile | `ApiResponse<StatusData>` |
 | GET | `/permissions` | accessibility / screen_recording | `ApiResponse<{...}>` |
-| GET | `/model/graph` | 完整模型快照（未脱敏） | `{generated_at, model, index_health?}` |
-| GET | `/model/evidence?ref=&as_of=` | 单条证据解析 | `EvidenceResponse` |
-| GET | `/model/node?id=` | 节点原始 receipts + 关系树 | `{id, source, raw[], tree}` |
-| GET | `/model/share-card` | 脱敏分享投影 | `{generated_at, model}` |
-| POST | `/model/edit` | 纠正（v1.2） | `ApiResponse` |
+| GET | `/model/graph` | Full model snapshot (not redacted) | `{generated_at, model, index_health?}` |
+| GET | `/model/evidence?ref=&as_of=` | Resolve a single piece of evidence | `EvidenceResponse` |
+| GET | `/model/node?id=` | Node raw receipts + relation tree | `{id, source, raw[], tree}` |
+| GET | `/model/share-card` | Redacted share projection | `{generated_at, model}` |
+| POST | `/model/edit` | Correction (v1.2) | `ApiResponse` |
 
-`/model/graph` 返回的是 **owner 未脱敏视图**（源码注释明确：MCP/导出默认脱敏，loopback viewer 不脱敏）。因此：
+`/model/graph` returns the **owner's unredacted view** (the source comments are explicit: MCP/export redact by default, the loopback viewer does not). Therefore:
 
-- v1 不提供任何“分享/导出”入口；
-- 未来若加导出，必须走 `/model/share-card` 或 `model export` 的脱敏路径。
+- v1 offers no "share/export" entry point;
+- If export is added in the future, it must go through the redacted path of `/model/share-card` or `model export`.
 
-### 5.5 错误映射
+### 5.5 Error mapping
 
-| 传输层 | UI |
+| Transport | UI |
 |---|---|
-| `ECONNREFUSED` | runtime stopped，显示启动按钮 |
-| 401 | token invalid，显示 `persome start` 重新生成指引 |
-| 404 | 路由不存在，按 version mismatch 处理 |
-| 5xx | 显示错误详情 + “打开日志” |
-| JSON schema 不符 | “Runtime 版本不兼容”，保留旧缓存并提示 |
+| `ECONNREFUSED` | runtime stopped, show the start button |
+| 401 | token invalid, show the guide to regenerate via `persome start` |
+| 404 | Route does not exist, treat as version mismatch |
+| 5xx | Show error details + "Open logs" |
+| JSON schema mismatch | "Runtime version incompatible"; keep the old cache and notify |
 
 ---
 
-## 6. 数据模型
+## 6. Data model
 
 ```ts
 // src/lib/types.ts
@@ -235,7 +235,7 @@ export interface Point {
   confidence: number;
   conflicted: boolean;
   receipt: string;
-  edit_refusal: string; // "" = 可纠正
+  edit_refusal: string; // "" = correctable
 }
 
 export interface Line {
@@ -257,7 +257,7 @@ export interface Face {
 }
 
 export interface Volume extends Face {
-  // 跨域 schema，字段同 Face
+  // cross-domain schema, same fields as Face
 }
 
 export interface Root {
@@ -296,7 +296,7 @@ export interface ModelStats {
 }
 ```
 
-证据响应（来自 `evidence.py` 的 `_base`）：
+Evidence response (from `_base` in `evidence.py`):
 
 ```ts
 export interface EvidenceResponse {
@@ -310,19 +310,19 @@ export interface EvidenceResponse {
   timestamp: string | null;
   path: string | null;
   metadata: Record<string, unknown>;
-  sources: EvidenceItem[];   // 显式来源，可作为证明
-  context: EvidenceItem[];   // 时间邻近上下文，不是证明
-  history: EvidenceItem[];   // Point 的版本链
+  sources: EvidenceItem[];   // explicit sources, usable as proof
+  context: EvidenceItem[];   // temporally nearby context, not proof
+  history: EvidenceItem[];   // the Point's version chain
 }
 ```
 
-> UI 文案必须区分 `sources`（直接来源）与 `context`（邻近上下文，不是证据）。这是 Runtime 自己的契约，不要混。
+> UI copy must distinguish `sources` (direct sources) from `context` (nearby context, not evidence). This is the Runtime's own contract; do not mix them.
 
 ---
 
-## 7. UI 设计
+## 7. UI design
 
-### 7.1 信息架构
+### 7.1 Information architecture
 
 ```
 ┌ Sidebar ─────────┬ Main ─────────────────────────────────────┐
@@ -333,7 +333,7 @@ export interface EvidenceResponse {
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-### 7.2 页面
+### 7.2 Pages
 
 #### Overview
 
@@ -349,134 +349,134 @@ export interface EvidenceResponse {
 │ Build: complete · 2026-11-04T… · 1,204 points              │
 │ Degraded stages: (none)                                    │
 │                                                            │
-│ [复制 build 命令] [Open official viewer] [Open data folder] │
+│ [Copy build cmd] [Open official viewer] [Open data folder] │
 └────────────────────────────────────────────────────────────┘
 ```
 
-- 数据来源：`/status`（5s 轮询，窗口失焦 30s）。
-- 显示：daemon、capture、last_capture、sessions、memory、timeline、build status、counts。
-- 若 `build.status = not_built`：显示“还没有模型，先跑一次 build”+ 可复制的命令（v1 不代替用户执行 build；v1.1 再加按钮）。
+- Data source: `/status` (polled every 5s, 30s when the window is unfocused).
+- Shows: daemon, capture, last_capture, sessions, memory, timeline, build status, counts.
+- If `build.status = not_built`: show "No model yet, run a build first" + a copyable command (v1 does not run the build on the user's behalf; v1.1 adds a button).
 
 #### Model
 
-三栏：
+Three columns:
 
 ```
 ┌ Root ────────────────┬ Faces / Volumes ──────┬ Points ─────────┐
-│ 一段叙事（可滚动）    │ Face 列表（置信度）    │ 可筛选表格      │
-│ 置信度 · 证据数 · 时间│ Volume 列表           │ 点击 → 右侧证据 │
+│ Narrative (scrolls)  │ Face list (confidence)│ Filterable table│
+│ Conf · evidence · time│ Volume list          │ Click → evidence│
 └──────────────────────┴───────────────────────┴─────────────────┘
 ```
 
-- Root 卡片：signature、confidence、observations、build time、receipts 数。
-- Faces/Volumes：按 confidence 排序，展示 signature 前两行；点击 → 过滤关联 Points。
-- Points：virtualized 列表；列：时间、文件、摘要、confidence、conflicted、tags。
-- 过滤器：`is_latest`、`conflicted`、`file_name`、tag。
-- 选中 Point → 打开 Evidence 抽屉（不跳页）。
+- Root card: signature, confidence, observations, build time, receipt count.
+- Faces/Volumes: sorted by confidence, showing the first two lines of the signature; click → filter related Points.
+- Points: virtualized list; columns: time, file, summary, confidence, conflicted, tags.
+- Filters: `is_latest`, `conflicted`, `file_name`, tag.
+- Selecting a Point → opens the Evidence drawer (no page change).
 
-#### Evidence（抽屉/独立页）
+#### Evidence (drawer/standalone page)
 
 ```
 ┌ Evidence ─────────────────────────────────────────────┐
-│ 结论：用户偏好 Rust 做 CLI 工具                         │
+│ Claim: the user prefers Rust for CLI tools             │
 │ status: ok · point:event:entry:… · 2026-10-12          │
 ├────────────────────────────────────────────────────────┤
-│ 直接来源（sources）                                     │
+│ Direct sources (sources)                               │
 │  • 2026-10-12 14:03 · Terminal · iTerm                 │
 │    “I’ll use Rust for this one.”                       │
-│    receipt ⟨…⟩  [复制]                                  │
+│    receipt ⟨…⟩  [Copy]                                  │
 ├────────────────────────────────────────────────────────┤
-│ 邻近上下文（context，非证明）                           │
+│ Nearby context (context, not proof)                    │
 │  • 14:01 · VS Code · Cargo.toml                        │
 ├────────────────────────────────────────────────────────┤
-│ 版本历史（history）                                     │
+│ Version history (history)                              │
 │  • supersedes ← 2026-09-30 …                           │
 └────────────────────────────────────────────────────────┘
 ```
 
-- 点击 receipt：调用 `/model/evidence?ref=<receipt>` 继续下钻；`status=missing` 时显示“原始数据已过保留期”。
-- `as_of` 选择器（v1.1）：时间旅行。
+- Clicking a receipt: call `/model/evidence?ref=<receipt>` to drill down further; when `status=missing`, show "The raw data is past its retention period".
+- `as_of` picker (v1.1): time travel.
 
-#### Node（关系）
+#### Node (relations)
 
-- 从 Point 的 “关系” tab 触发 `/model/node?id=<point.id>`。
-- 展示 `raw[]`（原始 receipts）与 `tree`（BFS 关系树，depth≤2、fanout≤8）。
-- 树节点可继续点击 → evidence。
+- Triggered from a Point's "Relations" tab via `/model/node?id=<point.id>`.
+- Shows `raw[]` (raw receipts) and `tree` (BFS relation tree, depth≤2, fanout≤8).
+- Tree nodes can be clicked further → evidence.
 
 #### Settings
 
-| 项 | 内容 |
+| Item | Content |
 |---|---|
-| Runtime 路径 | `<root>`，可打开 Finder |
-| 端口 / 版本 | 只读 |
-| Token | `已加载 / 缺失`（不显示值） |
-| Config | 打开 `config.toml`（只读提示） |
-| 诊断 | 复制 `doctor` 摘要（不含 token） |
-| 官方查看器 | 按钮：`persome model open` |
-| 关于 | 版本、许可、非官方声明 |
+| Runtime path | `<root>`, can open in Finder |
+| Port / version | Read-only |
+| Token | `loaded / missing` (value not shown) |
+| Config | Open `config.toml` (read-only notice) |
+| Diagnostics | Copy the `doctor` summary (without the token) |
+| Official viewer | Button: `persome model open` |
+| About | Version, license, unofficial notice |
 
-### 7.3 视觉
+### 7.3 Visuals
 
-- 浅色「纸」主题，参考 Runtime 查看器的暖白/森林绿；
-- 字体：系统 `-apple-system` / `PingFang SC`；
-- 圆角 10px，1px 边框，弱阴影；
-- 深色模式 v1.1（CSS variables 已留位）。
+- Light "paper" theme, following the Runtime viewer's warm white/forest green;
+- Fonts: system `-apple-system` / `PingFang SC`;
+- 10px corner radius, 1px borders, soft shadows;
+- Dark mode in v1.1 (CSS variables already reserved).
 
-### 7.4 空态与降级
+### 7.4 Empty states and degradation
 
-| 状态 | 文案 | 动作 |
+| State | Copy | Action |
 |---|---|---|
-| Runtime 未安装 | “没有找到 ~/.persome” | 安装指引链接 |
-| Runtime 未启动 | “Runtime 没有运行” | 启动按钮 |
-| 无权限 | “Accessibility / Screen Recording 未授权” | 打开系统设置 |
-| 模型为空 | “模型还在形成中（未 build）” | 显示 `persome model build` |
-| Build degraded | “以下阶段失败：…” | 显示 stage 列表 |
-| index_health 异常 | 顶部黄条 | 链接到诊断 |
+| Runtime not installed | "~/.persome not found" | Link to installation guide |
+| Runtime not started | "The Runtime is not running" | Start button |
+| No permission | "Accessibility / Screen Recording not granted" | Open System Settings |
+| Model empty | "The model is still forming (not built)" | Show `persome model build` |
+| Build degraded | "The following stages failed: …" | Show the stage list |
+| index_health abnormal | Yellow bar at the top | Link to diagnostics |
 
 ---
 
-## 8. 安全设计
+## 8. Security design
 
-| 面 | 措施 |
+| Surface | Measure |
 |---|---|
-| 进程 | `contextIsolation: true`、`nodeIntegration: false`、`sandbox: true` |
-| preload | 仅暴露 `window.lens` 的固定方法；参数用 zod 校验 |
-| token | 只在 main；IPC 返回值不含 token；日志脱敏 |
+| Process | `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true` |
+| preload | Exposes only fixed methods on `window.lens`; arguments validated with zod |
+| token | Main only; IPC return values never contain the token; logs redacted |
 | CSP | `default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'` |
-| 远程内容 | 禁止加载任何 http(s) 页面；外链走 `shell.openExternal` + 域名白名单 |
-| 文件访问 | 只读 `<root>` 下指定文件；路径规范化，拒绝 `..` |
-| 遥测 | **无**（不引入 Sentry/analytics） |
-| 导出 | v1 不提供；v1.2 只走 `/model/share-card` 或 `persome model export` |
+| Remote content | Loading any http(s) page is forbidden; external links go through `shell.openExternal` + a domain allowlist |
+| File access | Read only specified files under `<root>`; paths normalized, `..` rejected |
+| Telemetry | **None** (no Sentry/analytics) |
+| Export | Not offered in v1; v1.2 only via `/model/share-card` or `persome model export` |
 
 ---
 
-## 9. 性能
+## 9. Performance
 
-| 点 | 方案 |
+| Point | Approach |
 |---|---|
-| `/model/graph` 可能很大 | 启动时拉一次，缓存 60s；列表虚拟化；只渲染当前视图 |
-| 证据点击 | 懒加载，单条请求 |
-| 状态轮询 | 聚焦 5s / 失焦 30s；窗口隐藏时暂停 |
-| 内存 | 不把整张图复制进 React state 多次；用 normalized store |
-| 首屏 | 先显示 status，再异步拉 graph；graph 期间显示 skeleton |
+| `/model/graph` can be large | Fetch once at startup, cache for 60s; virtualized lists; render only the current view |
+| Evidence clicks | Lazy loading, one request each |
+| Status polling | 5s focused / 30s unfocused; paused when the window is hidden |
+| Memory | Don't copy the whole graph into React state multiple times; use a normalized store |
+| First screen | Show status first, then fetch the graph asynchronously; show a skeleton meanwhile |
 
 ---
 
-## 10. 技术栈与工程结构
+## 10. Tech stack and project structure
 
-### 10.1 栈
+### 10.1 Stack
 
-| 层 | 选择 |
+| Layer | Choice |
 |---|---|
-| 壳 | Electron 43（当前稳定版），electron-vite |
-| 渲染 | React 19 + TypeScript |
-| 状态 | TanStack Query + 少量 Zustand（选中项） |
-| 样式 | CSS Modules + CSS variables（不引 Tailwind） |
-| 校验 | zod |
-| 打包 | electron-builder（DMG，arm64） |
-| 测试 | Vitest（unit）+ Playwright `_electron`（e2e） |
+| Shell | Electron 43 (current stable), electron-vite |
+| Rendering | React 19 + TypeScript |
+| State | TanStack Query + a little Zustand (selection) |
+| Styling | CSS Modules + CSS variables (no Tailwind) |
+| Validation | zod |
+| Packaging | electron-builder (DMG, arm64) |
+| Testing | Vitest (unit) + Playwright `_electron` (e2e) |
 
-### 10.2 目录
+### 10.2 Directory layout
 
 ```
 persome-lens/
@@ -507,7 +507,7 @@ persome-lens/
     lib/format.ts
     styles/tokens.css
   tests/
-    fixtures/               # 从 runtime tests/fixtures/runtime_model 裁剪
+    fixtures/               # trimmed from runtime tests/fixtures/runtime_model
     unit/*.test.ts
     e2e/*.spec.ts
   build/
@@ -517,170 +517,170 @@ persome-lens/
 
 ---
 
-## 11. 测试
+## 11. Testing
 
-### 11.1 单元
+### 11.1 Unit
 
-- token 解析：缺字段、权限过宽、符号链接；
-- 端口发现：config 有/无、端口占用；
-- 错误映射：401/404/5xx/ECONNREFUSED；
-- 数据归一化：`/model/graph` → 视图模型；`status` → 卡片。
+- Token parsing: missing field, overly broad permissions, symlink;
+- Port discovery: with/without config, port in use;
+- Error mapping: 401/404/5xx/ECONNREFUSED;
+- Data normalization: `/model/graph` → view model; `status` → cards.
 
-### 11.2 契约测试
+### 11.2 Contract tests
 
-用 Runtime 仓库 `tests/fixtures/runtime_model/` 的 JSON 作为 golden fixture：
+Use the JSON in the Runtime repo's `tests/fixtures/runtime_model/` as golden fixtures:
 
-- 空模型（无 root）；
-- 完整模型（root + faces + volumes + points）；
-- evidence `status=missing`；
-- degraded build。
+- Empty model (no root);
+- Full model (root + faces + volumes + points);
+- evidence `status=missing`;
+- degraded build.
 
 ### 11.3 E2E
 
-用 Playwright `_electron` 启动 App，注入一个 **fake runtime**（本地 Express 或 msw）返回 fixture：
+Launch the app with Playwright `_electron` and inject a **fake runtime** (local Express or msw) that returns fixtures:
 
-1. runtime down → 启动按钮可见；
-2. 启动后 → Overview 显示 running；
-3. Model 页显示 Root；
-4. 点 Point → Evidence 抽屉出现 `sources`；
-5. 无 token → 显示 unauthorized 文案。
+1. runtime down → start button visible;
+2. after starting → Overview shows running;
+3. Model page shows Root;
+4. Click a Point → the Evidence drawer shows `sources`;
+5. No token → shows the unauthorized copy.
 
-### 11.4 手工
+### 11.4 Manual
 
-- 真实 Runtime 跑 10 分钟，确认状态轮询不抖动；
-- 断网启动，确认无任何网络请求（DevTools Network 为空）；
-- 检查日志无 token。
+- Run against the real Runtime for 10 minutes and confirm status polling doesn't flicker;
+- Start offline and confirm there are no network requests at all (DevTools Network is empty);
+- Check that logs contain no token.
 
 ---
 
-## 12. 打包与分发
+## 12. Packaging and distribution
 
 ```bash
 npm run dist
-# 产出 dist/Persome Lens-1.0.0-arm64.dmg
+# produces dist/Persome Lens-1.0.0-arm64.dmg
 ```
 
-- appId：`dev.persomelens.app`
-- productName：`Persome Lens`
-- 最低 macOS 14，arm64
-- v1 不做自动更新、不做公证（本地自用）；对外分发前再做 Developer ID + notarize
-- 图标：自绘占位，不使用原版商标
+- appId: `dev.persomelens.app`
+- productName: `Persome Lens`
+- Minimum macOS 14, arm64
+- v1 has no auto-update and no notarization (local personal use); add Developer ID + notarize before distributing externally
+- Icon: a self-drawn placeholder, not the original trademark
 
 ---
 
-## 13. 里程碑
+## 13. Milestones
 
-| 里程碑 | 内容 | 完成标志 |
+| Milestone | Content | Done when |
 |---|---|---|
-| M0 | 脚手架、窗口、preload、token/端口发现、`/status` | 应用可启动并读到 Runtime |
-| M1 | Model 页：graph、Root、Faces、Points 列表 | 真实数据可渲染 |
-| M2 | Evidence 抽屉、Node 树、Settings、空态/降级 | 证据可回溯；空态不崩 |
-| M3 | 打包 DMG、README、fixtures 测试 | DMG 可安装；fixture 测试通过 |
+| M0 | Scaffolding, window, preload, token/port discovery, `/status` | The app starts and reads the Runtime |
+| M1 | Model page: graph, Root, Faces, Points list | Real data renders |
+| M2 | Evidence drawer, Node tree, Settings, empty/degraded states | Evidence can be traced; empty states don't crash |
+| M3 | Package DMG, README, fixture tests | DMG installs; fixture tests pass |
 
-依赖：Runtime 已安装（已完成）、Node 24、Xcode CLT（已具备）。
+Dependencies: Runtime installed (done), Node 24, Xcode CLT (available).
 
 ---
 
-## 14. 风险与开放问题
+## 14. Risks and open questions
 
-| 风险 | 影响 | 缓解 |
+| Risk | Impact | Mitigation |
 |---|---|---|
-| `/model/graph` 契约在 v0.4 变化 | 解析失败 | 按 `schema_version` 分支；zod 校验；不兼容时只读旧缓存 |
-| 大模型 payload（数千 Points） | 卡顿 | 虚拟化 + 分页（v1.1 改用 MCP bounded projection） |
-| token 文件权限差异 | 无法连接 | 明确报错 + 引导 `persome start` 重新生成 |
-| Runtime 版本过旧 | 路由缺失 | 版本检查 + 升级提示 |
-| 用户同时开产品版 | 端口/采集冲突 | 只用 8742；检测 8823 并提示“产品版在运行” |
-| 只读 v1 不够用 | 用户想纠正 | v1.2 接 `POST /model/edit` + `correct_memory` |
+| `/model/graph` contract changes in v0.4 | Parsing fails | Branch on `schema_version`; zod validation; when incompatible, read only the old cache |
+| Large model payload (thousands of Points) | Lag | Virtualization + paging (v1.1 switches to the MCP bounded projection) |
+| Token file permission differences | Cannot connect | Clear error + guide to regenerate via `persome start` |
+| Runtime version too old | Routes missing | Version check + upgrade prompt |
+| User also runs the product at the same time | Port/capture conflicts | Use only 8742; detect 8823 and show "The product version is running" |
+| Read-only v1 isn't enough | User wants to correct | v1.2 wires up `POST /model/edit` + `correct_memory` |
 
-开放问题：
+Open questions:
 
-1. 搜索是否在 v1 就做？建议 v1.1，用 `persome mcp` stdio + `@modelcontextprotocol/sdk`。
-2. 是否做“constellation”星空图？建议 v1.1，先列表 + 关系树。
-3. 是否需要 i18n？v1 中文优先，英文 v1.1。
-4. 是否支持多 root（dev/prod）切换？v1 单 root + `PERSOME_ROOT` 覆盖。
-
----
-
-## 15. 验收标准（Definition of Done）
-
-- [ ] `npm install && npm run dev` 在已装 Runtime 的机器上直接打开窗口；
-- [ ] 断网、无账号，Overview/Model/Evidence 全部可用；
-- [ ] Runtime 未启动时显示明确空态，一键启动后自动刷新；
-- [ ] 点击 Root/Face/Point 能看到 sources 原文与 receipt；
-- [ ] `status=missing` 的旧 receipt 有正确文案；
-- [ ] 渲染进程 DevTools 中搜不到 token；
-- [ ] 无任何外部网络请求（除 127.0.0.1）；
-- [ ] `npm run dist` 产出可双击运行的 DMG；
-- [ ] README 写明：非官方、只读、数据不出本机。
+1. Should search be in v1? Suggest v1.1, using `persome mcp` stdio + `@modelcontextprotocol/sdk`.
+2. Build a "constellation" star map? Suggest v1.1; lists + relation tree first.
+3. Is i18n needed? v1 is Chinese-first, English in v1.1.
+4. Support switching between multiple roots (dev/prod)? v1 uses a single root + `PERSOME_ROOT` override.
 
 ---
 
-## 16. 后续版本
+## 15. Acceptance criteria (Definition of Done)
 
-| 版本 | 内容 |
+- [ ] `npm install && npm run dev` opens the window directly on a machine with the Runtime installed;
+- [ ] Offline and without an account, Overview/Model/Evidence all work;
+- [ ] When the Runtime is not started, a clear empty state is shown, and it refreshes automatically after one-click start;
+- [ ] Clicking Root/Face/Point shows the sources' original text and receipt;
+- [ ] Old receipts with `status=missing` have the correct copy;
+- [ ] The token cannot be found by searching in the renderer's DevTools;
+- [ ] No external network requests at all (except 127.0.0.1);
+- [ ] `npm run dist` produces a DMG that runs on double-click;
+- [ ] The README states: unofficial, read-only, data never leaves the machine.
+
+---
+
+## 16. Later versions
+
+| Version | Content |
 |---|---|
-| v1.1 | MCP stdio 搜索（`search` / `search_captures` / `recent_activity`）；星空图；深色模式 |
-| v1.2 | 写入：`POST /model/edit`、`correct_memory`；`as_of` 时间旅行 |
-| v1.3 | 导入向导（Obsidian/folder/Notion）；`HUMAN.md` 预览 |
-| v2 | 可选接产品版 Cloud（登录后启用会议/卡片/周报），但必须保持“本地模式”可独立运行 |
-| 暂不做 | HET（开源 Runtime 无此模块）；会议；社交；云同步 |
+| v1.1 | MCP stdio search (`search` / `search_captures` / `recent_activity`); star map; dark mode |
+| v1.2 | Writes: `POST /model/edit`, `correct_memory`; `as_of` time travel |
+| v1.3 | Import wizard (Obsidian/folder/Notion); `HUMAN.md` preview |
+| v2 | Optionally connect to the product Cloud (meetings/cards/weekly reports enabled after sign-in), but "local mode" must keep running standalone |
+| Not for now | HET (the open-source Runtime has no such module); meetings; social; cloud sync |
 
 ---
 
-## 17. 参考资料
+## 17. References
 
-- Runtime 仓库：`~/Documents/GitHub/personal-model`
-- 模型格式：`MODEL_FORMAT.md`
-- MCP 契约：`MCP.md`
-- 证据契约：`src/persome/evidence.py`
-- 路由：`src/persome/api/routes.py`
-- 官方查看器：`src/persome/api/model_view.py`
-
----
-
-## 18. 非官方声明
-
-本项目是第三方本地查看器，不使用原版商标与云端服务；只读取用户本机 `~/.persome` 中由开源 Runtime 生成的数据。Runtime 代码遵循 Apache-2.0，本查看器将保留相应 NOTICE。
+- Runtime repo: `~/Documents/GitHub/personal-model`
+- Model format: `MODEL_FORMAT.md`
+- MCP contract: `MCP.md`
+- Evidence contract: `src/persome/evidence.py`
+- Routes: `src/persome/api/routes.py`
+- Official viewer: `src/persome/api/model_view.py`
 
 ---
 
-## 19. 实现状态（2026-11-04）
+## 18. Unofficial notice
 
-- 代码位置：`~/Documents/GitHub/persome-lens`
-- 已实现：Overview（状态/构建/权限）、Model（Root/Faces/Volumes/Points 筛选）、Evidence 抽屉（sources/context/history/receipt 下钻）、Node 关系与原始回执、Settings、Runtime 一键启动、未连接/空模型/无权限空态。
-- 未实现（按计划）：搜索（MCP，v1.1）、写入/纠正（v1.2）、星空图、i18n、DMG 公证。
-- 验证：typecheck ✅、build ✅、打包 DMG ✅、mock fixtures 与真实 runtime（ingest 模式）均通过。
-- 运行：
+This project is a third-party local viewer; it does not use the original trademark or cloud services, and reads only data generated by the open-source Runtime in the user's local `~/.persome`. The Runtime code is under Apache-2.0, and this viewer will keep the corresponding NOTICE.
+
+---
+
+## 19. Implementation status (2026-11-04)
+
+- Code location: `~/Documents/GitHub/persome-lens`
+- Implemented: Overview (status/build/permissions), Model (Root/Faces/Volumes/Points filters), Evidence drawer (sources/context/history/receipt drill-down), Node relations and raw receipts, Settings, one-click Runtime start, empty states for not connected/empty model/no permission.
+- Not implemented (as planned): search (MCP, v1.1), writes/correction (v1.2), star map, i18n, DMG notarization.
+- Verification: typecheck ✅, build ✅, DMG packaging ✅, both mock fixtures and the real runtime (ingest mode) pass.
+- Running:
   ```bash
   cd ~/Documents/GitHub/persome-lens
   env -u ELECTRON_RUN_AS_NODE npm run dev
   ```
 
-### 19.1 真实数据验证（2026-11-04 晚）
+### 19.1 Real-data verification (2026-11-04 evening)
 
-- 真实 `~/.persome` 跑通：Overview / Model / Evidence 均能读取运行时数据。
-- 发现并修复一个真实数据 bug：`/model/graph` 的 `Point.tags` 是空格分隔字符串，不是数组；Model 页首版因此崩溃（白屏）。已在 `tagList()` 中兼容 string / array / null。
-- 第一次 build（114 个导入 session + 4 条 agent remember 事实）结果：**14 Points / 10 Lines / 0 Faces / 0 Volumes / 0 Root**，`model_contract` degraded。
-- 结论：`import-data` 在公开 v0.3.2 里只生成 event 日志，evomem 会跳过 `event-*`；Points 主要来自 `remember` 写入的持久记忆与实体边。Face/Volume/Root 需要跨会话重复证据。
-- Claude 订阅额度当晚 200/200 用尽（导入 session 归约消耗大），次日重置前 LLM 阶段会 fail closed。
+- Works end to end on the real `~/.persome`: Overview / Model / Evidence all read runtime data.
+- Found and fixed a real-data bug: `Point.tags` in `/model/graph` is a space-separated string, not an array; the first version of the Model page crashed on it (blank screen). `tagList()` now handles string / array / null.
+- First build (114 imported sessions + 4 agent `remember` facts) result: **14 Points / 10 Lines / 0 Faces / 0 Volumes / 0 Root**, `model_contract` degraded.
+- Conclusion: in public v0.3.2, `import-data` only produces event logs, and evomem skips `event-*`; Points come mainly from durable memories written by `remember` and from entity edges. Face/Volume/Root need repeated evidence across sessions.
+- The Claude subscription quota hit 200/200 that night (reducing the imported sessions is expensive); until the next-day reset, the LLM stages fail closed.
 
-### 19.2 P0 / P1 已实现（2026-11-04 夜）
+### 19.2 P0 / P1 implemented (2026-11-04 night)
 
-- **P0**：顶栏新增 `LLM used/limit` 徽标；额度耗尽时显示红色提示条（含下次重置时间）；新增全局刷新按钮。
-- **P1**：新增「搜索」页，走 `persome mcp` stdio：
-  - 记忆搜索：MCP `search`
-  - 屏幕搜索：MCP `search_captures`
-  - 最近活动：MCP `recent_activity`
-  - 记忆/最近结果可点开 Evidence 抽屉。
-- 主进程新增最小 MCP JSON-RPC 客户端（`src/main/mcp/client.ts`），按需启动 `persome mcp`，退出时关闭。
-- 已验证：typecheck、build、dist；真实 `~/.persome` 下记忆搜索返回结果；额度条显示 200/200 与重置时间。
+- **P0**: the top bar gains an `LLM used/limit` badge; when the quota is exhausted, a red notice bar appears (with the next reset time); a global refresh button was added.
+- **P1**: a new "Search" page, using `persome mcp` stdio:
+  - Memory search: MCP `search`
+  - Screen search: MCP `search_captures`
+  - Recent activity: MCP `recent_activity`
+  - Memory/recent results can open the Evidence drawer.
+- The main process gains a minimal MCP JSON-RPC client (`src/main/mcp/client.ts`) that starts `persome mcp` on demand and closes it on exit.
+- Verified: typecheck, build, dist; memory search returns results on the real `~/.persome`; the quota bar shows 200/200 and the reset time.
 
-### 19.3 P2 / P3 已实现（2026-11-04 夜）
+### 19.3 P2 / P3 implemented (2026-11-04 night)
 
-- **P2 写入**：
-  - 「记住一条」对话框：调用 MCP `remember`，直接写 `topic-agent-findings.md`，零 LLM。
-  - Evidence 抽屉「纠正」：调用 MCP `correct_memory`，自然语言纠正，保留回执；可能调用 LLM。
-  - 「构建模型」按钮：主进程 spawn `persome model build`，实时显示输出尾部、退出码，可取消；额度耗尽时禁用。
-- **P3 Playbook**：新增页面读取 MCP `behavior_patterns`，展示 Root / Faces / Skills 与 Runtime 渲染块；空态说明需要跨会话证据。
-- 真实数据验证：搜索、记住弹窗、纠正弹窗、空 Playbook 均正常渲染；typecheck/build/dist 通过。
-- 未验证：build 按钮的完整构建（当前额度 200/200 被禁用）；correct_memory 的实际应用（会调用 LLM，同样受额度限制）。
+- **P2 writes**:
+  - "Remember something" dialog: calls MCP `remember`, writes directly to `topic-agent-findings.md`, zero LLM.
+  - Evidence drawer "Correct": calls MCP `correct_memory`, natural-language correction, keeps the receipt; may call the LLM.
+  - "Build model" button: the main process spawns `persome model build`, shows the tail of the output and the exit code live, and can be cancelled; disabled when the quota is exhausted.
+- **P3 Playbook**: a new page reads MCP `behavior_patterns` and shows Root / Faces / Skills and the Runtime-rendered blocks; the empty state explains that cross-session evidence is needed.
+- Real-data verification: search, the remember dialog, the correct dialog, and the empty Playbook all render correctly; typecheck/build/dist pass.
+- Not verified: a full build via the build button (currently disabled at 200/200 quota); actually applying correct_memory (it calls the LLM and is subject to the same quota).

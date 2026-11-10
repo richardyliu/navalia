@@ -100,7 +100,7 @@ exercised. The positive paths were exercised against a real R10 Runtime on temp 
   `RuntimeError('not_found', …, detail 'endpoint_missing')`, which means a Runtime older than R10.
 - **Meetings** (`src/main/cloud/meetings.ts` `deleteFromRuntime`, channel `lens:meetings:delete-from-runtime`, preload
   `meetings.deleteFromRuntime`):
-  - UI: a **「从 Persome 删除…」** button in `MeetingDetail.tsx` whenever the meeting's import or remembered summary
+  - UI: a **"Delete from Persome…"** button in `MeetingDetail.tsx` whenever the meeting's import or remembered summary
     is still in the Runtime.
   - The button shows a native confirm first, listing what will be removed and saying derived memory stays.
   - It then calls `/imports/delete {by:"content_sha256", ids:[imported.sha256]}` and, if a summary was remembered,
@@ -109,7 +109,7 @@ exercised. The positive paths were exercised against a real R10 Runtime on temp 
     Runtime refused.
   - The import confirm text, `RUNTIME_DELETE_NOTE` and the meeting-delete note no longer say "the Runtime cannot
     delete".
-- **Connectors** (`src/main/connectors/service.ts` `deleteImported`). The existing 「删除」 with native confirm now:
+- **Connectors** (`src/main/connectors/service.ts` `deleteImported`). The existing "Delete" with native confirm now:
   - erases memory through `/memory/entries/delete`, in batches of up to 1000 ids;
   - falls back to `/model/edit retire` for ids refused with `evomem_authority`, and for every id on a Runtime older
     than R10;

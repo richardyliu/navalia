@@ -107,7 +107,7 @@ Command (from `personal-model-og` @ `be0a0bc`):
 | A dev Lens boots on the real runtime; Broker on :8750; graceful SIGTERM | PASS |
 | B receipts (MOD-07/08): 296/296 candidate receipts resolve | PASS. **Caveat:** the existing 49 Points and 46 Lines have `sources=[]` because they were built on 0.3.2 and nothing backfills the new link tables. A post-deploy model rebuild is needed (user decision, see below). |
 | C MOD-13 issues `no_faces/no_volumes/no_root` with Chinese text | PASS |
-| D HET `/het/*`: 401 without auth, 200 with it; minutes null / 未测量 | PASS |
+| D HET `/het/*`: 401 without auth, 200 with it; minutes null / "not measured" label | PASS |
 | E habits 3-date gate | PASS on a temp root. The real data has 0 Faces. |
 | F as-of (MOD-12) | **FAIL**. 35/49 Points are correct; 14 entry-backed Points return `active` before they existed. Root cause: `evidence.py` `_resolve_entry` ignores `as_of` and runs before `_resolve_evo_node`. Pre-existing and not a regression (it was FAIL before). Fix in progress as **R7**. |
 | G owner aliases: real data has 0 in every status; confirm→self 7/7 and reject 8/8 on a temp root | PASS |
