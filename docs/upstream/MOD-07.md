@@ -49,7 +49,7 @@ The only way left is to read `index.db` directly, which is forbidden for Lens. L
 
 ### Per-item drop reasons
 
-The upstream gives none. It records only the integer `dropped` per window, and `_quote_ok` merges "no quote" and "quote not in source". Lens shows `已丢弃 N 条（Runtime 未提供逐条原因）`, or the Runtime-wide counter from `delta-report` labelled as not specific to the item.
+The upstream gives none. It records only the integer `dropped` per window, and `_quote_ok` merges "no quote" and "quote not in source". Lens shows `N dropped (Runtime gave no per-item reason)`, or the Runtime-wide counter from `delta-report` labelled as not specific to the item.
 
 ### Verdict
 
@@ -130,7 +130,7 @@ The Lens EvidenceDrawer has a copy button for both commands.
 - The evidence chain breaks one hop from the claim. The owner can see that a Point was promoted but cannot reach the quote and window that justified it. T-MOD-07 step 5 fails.
 - Any client that counts `sources` will report "0 sources" for a grounded Point. A client that renders `missing` naively will imply the evidence expired, but the row is still stored.
 - Owners and auditors cannot tell "the model gave no quote" from "the quote was fabricated" or "confidence was below the floor". T-MOD-07 step 3 fails.
-- Lens mitigation (S1-01, OG-03): the drawer shows these receipts as **证据未解析** with the Runtime's own reason and never counts them as sources. A Point with `sources=[]` is no longer shown with a bare 「无」. It gets an explicit **证据未解析** row with its ref, the text 「Runtime 为这条 Point 返回了空的 sources（sources=[]），没有给出原因」, the MOD-07 note and a labelled `Lens 回退：无`. When only a count exists the drawer shows `已丢弃 N 条（Runtime 未提供逐条原因）`, and it offers the repro commands. Lens cannot fix the root cause, because it must not read or write `index.db`.
+- Lens mitigation (S1-01, OG-03): the drawer shows these receipts as **Evidence unresolved** with the Runtime's own reason and never counts them as sources. A Point with `sources=[]` is no longer shown with a bare "None". It gets an explicit **Evidence unresolved** row with its ref, the text "Runtime returned empty sources for this Point (sources=[]) and gave no reason", the MOD-07 note and a labelled `Lens fallback: none`. When only a count exists the drawer shows `N dropped (Runtime gave no per-item reason)`, and it offers the repro commands. Lens cannot fix the root cause, because it must not read or write `index.db`.
 
 ## Suggested patch (description + diff sketch; NOT applied)
 

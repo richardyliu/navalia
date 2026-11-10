@@ -12,4 +12,4 @@ Target: `personal-model` 0.3.2. Status: not filed, not applied. Found by OG-00b 
 2. Pass the session window end as `valid_from` for delta relations and as `occurred_at` for promoted Points.
 
 ## Impact on Lens
-EvidenceDrawer "查看当时" uses this endpoint. Until fixed, Lens should label it as a history/context cut-off, not "state at T".
+EvidenceDrawer "View as of then" uses this endpoint. Until fixed, Lens should label it as a history/context cut-off, not "state at T".

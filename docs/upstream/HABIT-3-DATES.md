@@ -6,7 +6,7 @@ Related: DEVIATIONS D24, `docs/design/s1-log/S1-05.md`, Lens `src/renderer/src/c
 
 ## Motivation
 
-The S1 article treats a behaviour as a stable habit only when it has evidence on at least 3 different dates (as summarized in GAP-vs-S1 U2 and D24; I did not re-read the article for this note). The Runtime admits a behaviour at **two observations, and none of its gates counts calendar dates**. Lens works around this by labelling anything under 3 dates 「观察中（未满 3 个不同日期）」, and anything without dates (every Face) 「日期未知」 (S1-05). That leaves the Runtime and every other MCP client still treating 2-observation patterns as established.
+The S1 article treats a behaviour as a stable habit only when it has evidence on at least 3 different dates (as summarized in GAP-vs-S1 U2 and D24; I did not re-read the article for this note). The Runtime admits a behaviour at **two observations, and none of its gates counts calendar dates**. Lens works around this by labelling anything under 3 dates "Observing (fewer than 3 distinct dates)", and anything without dates (every Face) "Dates unknown" (S1-05). That leaves the Runtime and every other MCP client still treating 2-observation patterns as established.
 
 ## Current behaviour (verified in source)
 
@@ -32,7 +32,7 @@ Notes from reading the code:
 +1. Independent observations on at least three distinct local calendar dates support it. Repetition inside one session, or several sessions on the same date, counts as one date.
 ```
 
-In the entry-format example (`pattern_detector.md:45-52`), have `**Evidence**` list the dates, e.g. `5 sessions on 4 dates (2026-08-03, 08-04, 08-06, 08-07); receipts …`. Lens already parses "N 个不同日期" / "across N days" as a declared-text fallback (S1-05 §3), so listing explicit dates lets clients verify the claim instead of trusting it.
+In the entry-format example (`pattern_detector.md:45-52`), have `**Evidence**` list the dates, e.g. `5 sessions on 4 dates (2026-08-03, 08-04, 08-06, 08-07); receipts …`. Lens already parses the Chinese "N distinct dates" phrase / "across N days" as a declared-text fallback (S1-05 §3), so listing explicit dates lets clients verify the claim instead of trusting it.
 
 ### 2. Candidate pre-filter (`config.py`, `writer/pattern_detector.py`)
 
@@ -96,7 +96,7 @@ For `time_clusters`, either key on `hour` alone, or keep `(hour, weekday)` and r
 
 ### 4. Expose dates (`mcp/server.py` `_behavior_patterns`, `model/snapshot.py:250`)
 
-Add `"observation_dates": [...]` next to `"observations"`. That lets Lens (and any MCP client) show 「稳定习惯 · N 个不同日期」 for Faces instead of 「日期未知」.
+Add `"observation_dates": [...]` next to `"observations"`. That lets Lens (and any MCP client) show "Stable habit · N distinct dates" for Faces instead of "Dates unknown".
 
 ## Tests to add upstream
 
@@ -119,4 +119,4 @@ Style follows `tests/test_schema_faces.py::TestStabilityGateAndPromotion` and `t
 
 ## What Lens does until then
 
-Unchanged (X6): Lens labels by distinct dates it can derive itself, says 「观察中」 / 「日期未知」, and never writes the Runtime.
+Unchanged (X6): Lens labels by distinct dates it can derive itself, says "Observing" / "Dates unknown", and never writes the Runtime.

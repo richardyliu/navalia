@@ -1,72 +1,72 @@
-# Persome Lens v2.1 — 贴近原版的设计文档
+# Navalia v2.1 — design document close to the original
 
-> 版本：v2.1 Draft（fidelity-first）
-> 日期：2026-11-04
-> 目标：让 Lens 的**设计理念、机制、数据流**尽可能贴近原版，而不是做一个“看起来像”的查看器。
-> 基线：v1 查看器已实现，见 `DESIGN-v1-archive.md`；v2.0 初稿已被本版取代。
+> Version: v2.1 Draft (fidelity-first)
+> Date: 2026-11-04
+> Goal: make Lens's **design ideas, mechanisms and data flow** as close to the original as possible, rather than building a viewer that only "looks like" it.
+> Baseline: the v1 viewer is implemented, see `DESIGN-v1-archive.md`; the v2.0 first draft is superseded by this version.
 
 ---
 
-## 0. 与原版的机制对照（先承认差异）
+## 0. Mechanism comparison with the original (admitting the differences first)
 
-### 0.1 完全一致的部分
+### 0.1 Parts that are fully identical
 
-| 机制 | 原版 | Lens v2.1 |
+| Mechanism | Original | Lens v2.1 |
 |---|---|---|
-| 证据门控 | 模型输出 quote，代码回查 receipt | 沿用 Runtime，UI 展示 sources/context 分离 |
-| 模型层级 | Point / Line / Face / Volume / Root | 沿用 Runtime |
-| 本地优先 | 原始数据本地、可暂停、可删除 | 沿用 |
-| Agent 中立 | MCP | 沿用 |
-| 可纠正 | supersede + correction | 沿用 |
-| 身份 | Personal Card / Swipe / Access log | 同一套 UI 语义 |
-| 性能 | HET（Human Equivalent Time） | 同一套定义与账本 |
+| Evidence gating | Model outputs a quote, code looks up the receipt | Reuses the Runtime; UI shows sources/context separately |
+| Model levels | Point / Line / Face / Volume / Root | Reuses the Runtime |
+| Local-first | Raw data local, pausable, deletable | Reused |
+| Agent-neutral | MCP | Reused |
+| Correctable | supersede + correction | Reused |
+| Identity | Personal Card / Swipe / Access log | Same UI semantics |
+| Performance | HET (Human Equivalent Time) | Same definitions and ledger |
 
-### 0.2 初稿偏离、本版修正的部分
+### 0.2 Parts where the first draft deviated and this version corrects
 
-| 机制 | 原版做法 | 初稿 | v2.1 修正 |
+| Mechanism | Original approach | First draft | v2.1 correction |
 |---|---|---|---|
-| **采集归属** | **Electron 壳拥有 OS capture 与 TCC**，Runtime 用 `capture.source="ingest"`，不持有权限 | 给 Runtime 打 patch、让 daemon 采集 | **改为 Lens 拥有 capture**，自建 native addon + ingest client；Runtime 不再采集 |
-| 按 App 排除 | 壳的 `excluded-app-picker`，在采集前丢弃 | Runtime patch | Lens capture coordinator 直接丢弃 |
-| 暂停 | 壳的 `capture-pause`（可暂停到次日 0 点） | `persome pause` CLI | Lens 自己管理暂停状态 |
-| HET | **自动**：agent logs → segmenter → assessor → anchors → tick | 手动确认 + 强证据 | 改为自动流水线，手动只做 override |
-| 授权 | 产品当前是 per-agent **full access** + Access log；没有观察到 per-scope | 自造 `profile.read` 等 | 先实现 full access + Access log；scope 作为 Lens 扩展，明确标注非原版 |
-| Card | Personal Card + Swipe + Connections | 自造签名 JSON | UI 语义对齐；签名导出作为扩展 |
-| 周报 | check-ins + 邮件 | 无 | 本地 Weekly Review 替代（明确 deviation） |
+| **Capture ownership** | **The Electron shell owns OS capture and TCC**; the Runtime uses `capture.source="ingest"` and holds no permissions | Patch the Runtime so the daemon captures | **Lens owns capture instead**, with its own native addon + ingest client; the Runtime no longer captures |
+| Exclude by app | The shell's `excluded-app-picker`, dropped before capture | Runtime patch | The Lens capture coordinator drops directly |
+| Pause | The shell's `capture-pause` (can pause until 00:00 the next day) | `persome pause` CLI | Lens manages pause state itself |
+| HET | **Automatic**: agent logs → segmenter → assessor → anchors → tick | Manual confirmation + strong evidence | Switch to the automatic pipeline; manual only for overrides |
+| Authorization | The product today is per-agent **full access** + Access log; no per-scope observed | Invented `profile.read` and similar | Implement full access + Access log first; scopes as a Lens extension, clearly labelled as not original |
+| Card | Personal Card + Swipe + Connections | Invented signed JSON | Align UI semantics; signed export as an extension |
+| Weekly report | check-ins + email | None | Replaced by a local Weekly Review (explicit deviation) |
 
-### 0.3 仍然存在的差异（诚实列出）
+### 0.3 Differences that still exist (listed honestly)
 
-| 差异 | 原因 | 处理 |
+| Difference | Reason | Handling |
 |---|---|---|
-| Runtime 私有模型模块（Minute Archive / 账本 / graph induction / world / funnel） | 只在产品私有分支，62k 行 | v2.0 用 OSS 模型；v2.1 重实现 `world`/person lineage；archive/ledger 延后 |
-| 聊天 / 会议 / 好友 / 邮件 | 依赖官方云端 + Soniox | 不做；本地替代见 §10 |
-| 公网 Card 分享 | 需要云与合规 | 只做本地 `.persomecard` + PNG |
-| 移动端 | 产品也没有正式交付 | 不做 |
+| Runtime private model modules (Minute Archive / ledger / graph induction / world / funnel) | Only in the product's private branch, 62k lines | v2.0 uses the OSS model; v2.1 reimplements `world`/person lineage; archive/ledger deferred |
+| Chat / meetings / friends / email | Depend on the official cloud + Soniox | Not built; local replacements in §10 |
+| Public Card sharing | Needs cloud and compliance | Only local `.persomecard` + PNG |
+| Mobile | The product has no official release either | Not built |
 
 ---
 
-## 1. 北极星
+## 1. North star
 
-访谈定义：
+Definition from the interview:
 
-> “中立、第三方、开源的 Personal Context Layer，提供可追溯、可纠正、由本人控制的个人上下文的**采集、建模、可视化**与基于个人上下文的**输出服务**。”
+> "A neutral, third-party, open-source Personal Context Layer that provides **capture, modeling, visualization** of traceable, correctable, self-controlled personal context, plus **output services** built on that personal context."
 
-四条原则：Local-first、Evidence-first、User-owned、Agent-neutral。
+Four principles: Local-first, Evidence-first, User-owned, Agent-neutral.
 
-五个面：
+Five planes:
 
-| 原服务 | v2.1 面 |
+| Original service | v2.1 plane |
 |---|---|
-| 采集 | **Capture Plane（Lens 拥有）** |
-| 建模 | Context Plane（Runtime，ingest 模式） |
-| 可视化 | Experience Plane（Living Model / Rewind / Card） |
-| 输出 | **Identity & Authorization Plane**（Card / Swipe / Connections / Access log / Broker） |
-| 性能 | **Performance Plane**（HET） |
+| Capture | **Capture Plane (owned by Lens)** |
+| Modeling | Context Plane (Runtime, ingest mode) |
+| Visualization | Experience Plane (Living Model / Rewind / Card) |
+| Output | **Identity & Authorization Plane** (Card / Swipe / Connections / Access log / Broker) |
+| Performance | **Performance Plane** (HET) |
 
 ---
 
-## 2. 总架构：壳拥有采集，Runtime 只做建模
+## 2. Overall architecture: the shell owns capture, the Runtime only models
 
-这正是原版的核心架构，也是 v2.1 最大的修正。
+This is exactly the original's core architecture, and the biggest correction in v2.1.
 
 ```
 ┌──────────────────────────── Persome Lens (owner shell) ───────────────────────┐
@@ -92,176 +92,176 @@
         └─────────────────┘
 ```
 
-关键点：
+Key points:
 
-- **TCC 归 Lens**：native addon 跑在 Electron main 里，System Settings 只出现一行 Lens。
-- Runtime 配置 `capture.source = "ingest"`，不启动 AX watcher，不申请权限。
-- Runtime 仍然是模型/证据/检索的唯一事实源；Lens 不直接写 `index.db`。
-- 第三方 Agent 只连 Lens Broker（8750），不直连 Runtime（8742）。
+- **TCC belongs to Lens**: the native addon runs in the Electron main process, so System Settings shows only one Lens row.
+- The Runtime is configured with `capture.source = "ingest"`; it starts no AX watcher and requests no permissions.
+- The Runtime is still the single source of truth for model/evidence/retrieval; Lens never writes `index.db` directly.
+- Third-party agents connect only to the Lens Broker (8750), never directly to the Runtime (8742).
 
-### 2.1 决策
+### 2.1 Decisions
 
-| 决策 | 选择 | 理由 |
+| Decision | Choice | Rationale |
 |---|---|---|
-| 采集 | **Lens-owned + ingest** | 与原版一致；TCC 单一行；排除/暂停/去重都在壳内 |
-| Runtime patch | **不需要**（采集）；删除区间可后续最小 patch | 采集不再依赖 Runtime |
-| HET | Lens 侧自动流水线 | 原版 `het/` 是私有模块；按同一逻辑重实现 |
-| Scope | 原版命名 | 见 §4.2 |
-| Card | UI 对齐原版 + Ed25519 导出扩展 | 原版 Card 是身份对象；签名是本地可携带的增强 |
-| 周报 | 本地 Weekly Review | 替代云邮件；明确 deviation |
+| Capture | **Lens-owned + ingest** | Same as the original; a single TCC row; exclusion/pause/dedup all in the shell |
+| Runtime patch | **Not needed** (for capture); range deletion may get a minimal patch later | Capture no longer depends on the Runtime |
+| HET | Automatic pipeline on the Lens side | The original `het/` is a private module; reimplement the same logic |
+| Scope | Original naming | See §4.2 |
+| Card | UI aligned with the original + Ed25519 export extension | The original Card is an identity object; signing is a local, portable enhancement |
+| Weekly report | Local Weekly Review | Replaces cloud email; explicit deviation |
 
 ---
 
-## 3. Capture Plane（Lens 拥有）
+## 3. Capture Plane (owned by Lens)
 
 ### 3.1 Native addon
 
-`persome-lens-native.node`（N-API，ObjC++），跑在 Electron main：
+`persome-lens-native.node` (N-API, ObjC++), running in the Electron main process:
 
-| 能力 | 说明 |
+| Capability | Description |
 |---|---|
-| `axTree()` | 输出与 Runtime `mac-ax-helper` **字节兼容**的 JSON（apps → windows → elements；含 bundle_id、window title、focused role/value、subrole） |
-| `frontmost()` | 前台 App/窗口元数据 |
-| `screenshot()` | ScreenCaptureKit / CGWindowList，返回 JPEG bytes |
-| `permissions()` | `AXIsProcessTrusted`、`SCShareableContent`（真实探测，注册 Lens） |
-| `urlHandlers()` | Safari/Chrome 当前 URL（AX 不可得时） |
+| `axTree()` | Outputs JSON **byte-compatible** with the Runtime's `mac-ax-helper` (apps → windows → elements; including bundle_id, window title, focused role/value, subrole) |
+| `frontmost()` | Frontmost app/window metadata |
+| `screenshot()` | ScreenCaptureKit / CGWindowList, returns JPEG bytes |
+| `permissions()` | `AXIsProcessTrusted`, `SCShareableContent` (real probes, registering Lens) |
+| `urlHandlers()` | Current Safari/Chrome URL (when AX can't provide it) |
 
-为什么是 addon 而不是 Swift helper：TCC 把权限授予**发起调用的进程**；独立 helper 会变成第二个 TCC 主体，正是原版要避免的。
+Why an addon rather than a Swift helper: TCC grants permission to **the process that makes the call**; a separate helper would become a second TCC subject, which is exactly what the original avoids.
 
-> 原型期可临时调用 OSS 的 `mac-ax-helper` 跑通 ingest，但 v2.0 发布必须换成 addon。
+> During prototyping, the OSS `mac-ax-helper` may be called temporarily to get ingest working, but the v2.0 release must switch to the addon.
 
-### 3.2 Coordinator（原版同款语义）
+### 3.2 Coordinator (same semantics as the original)
 
-从 Runtime daemon 移到 Lens：
+Moved from the Runtime daemon to Lens:
 
-- `debounceMs=3000`，紧急事件 500ms；
-- `minCaptureGapSeconds=2`；
-- `dedupIntervalSeconds=1`，`sameWindowDedupSeconds=5`；
-- `heartbeatMinutes=10`；
-- `pauseOnLock=true`；
-- 同一 surface 的 Activation/Focus 合并规则与 Runtime 一致。
+- `debounceMs=3000`, urgent events 500ms;
+- `minCaptureGapSeconds=2`;
+- `dedupIntervalSeconds=1`, `sameWindowDedupSeconds=5`;
+- `heartbeatMinutes=10`;
+- `pauseOnLock=true`;
+- Activation/Focus merge rules for the same surface match the Runtime.
 
-### 3.3 排除与暂停
+### 3.3 Exclusion and pause
 
-- 排除：bundle id + app name，双清单；在抓取前判断，**不生成帧、不调用 ingest**。
-- App 选择器：`NSOpenPanel` 选 `.app`，读 `Info.plist` 的 `CFBundleIdentifier`（与原版 `excluded-app-picker` 同逻辑）。
-- 暂停：立即暂停 / 暂停到次日 0 点；状态写 `settings.json`，重启后保留。
-- 权限：Screen Recording 探测必须等用户显式同意（否则会提前注册 TCC）；Accessibility 可自由探测。
+- Exclusion: bundle id + app name, two lists; checked before capture, so **no frame is produced and ingest is not called**.
+- App picker: `NSOpenPanel` to choose a `.app`, reading `CFBundleIdentifier` from `Info.plist` (same logic as the original `excluded-app-picker`).
+- Pause: pause now / pause until 00:00 the next day; state written to `settings.json`, kept across restarts.
+- Permissions: the Screen Recording probe must wait for explicit user consent (otherwise it registers TCC early); Accessibility can be probed freely.
 
 ### 3.4 Ingest client
 
-`POST http://127.0.0.1:8742/captures/ingest`，Bearer token：
+`POST http://127.0.0.1:8742/captures/ingest`, Bearer token:
 
-- body ≤ 12 MiB；
-- **串行**发送（Runtime 全局锁，>16 并发 503）；
-- 200 有三种结果：written / deduped / skipped（paused/locked），必须分别处理；
-- 5xx 重试 250 / 1000 / 3000ms；4xx 不重试；
-- 失败帧进有界重试队列，不阻塞采集。
+- body ≤ 12 MiB;
+- sent **serially** (Runtime global lock, 503 above 16 concurrent);
+- a 200 has three outcomes: written / deduped / skipped (paused/locked), each handled separately;
+- 5xx retried at 250 / 1000 / 3000ms; 4xx not retried;
+- failed frames go into a bounded retry queue and never block capture.
 
-### 3.5 截图与保留
+### 3.5 Screenshots and retention
 
-- 截图随帧发给 Runtime，由 Runtime 用 `PERSOME_SCREENSHOT_KEY` AES-256-GCM 加密落盘；
-- Lens 不持久化明文截图（内存中只保留到 ingest 完成）；
-- 保留期、截图剥离、OCR 开关仍由 Runtime `[capture]` 配置控制，Lens 只写配置 + 重启。
+- Screenshots are sent to the Runtime with the frame, and the Runtime encrypts them to disk with `PERSOME_SCREENSHOT_KEY` AES-256-GCM;
+- Lens never persists plaintext screenshots (kept in memory only until ingest completes);
+- Retention, screenshot stripping and the OCR switch are still controlled by the Runtime `[capture]` config; Lens only writes the config + restarts.
 
-### 3.6 删除
+### 3.6 Deletion
 
-- v2.0：Lens 删除自己 `capture-buffer` 中命中区间的帧，然后调 `persome rebuild-captures-index`；
-- 明确提示：**派生 memory/Points 不会自动删除**；
-- v2.1：如需要精确清理索引，提交一个最小 Runtime patch（`clean captures --since/--until`）。
+- v2.0: Lens deletes the frames in the matching range from its own `capture-buffer`, then calls `persome rebuild-captures-index`;
+- Explicit notice: **derived memory/Points are not deleted automatically**;
+- v2.1: if precise index cleanup is needed, submit a minimal Runtime patch (`clean captures --since/--until`).
 
-### 3.7 验收
+### 3.7 Acceptance
 
-- 排除 1Password 后 100 次前台切换 0 帧、0 ingest；
-- 暂停到次日 0 点后 0 帧；
-- 连续输入不产生每键一帧（coordinator 生效）；
-- TCC 列表只出现 Lens 一行（或明确标注原型期 helper）。
+- With 1Password excluded, 100 frontmost switches produce 0 frames and 0 ingests;
+- 0 frames after pausing until 00:00 the next day;
+- Continuous typing does not produce one frame per keystroke (coordinator in effect);
+- The TCC list shows only one Lens row (or clearly labels the prototype helper).
 
 ---
 
 ## 4. Identity & Authorization Plane
 
-### 4.1 原版语义
+### 4.1 Original semantics
 
-- **Personal Card**：正面身份摘要，背面 Mini Map；可翻面。
-- **Swipe Your Card**：把 Card 的授权切片给 AI。
-- **Connections**：管理已连接的 Agent（原版字符串是 Connections）。
-- **Access log**：记录 AI 怎样读取了上下文（原版字符串是 Access log）。
+- **Personal Card**: an identity summary on the front, a Mini Map on the back; can be flipped.
+- **Swipe Your Card**: slices the Card's authorization out to an AI.
+- **Connections**: manages connected agents (the original string is Connections).
+- **Access log**: records how AI read the context (the original string is Access log).
 
-Lens 保留这四个名字与交互，不另造概念。“Agent Report”只是 Access log 的旧称呼，交付时用 **Access log**。
+Lens keeps these four names and interactions and invents no new concepts. "Agent Report" is only an old name for the Access log; ship it as **Access log**.
 
-### 4.2 Access（原版 full access；scope 是 Lens 扩展）
+### 4.2 Access (original: full access; scopes are a Lens extension)
 
-> **原版事实**：原版的 Connections 只有 `full access` + Access log，没有 per-scope 选择。下面这张表是 Lens 的**扩展**，参考同产品家族的 Card 壳，不是原版行为；实现时必须标注。
+> **Original fact**: the original Connections have only `full access` + Access log, with no per-scope choice. The table below is a Lens **extension**, modelled on the Card shell from the same product family, not original behaviour; the implementation must label it.
 
-| scope（Lens 扩展） | 允许读取 | 默认 |
+| scope (Lens extension) | Allows reading | Default |
 |---|---|---|
-| `card:read` | Card 摘要 | ✅ 公开 |
-| `identity:read` | 身份与 Root | ✅ 公开 |
-| `now:read` | 当前上下文 | 授权 |
-| `rewind:read` | 截图历史 | 授权 |
-| `evidence:read` | receipts + 原文 | 高敏，默认拒绝 |
-| `reports:read` | AI 使用回执 | 授权 |
-| `model:search` | 检索 | 授权 |
-| `model:ask` | 问答式读取 | 授权 |
-| `model:jot` | 写入短记忆 | 授权 |
-| `model:correct` | 纠正 | 高敏 |
-| `connectors:read` | 连接器数据 | 授权 |
-| `connectors:connect` | 新建连接 | 高敏 |
+| `card:read` | Card summary | ✅ Public |
+| `identity:read` | Identity and Root | ✅ Public |
+| `now:read` | Current context | Granted |
+| `rewind:read` | Screenshot history | Granted |
+| `evidence:read` | receipts + raw text | High sensitivity, denied by default |
+| `reports:read` | AI usage receipts | Granted |
+| `model:search` | Retrieval | Granted |
+| `model:ask` | Question-style reads | Granted |
+| `model:jot` | Write short memories | Granted |
+| `model:correct` | Corrections | High sensitivity |
+| `connectors:read` | Connector data | Granted |
+| `connectors:connect` | Create connections | High sensitivity |
 
-`PUBLIC_SCOPES = ["card:read", "identity:read"]`，与原版公开卡片一致。
+`PUBLIC_SCOPES = ["card:read", "identity:read"]`, matching the original public card.
 
 ### 4.3 Card
 
-- UI：Personal Card 正面/背面、翻面、Mini Map；数据来自 `/model/graph` + `/model/share-card`。
-- **本地可携带扩展**：生成 `.persomecard`（Ed25519 签名，RFC 8785 canonical JSON），用于离线分享/导入验证。
-- Card 默认不含 quote；只有 `evidence:read` 的授权切片才带 receipt。
-- 私钥 `safeStorage` 加密，0600；公钥在 Card 里，验证端不需要 Lens。
+- UI: Personal Card front/back, flip, Mini Map; data from `/model/graph` + `/model/share-card`.
+- **Local portable extension**: generates a `.persomecard` (Ed25519-signed, RFC 8785 canonical JSON) for offline sharing/import verification.
+- The Card carries no quotes by default; only an authorization slice with `evidence:read` includes receipts.
+- Private key encrypted with `safeStorage`, 0600; the public key is in the Card, so verifiers don't need Lens.
 
-### 4.4 Broker（Connections 的本地执行点，Lens 扩展）
+### 4.4 Broker (local enforcement point for Connections, Lens extension)
 
-Runtime MCP（8742）是 owner-only 全量；第三方 Agent 一律连 Lens Broker（8750）：
+The Runtime MCP (8742) is owner-only and unrestricted; third-party agents always connect to the Lens Broker (8750):
 
-> 2026-11-04 更新（用户决定，DEVIATIONS D19）：Broker 为 **full access**，暴露 26 个工具（2026-11-05 DEPLOY-05 起为 29 个：22 个 OSS + 3 个 Rewind + 4 个 Lens 扩展）；下表是 scope 扩展下的映射（full access 不受 scope 限制）。权威来源：`src/main/broker/catalog.ts` 的 `TOOL_CATALOG`。
+> 2026-11-04 update (user decision, DEVIATIONS D19): the Broker is **full access** and exposes 26 tools (29 since DEPLOY-05 on 2026-11-05: 22 OSS + 3 Rewind + 4 Lens extensions); the table below is the mapping under the scope extension (full access is not restricted by scope). Authoritative source: `TOOL_CATALOG` in `src/main/broker/catalog.ts`.
 
-| 工具 | scope（扩展） |
+| Tool | scope (extension) |
 |---|---|
-| OSS 22 个工具中的只读检索类（`search`、`search_captures`、`verify_fact`、`behavior_patterns`、`entity_graph`、`get_model_snapshot`、`list_memories`、`read_memory`、`related_events`、`get_schema`、`query_health_metrics`、`get_pending_model_work`） | `model:search` |
-| `current_context`、`recent_activity`、`attention_trajectory`、`read_recent_capture` | `now:read` |
-| `resolve_evidence`、`read_receipt` | `evidence:read` |
+| Read-only retrieval tools among the 22 OSS tools (`search`, `search_captures`, `verify_fact`, `behavior_patterns`, `entity_graph`, `get_model_snapshot`, `list_memories`, `read_memory`, `related_events`, `get_schema`, `query_health_metrics`, `get_pending_model_work`) | `model:search` |
+| `current_context`, `recent_activity`, `attention_trajectory`, `read_recent_capture` | `now:read` |
+| `resolve_evidence`, `read_receipt` | `evidence:read` |
 | `remember` | `model:jot` |
-| `correct_memory` | `model:correct`（耗 LLM，额度不足拒绝） |
-| `process_pending_model_work` | `model:ask`（耗 LLM，额度不足拒绝） |
-| `search_rewind`、`rewind_frames`、`view_rewind_screenshot`（形状 Lens 自定） | `rewind:read` |
-| `owner_aliases`（OSS，Runtime schema 2026-11-05.3 新增，只读） | `model:search`（不接受公开 scope `identity:read`：列表含待确认 / 已拒绝的、可能属于他人的名字）；没有 `evidence:read` 时只保留固定字段（alias、alias_key、status、confidence、evidence_count、first/last_seen_at、activated_at、decision_source），`evidence[]` 置空（扩展） |
-| `card_get`（Lens 扩展） | `card:read` + `identity:read` |
-| `usage_report`（Lens 扩展） | `reports:read` |
+| `correct_memory` | `model:correct` (uses the LLM; refused when budget is exhausted) |
+| `process_pending_model_work` | `model:ask` (uses the LLM; refused when budget is exhausted) |
+| `search_rewind`, `rewind_frames`, `view_rewind_screenshot` (shapes defined by Lens) | `rewind:read` |
+| `owner_aliases` (OSS, added in Runtime schema 2026-11-05.3, read-only) | `model:search` (the public scope `identity:read` is not accepted: the list includes pending / rejected names that may belong to someone else); without `evidence:read`, only fixed fields are kept (alias, alias_key, status, confidence, evidence_count, first/last_seen_at, activated_at, decision_source) and `evidence[]` is emptied (extension) |
+| `card_get` (Lens extension) | `card:read` + `identity:read` |
+| `usage_report` (Lens extension) | `reports:read` |
 
-- 鉴权：`Authorization: Bearer <grant token>`；token 只存 SHA-256；
-- 过滤：按 scope 裁剪字段 + PII 清洗；
-- 审计：`audit.db` 记录每次调用（grant、tool、args hash、返回 id、结果），Access log 展示；
-- 撤销/过期立即生效。
+- Auth: `Authorization: Bearer <grant token>`; only the token's SHA-256 is stored;
+- Filtering: fields trimmed by scope + PII scrubbing;
+- Audit: `audit.db` records every call (grant, tool, args hash, returned ids, result), shown in the Access log;
+- Revocation/expiry takes effect immediately.
 
 ### 4.5 Swipe
 
-- 选择 scope 切片 → 生成 Card（可视化 + `.persomecard`）；
-- 二维码只含 `card_id` + 公钥指纹，不含数据；
-- 本地文件/AirDrop 分享；公网链接不做。
+- Choose a scope slice → generate a Card (visual + `.persomecard`);
+- The QR code holds only `card_id` + the public-key fingerprint, no data;
+- Share by local file/AirDrop; no public links.
 
-### 4.6 验收
+### 4.6 Acceptance
 
-- Card 离线可验证；
-- `PUBLIC_SCOPES` 的读取只返回 card/identity；
-- 没有 `evidence:read` 拿不到 quote；
-- 撤销后 1s 内 403，Access log 可见。
+- Cards verifiable offline;
+- Reads under `PUBLIC_SCOPES` return only card/identity;
+- No quotes without `evidence:read`;
+- 403 within 1s after revocation, visible in the Access log.
 
 ---
 
-## 5. Performance Plane — HET（自动流水线）
+## 5. Performance Plane — HET (automatic pipeline)
 
-### 5.1 与原版一致的流水线
+### 5.1 Pipeline identical to the original
 
-原版 `het/` 的结构：**agent logs → session watcher → segmenter → assessor → anchors → tick → ledger**。Lens 按同样顺序实现。
+The structure of the original `het/`: **agent logs → session watcher → segmenter → assessor → anchors → tick → ledger**. Lens implements it in the same order.
 
 ```
 agent transcripts ─┐
@@ -275,151 +275,151 @@ broker audit ──────┘                                      │
 
 ### 5.2 Agent log adapters
 
-| Agent | 位置 | 解析 |
+| Agent | Location | Parsing |
 |---|---|---|
-| Claude Code | `~/.claude/projects/**/*.jsonl` | session id、时间、用户/助手消息、工具调用 |
-| Codex CLI | `~/.codex/sessions/**/*.jsonl` | session、turn、命令 |
-| Cursor Agent | 可选，后续 | — |
+| Claude Code | `~/.claude/projects/**/*.jsonl` | session id, time, user/assistant messages, tool calls |
+| Codex CLI | `~/.codex/sessions/**/*.jsonl` | session, turn, commands |
+| Cursor Agent | Optional, later | — |
 
-只读 transcript；不复制全文，只保留任务判定所需的摘要与引用。
+Transcripts are read-only; full text is not copied, only the summaries and references needed to judge tasks.
 
-### 5.3 切分
+### 5.3 Segmentation
 
-- 以 timeline session 边界 + agent transcript 时间为骨架；
-- 合并同一项目/同一 surface 的连续活动；
-- 识别 agent 参与：transcript 存在 + 时间重叠 + 同项目；
-- 产出 `HetTask`（start/end/title/project/agent/kind）。
+- Timeline session boundaries + agent transcript times form the skeleton;
+- Merge consecutive activity in the same project/surface;
+- Detect agent involvement: transcript exists + time overlap + same project;
+- Output `HetTask` (start/end/title/project/agent/kind).
 
-### 5.4 判定（assessor）
+### 5.4 Judgement (assessor)
 
-- 每个已结算任务一次**有界 LLM 调用**（可用 Claude 订阅/API；预算不足则任务停在 `needs_assessment`，不猜）；
-- 输出：类型、复杂度、agent 占比、是否被采纳、采纳证据；
-- 分钟数由 `anchors` 确定性计算，不让模型直接给数字。
+- One **bounded LLM call** per settled task (can use a Claude subscription/API; when budget runs out the task stays at `needs_assessment`, no guessing);
+- Output: type, complexity, agent share, whether adopted, adoption evidence;
+- Minutes are computed deterministically by `anchors`; the model never gives a number directly.
 
-### 5.5 采纳
+### 5.5 Adoption
 
-| 状态 | 来源 | 权重 |
+| State | Source | Weight |
 |---|---|---:|
-| `confirmed` | 用户 override | 1.0 |
-| `strong` | assessor 找到明确采纳证据（提交/编辑/发送） | 0.85 |
-| `weak` | 只有间接引用 | 0.55 |
-| `unknown` | 无证据 | 0.3 |
-| `rejected` | 用户 override | 0 |
+| `confirmed` | User override | 1.0 |
+| `strong` | Assessor found explicit adoption evidence (commit/edit/send) | 0.85 |
+| `weak` | Only indirect references | 0.55 |
+| `unknown` | No evidence | 0.3 |
+| `rejected` | User override | 0 |
 
-v2.1 默认自动判定；用户可在 HET 页 override。
+v2.1 judges automatically by default; the user can override on the HET page.
 
-### 5.6 Anchors（确定性分钟）
+### 5.6 Anchors (deterministic minutes)
 
-| kind | 单位 | 默认 |
+| kind | Unit | Default |
 |---|---|---:|
-| research | 每 5 个来源/页 | 20 |
-| writing | 每 500 字 | 30 |
-| coding | 每 200 行/PR | 45 |
-| review | 每份文档/PR | 20 |
-| ops | 每个任务 | 10 |
-| meeting | 每分钟 | 1 |
+| research | per 5 sources/pages | 20 |
+| writing | per 500 words | 30 |
+| coding | per 200 lines/PR | 45 |
+| review | per document/PR | 20 |
+| ops | per task | 10 |
+| meeting | per minute | 1 |
 
 ```
 minutes = anchor(kind) × size_factor × adoption_weight × complexity_factor
 ```
 
-### 5.7 账本与 UI
+### 5.7 Ledger and UI
 
-- `het.db`：`het_tasks` / `het_events` / `het_anchors` / `agent_calls`；
-- 今日/周/月、任务列表、待确认、Anchors、Weekly Review；
-- 每条可展开 evidence；无法解释的不进总数。
+- `het.db`: `het_tasks` / `het_events` / `het_anchors` / `agent_calls`;
+- Today/week/month, task list, pending confirmation, Anchors, Weekly Review;
+- Every entry has expandable evidence; anything unexplainable is excluded from totals.
 
-### 5.8 验收
+### 5.8 Acceptance
 
-- 自动流水线在 20 条样本上产出任务，人工核对类型/采纳；
-- 每条任务有 evidence 或 `needs_assessment`；
-- 周报总和 = 条目求和；
-- 用户 override 后重算，保留审计。
+- The automatic pipeline produces tasks on 20 samples, with type/adoption checked by hand;
+- Every task has evidence or `needs_assessment`;
+- Weekly report total = sum of entries;
+- After a user override, recompute and keep the audit trail.
 
 ---
 
 ## 6. Experience Plane
 
-| 模块 | 版本 | 说明 |
+| Module | Version | Description |
 |---|---|---|
-| Card 翻面 + Mini Map | v2.0 | 数据来自 Card |
-| Living Model 星云 | v2.1 | `/model/graph`，1000 Points <1s |
-| Rewind | v2.1 | 需要 Runtime 提供解密读取；OSS 无，需最小 patch 或 Lens 解密（取决于 key 归属） |
+| Card flip + Mini Map | v2.0 | Data from the Card |
+| Living Model nebula | v2.1 | `/model/graph`, 1000 Points <1s |
+| Rewind | v2.1 | Needs decrypted reads from the Runtime; OSS has none, so either a minimal patch or decryption in Lens (depends on who owns the key) |
 | Playbook | v2.1 | `behavior_patterns` + `case_extractor` |
-| **Weekly Review** | v2.0 | 本地替代 check-ins 邮件：本周 HET、项目、证据、给朋友的信草稿；导出 Markdown/HTML，不发送 |
+| **Weekly Review** | v2.0 | Local replacement for check-in emails: this week's HET, projects, evidence, a draft letter to friends; exports Markdown/HTML, never sent |
 
 ---
 
-## 7. 安全与隐私
+## 7. Security and privacy
 
-- 私钥 safeStorage；grant token 只存哈希；
-- Broker 只监听 127.0.0.1；默认拒绝；
-- v2.1 无出网请求（Weekly Review 不发送）；
-- 截图在 Runtime 加密；Lens 不落盘明文；
-- TCC 只归 Lens；
-- 审计可导出/清空；HET 账本可整体删除。
+- Private key in safeStorage; grant tokens stored only as hashes;
+- The Broker listens only on 127.0.0.1; deny by default;
+- v2.1 makes no outbound requests (the Weekly Review is not sent);
+- Screenshots encrypted in the Runtime; Lens writes no plaintext to disk;
+- TCC belongs only to Lens;
+- Audit can be exported/cleared; the HET ledger can be deleted as a whole.
 
 ---
 
-## 8. 交付顺序（机制优先）
+## 8. Delivery order (mechanisms first)
 
-第一版只追三个 P0 面的机制闭环；每完成一面就应可运行、可测，再进下一面。以“跑通 + 对照测试”为完成条件。
+The first version chases only a closed mechanism loop for the three P0 planes; each plane must run and be testable before moving to the next. Done means "works end to end + comparison tests".
 
-| 顺序 | 交付 | 完成标志 |
+| Order | Deliverable | Done when |
 |---|---|---|
-| 1 | Capture：native addon + coordinator + ingest + 排除/暂停 | TCC 归 Lens；`source=ingest`；排除/暂停/去重可测 |
-| 2 | Identity：Card / Swipe / Connections / Access log / Broker | Card 可验证；连接/断开可用；Access log 有记录 |
-| 3 | HET：agent logs → segmenter → assessor → anchors → ledger | 自动产出任务；pending 不计入；修正生效 |
-| 4 | 集成：三面串起来 + 测试 + DMG | 全链路可跑；关键测试通过 |
-| P1 | Experience：星云 / Rewind / Playbook / Weekly Review | 在 P0 稳定后逐项加 |
+| 1 | Capture: native addon + coordinator + ingest + exclusion/pause | TCC belongs to Lens; `source=ingest`; exclusion/pause/dedup testable |
+| 2 | Identity: Card / Swipe / Connections / Access log / Broker | Card verifiable; connect/disconnect works; Access log has records |
+| 3 | HET: agent logs → segmenter → assessor → anchors → ledger | Tasks produced automatically; pending not counted; corrections take effect |
+| 4 | Integration: three planes wired together + tests + DMG | Full chain runs; key tests pass |
+| P1 | Experience: nebula / Rewind / Playbook / Weekly Review | Added one by one once P0 is stable |
 
-> 第一版交付后，按测试清单的失败项逐项调试优化；不要为了赶进度跳过 L2/L3。
-
----
-
-## 9. 验收（v2.0）
-
-- [ ] TCC 只有 Lens 一行；Runtime 处于 ingest 模式；
-- [ ] 排除/暂停/去重/心跳与原版语义一致；
-- [ ] Card/Swipe/Connections/Access log 四个界面齐全；
-- [ ] Connections 默认 full access；Access log 记录读取（含空结果），清空不影响连接；
-- [ ] scope 扩展单独测试：PUBLIC_SCOPES 只给 card/identity；evidence 默认拒绝；
-- [ ] HET 自动产出任务，assessor + anchors 分离；
-- [ ] 无出网请求；私钥/token 不泄漏；
-- [ ] 关键路径测试通过。
+> After the first version ships, debug and optimise the failures in the test list one by one; don't skip L2/L3 to save time.
 
 ---
 
-## 10. 明确 deviation
+## 9. Acceptance (v2.0)
 
-| 原版 | Lens v2.1 | 原因 |
+- [ ] TCC has only one Lens row; the Runtime is in ingest mode;
+- [ ] Exclusion/pause/dedup/heartbeat semantics match the original;
+- [ ] All four screens Card/Swipe/Connections/Access log exist;
+- [ ] Connections default to full access; the Access log records reads (including empty results), and clearing it does not affect connections;
+- [ ] The scope extension is tested separately: PUBLIC_SCOPES give only card/identity; evidence denied by default;
+- [ ] HET produces tasks automatically, with assessor + anchors separated;
+- [ ] No outbound requests; no private key/token leaks;
+- [ ] Critical-path tests pass.
+
+---
+
+## 10. Explicit deviations
+
+| Original | Lens v2.1 | Reason |
 |---|---|---|
-| 聊天 | 无 | 云推理；用 Broker + 外部 Agent 替代 |
-| 会议转写 | 无 | Soniox + 云 |
-| 好友卡片/社交 | 无 | 需要云账号；用本地 `.persomecard` 替代 |
-| 周报邮件 | **Weekly Review（本地）** | 不发邮件，只生成本地报告 |
-| 技能抽取 | 无 | 云 `/v1/skill-extractions` |
-| 云同步 | 无 | 本地优先 |
-| Minute Archive / 账本 / world / funnel | v2.0 用 OSS 模型；v2.1 重实现 world/person lineage | 私有分支，不能复制代码 |
+| Chat | None | Cloud inference; replaced by Broker + external agents |
+| Meeting transcription | None | Soniox + cloud |
+| Friend cards/social | None | Needs a cloud account; replaced by local `.persomecard` |
+| Weekly report email | **Weekly Review (local)** | No email sent, only a local report |
+| Skill extraction | None | Cloud `/v1/skill-extractions` |
+| Cloud sync | None | Local-first |
+| Minute Archive / ledger / world / funnel | v2.0 uses the OSS model; v2.1 reimplements world/person lineage | Private branch, code can't be copied |
 
-这些 deviation 必须在产品文案里说清楚，不能假装“和原版一样”。
+These deviations must be stated clearly in product copy; never pretend it is "the same as the original".
 
 ---
 
-## 11. 与原文对应
+## 11. Mapping to the original text
 
-| 原文 | 落点 |
+| Original text | Where it lands |
 |---|---|
-| “一个人数字世界的身份证” | Personal Card + Swipe + 签名导出 |
-| “让每个 Agent 都读到同一个你” | Broker + scope |
-| “采集、建模、可视化、输出” | Capture Plane / Runtime / Living Model / Broker |
-| “可追溯、可纠正、由本人控制” | Evidence / Correct / grant revoke |
-| “N×N 影子” | 多 Connections / 多 grant |
-| “Context → Performance” | HET 自动流水线 + Weekly Review |
-| “Make something agents want” | Broker 5 工具 + Access log |
+| "An ID card for a person's digital world" | Personal Card + Swipe + signed export |
+| "Let every agent read the same you" | Broker + scope |
+| "Capture, modeling, visualization, output" | Capture Plane / Runtime / Living Model / Broker |
+| "Traceable, correctable, controlled by the person" | Evidence / Correct / grant revoke |
+| "N×N shadows" | Multiple Connections / multiple grants |
+| "Context → Performance" | HET automatic pipeline + Weekly Review |
+| "Make something agents want" | Broker 5 tools + Access log |
 
 ---
 
-## 12. v1 保留
+## 12. Kept from v1
 
-Overview / Model / Evidence / Search / Playbook / Settings / remember / correct / build / 额度提示，全部保留；v2.1 在其上叠加 Capture、Identity、HET。
+Overview / Model / Evidence / Search / Playbook / Settings / remember / correct / build / budget notices, all kept; v2.1 layers Capture, Identity and HET on top.

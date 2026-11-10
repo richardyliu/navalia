@@ -1,4 +1,4 @@
-# Upstream note: stable source key for `persome import-data`（S1-07）
+# Upstream note: stable source key for `persome import-data` (S1-07)
 
 Status: proposal, not filed, not applied. Lens does not modify the Runtime repo.
 

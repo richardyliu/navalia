@@ -9,7 +9,7 @@ Test definitions: CAP-01, CAP-08, CAP-09 and T-CAP-01.
 
 - **Use a temp Runtime root under `/tmp/persome-test/`.** Do not point anything at `~/.persome`. The audit scripts refuse other roots (`docs/test-evidence/_scripts/count-buffer.py:7`, `lens-harness.mjs:19,26`).
 - The real install currently runs `[capture] source = "daemon"` with its own `mac-ax-watcher` (`REPORT.md:75`). Switching the real root to ingest is the user's decision. It is **not** part of this checklist.
-- Never paste tokens into evidence. `~/.persome/env` and the temp root's `env` stay out of `docs/test-evidence/`. The Capture page's 「复制诊断」 output already removes tokens (README Capabilities, "Capture diagnostics").
+- Never paste tokens into evidence. `~/.persome/env` and the temp root's `env` stay out of `docs/test-evidence/`. The Capture page's "Copy diagnostics" output already removes tokens (README Capabilities, "Capture diagnostics").
 
 ## Common setup (all three tests)
 
@@ -29,8 +29,8 @@ Test definitions: CAP-01, CAP-08, CAP-09 and T-CAP-01.
    - **Dev build** (`electron .` / `lens-harness.mjs`): the TCC row will be **"Electron"** (`node_modules/electron/dist/Electron.app`), not "Persome Lens". It is fine for CAP-08/09. For CAP-01 part 2 it proves nothing about the shipped app.
    - **Packaged build** (`dist/mac-arm64/Persome Lens.app`, bundle id `dev.persomelens.app`, README Limitations): required for CAP-01 part 2. It is ad-hoc signed, so grants may need re-granting after every rebuild (README "TCC grants and rebuilds").
    - Launch it through LaunchServices (Finder or `open`), not by running `Contents/MacOS/…` from Terminal. A Terminal launch can make Terminal the responsible process for TCC. That is [my understanding of macOS behaviour, not verified in this repo]. To pass `PERSOME_ROOT` through `open`, use `open -n --env PERSOME_ROOT="$T" "dist/mac-arm64/Persome Lens.app"` (`open --env` needs a recent macOS; not verified on this machine). Lens honours `PERSOME_ROOT` (`src/main/runtime/paths.ts:14-18`).
-4. **Grants (human).** Open Lens → 采集 page → request Accessibility, then Screen Recording (IPC `lens:capture:request-accessibility` / `lens:capture:request-screen-recording` / `lens:capture:open-privacy`, `src/main/capture/api.ts:16-18`). In System Settings → Privacy & Security, enable Lens in **Accessibility** and in **Screen Recording**. Quit and relaunch Lens when macOS asks.
-5. Confirm on the 采集 page diagnostics card: source `ingest`, Accessibility ✓, Screen Recording ✓, and the 「最近帧」 count rising after an app switch (S1-04; `src/main/capture/diagnostics.ts`). Save 「复制诊断」 output as `diagnostics.txt`.
+4. **Grants (human).** Open Lens → Capture page → request Accessibility, then Screen Recording (IPC `lens:capture:request-accessibility` / `lens:capture:request-screen-recording` / `lens:capture:open-privacy`, `src/main/capture/api.ts:16-18`). In System Settings → Privacy & Security, enable Lens in **Accessibility** and in **Screen Recording**. Quit and relaunch Lens when macOS asks.
+5. Confirm on the Capture page diagnostics card: source `ingest`, Accessibility ✓, Screen Recording ✓, and the "Recent frames" count rising after an app switch (S1-04; `src/main/capture/diagnostics.ts`). Save "Copy diagnostics" output as `diagnostics.txt`.
 
 ## CAP-01 — the shell owns TCC; the Runtime does not (L2)
 
@@ -41,7 +41,7 @@ Definition: only Lens appears in TCC; the Runtime has no AX watcher; `source=ing
 | 1 Processes | `ps -axo pid,ppid,command \| grep -Ei 'persome\|electron\|mac-ax' \| grep -v grep` and, for every `mac-ax-*` pid, its parent (`ps -o pid,command -p <ppid>`) | Lens main + Electron helpers; the temp Runtime is `python … persome start --foreground --capture-only` with **no** `mac-ax-watcher` / `mac-ax-helper` child. A `mac-ax-watcher` whose parent is the *real* daemon (`~/.persome`, `source=daemon`) is not attached to Lens and must be recorded as such (as in the audit: pid 96891 → 96886) |
 | 2 TCC (human) | System Settings → Privacy & Security → **Accessibility**, then **Screen Recording** | The only Persome-related enabled row is **"Persome Lens"**. No `mac-ax-helper`, `mac-ax-watcher`, "Persome Helper", `python`, or Terminal enabled *for this purpose*. List any other enabled rows; they need not be removed, but a Persome-related one fails the test |
 | 3 Config + runtime state | `grep -A2 '^\[capture\]' "$T/config.toml"`; `cat "$T/.runtime-state.json"`; first line of `capture.log` (location under `$T/logs/` assumed, not verified) | `source = "ingest"`; `"capture_mode": "ingest"`; `permissions` = `not_applicable` (as in `CAP-01/process-and-config.txt`); log line "OS capture disabled (no watcher / no screenshot grab)" |
-| (Lens side) | Lens capture status via the 采集 page | `runtime.source = "ingest"`, `started: true`, **not** `degraded` once both grants are given (the audit run was degraded: "Accessibility is not granted to Persome Lens") |
+| (Lens side) | Lens capture status via the Capture page | `runtime.source = "ingest"`, `started: true`, **not** `degraded` once both grants are given (the audit run was degraded: "Accessibility is not granted to Persome Lens") |
 
 Evidence to save in `docs/test-evidence/CAP-01/`:
 - `process-and-config-<date>.txt` (part 1 + 3 output, same shape as the existing file)

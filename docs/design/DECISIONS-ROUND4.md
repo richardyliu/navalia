@@ -1,40 +1,40 @@
-# DECISIONS — Round 4 (S1-FULL → X3 + 真实验收)
+# DECISIONS — Round 4 (S1-FULL → X3 + real acceptance)
 
-日期：2026-11-06。本文件是本轮的 Approval Ledger。未在此列出的扩展一律视为未批准。
+Date: 2026-11-06. This file is this round's Approval Ledger. Any extension not listed here is treated as not approved.
 
-## R4-1 X3：HET 真实 assessor transport —— 批准
+## R4-1 X3: real HET assessor transport — approved
 
-| 项 | 决定 |
+| Item | Decision |
 |---|---|
-| 是否开启 | **批准**。默认仍 `assessorEnabled=false`，由用户在 HET 页显式开启 |
-| Transport | Runtime `[agent_funding]`（option C）：Lens 主进程 `execFile(<root>/venv/bin/python, ['-I','-c',<固定脚本>])`，调用 `persome.writer.agent_cli.complete`。**不直接 spawn `claude`/`codex`**（否则绕过共享 fcntl 锁与 daily_call_limit） |
-| Provider / model | 沿用 `~/.persome/config.toml` 的 `[agent_funding] client/model`；het.db 记录 client / model / anchor_version |
-| Budget | 复用 `[agent_funding] daily_call_limit`（按本地日期）；HET 的 `perTickCap` / `perDayCap` 叠加生效；耗尽 → `budget_unavailable`，不重试 |
-| 出机数据 | `sendSummariesToAssessor` 默认 false：只发 task id、agent、duration、counts、tool names、signals、file types |
-| 用户可选项 | 可显式打开「发送摘要给 assessor」，需二次确认，UI 写明发什么/发给谁/不可撤回 |
-| 保留 | Lens 只存 verdict / evidence ids / counts；不存 prompt 原文 |
-| 分钟来源 | assessor 只输出 kind/size/complexity/agent_share/adoption/evidence；分钟由 anchors 确定性计算；带 `minutes` 或未知键 → `invalid` |
-| UI 语义 | 「估计」+ anchor version；不是 Performance / 绩效分 / 节省时间 |
-| Cloud HET | **不批准**：HET 不走 cloud `/v1/chat/completions` |
+| Enabled? | **Approved**. Still `assessorEnabled=false` by default; the user turns it on explicitly on the HET page |
+| Transport | Runtime `[agent_funding]` (option C): the Lens main process runs `execFile(<root>/venv/bin/python, ['-I','-c',<fixed script>])`, which calls `persome.writer.agent_cli.complete`. **Does not spawn `claude`/`codex` directly** (that would bypass the shared fcntl lock and daily_call_limit) |
+| Provider / model | Uses `[agent_funding] client/model` from `~/.persome/config.toml`; het.db records client / model / anchor_version |
+| Budget | Reuses `[agent_funding] daily_call_limit` (per local date); HET's `perTickCap` / `perDayCap` apply on top; exhausted → `budget_unavailable`, no retry |
+| Data leaving the machine | `sendSummariesToAssessor` defaults to false: sends only task id, agent, duration, counts, tool names, signals, file types |
+| User option | "Send summaries to the assessor" can be turned on explicitly, with a second confirmation; the UI states what is sent, to whom, and that it cannot be undone |
+| Retention | Lens stores only verdict / evidence ids / counts; never the raw prompt |
+| Source of minutes | The assessor outputs only kind/size/complexity/agent_share/adoption/evidence; minutes are computed deterministically from anchors; output with `minutes` or unknown keys → `invalid` |
+| UI semantics | "Estimate" + anchor version; not Performance / a performance score / time saved |
+| Cloud HET | **Not approved**: HET does not use cloud `/v1/chat/completions` |
 
-### R4-1a 观测到的偏差（记录，不处理）
+### R4-1a Observed deviation (recorded, no action)
 
-- brief 写 `daily_call_limit = 200`；本机 `~/.persome/config.toml` 实际为 **20000**（2026-11-06 读取，used=7）。
-  Lens 不修改 Runtime 配置或 usage 文件。因此本轮的有效上限是 **brief 的自限额**
-  （X3 ≤20、Workflow ≤40、云抽取 ≤20、Faces/构建 ≤40）+ HET `perDayCap=20`，而不是 Runtime 的 20000。
-  **用户确认（2026-11-06）：20000 是有意修改，brief 中的 200 已过时。** Runtime limit 保持 20000；
-  HET 仍受自身 `perTickCap=5` / `perDayCap=20` 约束。
+- The brief says `daily_call_limit = 200`; this machine's `~/.persome/config.toml` actually has **20000** (read 2026-11-06, used=7).
+  Lens does not modify the Runtime config or usage file. So this round's effective limit is **the brief's self-imposed caps**
+  (X3 ≤20, Workflow ≤40, cloud extraction ≤20, Faces/build ≤40) + HET `perDayCap=20`, not the Runtime's 20000.
+  **User confirmed (2026-11-06): 20000 is an intentional change; the 200 in the brief is outdated.** The Runtime limit stays at 20000;
+  HET is still bound by its own `perTickCap=5` / `perDayCap=20`.
 
-## R4-2 仍不批准
+## R4-2 Still not approved
 
-- 新增第三方账号 / OAuth（Google / Notion / Outlook 没有 client id → BLOCKED）。
-- X7 Lens 内置 LLM。Workflow 提取只走 Runtime `pattern_detector` 或已批准的 Cloud 抽取路径。
-- HET 用 cloud LLM。
-- 签名 / 公证 / 自动更新：本机只有 `Apple Development` 证书，无 Developer ID、无发布源 → BLOCKED。
+- New third-party accounts / OAuth (Google / Notion / Outlook have no client id → BLOCKED).
+- X7 built-in LLM in Lens. Workflow extraction goes only through the Runtime `pattern_detector` or the approved Cloud extraction path.
+- HET using a cloud LLM.
+- Signing / notarization / auto-update: this machine only has an `Apple Development` certificate, no Developer ID and no release source → BLOCKED.
 
-## R4-3 本轮操作约束
+## R4-3 Operating constraints for this round
 
-- 不改 Runtime 代码、不直接写 `index.db`；上游缺口写 `docs/upstream/*.md`。
-- 不伪造 HET 分钟、Workflow steps、Face、云交付、CAP 结果。
-- 真实云测试只认环境变量；本机 shell 环境中无 `CLOUD_LLM_*` / SMTP / `CLOUD_SONIOX_API_KEY` → 对应项 BLOCKED。
-- 不 push / 不开 PR / 不发布。
+- No changes to Runtime code, no direct writes to `index.db`; upstream gaps go in `docs/upstream/*.md`.
+- No faked HET minutes, Workflow steps, Faces, cloud deliveries or CAP results.
+- Real cloud tests rely only on environment variables; this machine's shell environment has no `CLOUD_LLM_*` / SMTP / `CLOUD_SONIOX_API_KEY` → those items are BLOCKED.
+- No push / no PR / no release.

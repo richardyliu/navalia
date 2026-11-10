@@ -1,4 +1,4 @@
-# Persome Cloud (Phase 0 + Chat + Cards + Letters + Meetings + Moments)
+# Navalia Cloud (Phase 0 + Chat + Cards + Letters + Meetings + Moments)
 
 Opt-in cloud service for Navalia. **Lens works fully without it**; every cloud
 feature is off by default and the user turns it on explicitly. Implemented: device-key
@@ -57,7 +57,7 @@ and must sit behind a TLS-terminating reverse proxy in production.
 | `CLOUD_LLM_MAX_TOKENS` | `1500` | `max_tokens` sent upstream |
 | `CLOUD_CHAT_DAILY_TOKENS` | `200000` | Per-account daily budget (prompt + completion, UTC day) → `429 quota_exceeded` |
 | `CLOUD_MAIL_MODE` | unset | `smtp` \| `outbox` \| unset. Unset = letters still accepted, deliveries stay `queued` with `error_code: "mail_disabled"` (expire to `failed`/`expired` after 7 d); subscribe returns 202 but sends/stores nothing |
-| `CLOUD_MAIL_FROM` | – | smtp/outbox, required. Bare address (`letters@example.com`); the display name is the publisher's card `display_name` (fallback `Persome 周信`) |
+| `CLOUD_MAIL_FROM` | – | smtp/outbox, required. Bare address (`letters@example.com`); the display name is the publisher's card `display_name` (fallback: a fixed Chinese name meaning "Persome weekly letter") |
 | `CLOUD_MAIL_OUTBOX_DIR` | – | outbox mode, required. Writes one `.eml` per mail (dir 0700, files 0600). Dev only: files contain recipient addresses |
 | `CLOUD_SMTP_HOST` / `CLOUD_SMTP_PORT` | – / `587` (`465` if secure) | smtp mode relay |
 | `CLOUD_SMTP_SECURE` | off | `1` = implicit TLS. Off = STARTTLS **required** (except to a loopback host) |
@@ -129,7 +129,7 @@ Order of pre-stream checks: auth (401) → rate limit (429 `rate_limited`) → b
 
 Stream events: `delta {text}` (many) → optional `error {code, message}` (`upstream_error` | `upstream_timeout`, mid-stream only) → `usage {prompt_tokens, completion_tokens, model[, estimated:true]}` (once) → `done {finish_reason: stop|length|error, citations}`. Citations = distinct `[ctx-N]` markers in the full answer that match provided ids, first-appearance order. A client disconnect aborts the upstream request. No retries.
 
-Mock answer (deterministic): `（mock）收到 N 条上下文。` then `\n- <title> [ctx-K]` for the first ≤ 3 items, in 7-character deltas.
+Mock answer (deterministic): a fixed Chinese line meaning "(mock) received N context items.", then `\n- <title> [ctx-K]` for the first ≤ 3 items, in 7-character deltas.
 
 **`task: "workflow_extract"` (C15).** Same request and stream contract. The server-owned system prompt (replacing the
 chat rules) asks the model to extract a reusable workflow from the session items using only those items (no invented
@@ -137,7 +137,7 @@ tools / commands / paths), and to output ONLY one JSON object in a single ```` `
 `{"title":string,"steps":[{"title","detail","cites":["ctx-N"]}],"artifacts":[{"name","kind","cites"}],"rules":[{"text","cites"}],"problems":[{"text","resolution":string|null,"cites"}]}`,
 every item citing context ids, empty arrays allowed. **The server does not parse or validate that JSON** (the client
 does); it streams deltas as for chat. `done.citations` for this task = distinct quoted `"ctx-N"` strings in the answer
-that match provided ids. Mock: a ```` ```json ```` block with `title` `（mock）工作流：<first title>`, one step per
+that match provided ids. Mock: a ```` ```json ```` block with `title` set to a fixed Chinese prefix meaning "(mock) workflow: " plus `<first title>`, one step per
 first ≤ 3 items (`title` = item title, `detail` = item text on one line ≤ 200 chars, `cites` = [that id]), empty
 `artifacts` / `rules` / `problems`, in 7-character deltas. Quota / `chat_usage` accounting is unchanged.
 
@@ -163,7 +163,7 @@ backoff 1 min then 5 min; SMTP 5xx and header-unsafe mails fail at once (`smtp_r
 Mail: `multipart/alternative` (the markdown as plain text + escaped paragraph-only HTML), `Subject` = title,
 `From` = `"<card display name>" <CLOUD_MAIL_FROM>`, no Reply-To, `List-Unsubscribe: <origin/v1/unsubscribe?token=…>`
 + `List-Unsubscribe-Post: List-Unsubscribe=One-Click`. **No tracking**: no images, no rewritten links, no open/click
-counting; the unsubscribe link is the only per-recipient URL. Footer: "你在 <origin> 订阅了…" + unsubscribe link.
+counting; the unsubscribe link is the only per-recipient URL. Footer: a Chinese line meaning "You subscribed at <origin>…" + unsubscribe link.
 
 Subscribers: double opt-in (confirmation token 48 h, sha256 stored; raw token kept only until handed to the
 transport). ≤ 3 confirmation mails per address per 24 h (across publishers); per-IP and per-publisher limits;
@@ -243,7 +243,7 @@ that chunk's `error_code` (`stt_failed`, `stt_auth`, `stt_quota`, `stt_rejected`
 (chunk offset = sum of the previous chunks' declared durations). `language` = most frequent detected language or
 `null`. Overall `text` = segment texts joined with `\n`.
 
-Mock: one segment per chunk, `（mock 转写）第 ${seq+1} 段，${round(ms/1000)} 秒`, speaker `S1`, language `null`.
+Mock: one segment per chunk, with Chinese text meaning "(mock transcript) segment ${seq+1}, ${round(ms/1000)} seconds", speaker `S1`, language `null`.
 
 Soniox (async REST API, docs read 2026-11-05 — see `src/stt.ts` header): per chunk `POST /v1/files` (multipart
 field `file`, filename `chunk.<ext>`, never the title) → `POST /v1/transcriptions` `{model, file_id, language_hints?,

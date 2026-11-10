@@ -1,113 +1,113 @@
-# Persome Lens — GAP vs S1, Round 2
+# Navalia — GAP vs S1, Round 2
 
-Oracle：S1 文章（mp.weixin.qq.com/s/k5D4zCbwMgZc2RupRYPWqA；镜像 news.qq.com/rain/a/20261104A0E5ZC00）。
-S2 访谈 / 原版 DMG 是另一个 oracle（`docs/test-evidence/REPORT.md` 的 0.91 只对 DMG）。冲突时 S1 优先，取舍写 `DEVIATIONS.md`。
-Round 1 结果：`GAP-vs-S1.md`。默认决策：`DECISIONS-ROUND2.md`。每个任务的明细：`s2-log/S2-xx.md`。
+Oracle: the S1 article (mp.weixin.qq.com/s/k5D4zCbwMgZc2RupRYPWqA; mirror news.qq.com/rain/a/20261104A0E5ZC00).
+The S2 interview / original DMG is a separate oracle (the 0.91 in `docs/test-evidence/REPORT.md` applies only to the DMG). On conflict, S1 wins; trade-offs go in `DEVIATIONS.md`.
+Round 1 results: `GAP-vs-S1.md`. Default decisions: `DECISIONS-ROUND2.md`. Per-task details: `s2-log/S2-xx.md`.
 
-## 0. 基线（2026-11-05，Round 2 Phase 0）
+## 0. Baseline (2026-11-05, Round 2 Phase 0)
 
-| 项 | 结果 |
+| Item | Result |
 |---|---|
-| git | 非 git 仓库 |
-| `npm run typecheck` | 0 错误 |
-| `npm test` | 772 passed / 5 skipped（79 files，4 skipped files） |
-| `npm run build` | 通过 |
+| git | Not a git repository |
+| `npm run typecheck` | 0 errors |
+| `npm test` | 772 passed / 5 skipped (79 files, 4 skipped files) |
+| `npm run build` | Passes |
 
-## 1. Phase 0 审计：Round 1 的 “DONE” 对照代码
+## 1. Phase 0 audit: Round 1 "DONE" checked against the code
 
-| Round 1 标签 | 代码事实 | 修正 |
+| Round 1 label | Code fact | Correction |
 |---|---|---|
-| S1-06 Workflow 任务结构 DONE | `src/main/workflows/runtime.ts` 只从 Runtime skill 文件映射；Runtime 只写 Pattern/Context/Evidence，steps 仅在显式 `Steps:` 时才有。真实 Workflow 绝大多数只有 goal/context/evidence | **PARTIAL**：schema 有，内容空 |
-| S1-08 资料库 DONE | `library/aggregate.ts` 只有 人/项目/未分类 + `behavior_patterns` 技能；无“画像”，不读 Lens Workflow store（导入 / 分享的 `.lensskill` 不显示） | **PARTIAL** |
-| S1-11 朋友 DONE | 卡片导入 / 周信可用；订阅 `unsupported` | **PARTIAL** |
-| S1-02 周报导出“未写明 assessor 关闭” | `src/main/het/weekly.ts` 已有 `assessorNote()`；README Limitations 那句是漂移 | 删 README 旧句 |
-| 自然语言提问 / 微信群 | 无 “问” 入口，无 recipe | TODO → S2-03 |
-| 首启 | 启动直接进 “总览” | TODO → S2-01 |
-| 全量导出 / 备份 | 只有单项导出 | TODO → S2-02 |
-| E2E | 新页面无覆盖 | TODO → S2-05 |
+| S1-06 Workflow task structure DONE | `src/main/workflows/runtime.ts` only maps from Runtime skill files; Runtime only writes Pattern/Context/Evidence, and steps exist only when `Steps:` is written explicitly. The vast majority of real Workflows have only goal/context/evidence | **PARTIAL**: schema exists, content empty |
+| S1-08 Library DONE | `library/aggregate.ts` has only people/projects/unclassified + `behavior_patterns` skills; no "Profile", does not read the Lens Workflow store (imported / shared `.lensskill` files are not shown) | **PARTIAL** |
+| S1-11 Peers DONE | Card import / weekly letter work; subscriptions `unsupported` | **PARTIAL** |
+| S1-02 weekly report export "does not state the assessor is off" | `src/main/het/weekly.ts` already has `assessorNote()`; the README Limitations sentence is drift | Delete the old README sentence |
+| Natural-language questions / WeChat groups | No "Ask" entry point, no recipe | TODO → S2-03 |
+| First launch | Launch goes straight to "Overview" | TODO → S2-01 |
+| Full export / backup | Only per-item export | TODO → S2-02 |
+| E2E | New pages not covered | TODO → S2-05 |
 
-## 2. Round 2 计划（每任务 3–5 行）
+## 2. Round 2 plan (3–5 lines per task)
 
-执行方式：lead 搭脚手架（`s2-log/BRIEF.md` 列出的共享接线），5 个实现 agent + 1 个文档 agent 并行，写集不相交；E2E 与安全审查在实现之后。
+How it runs: the lead builds the scaffolding (the shared wiring listed in `s2-log/BRIEF.md`), 5 implementation agents + 1 docs agent run in parallel with non-overlapping write sets; E2E and security review come after implementation.
 
-- **S2-01 Onboarding**（onboard-ask）：`<LensStore>/onboarding.json`（0600）判定首启；可跳过的步骤：欢迎 → 权限 → 连接 → 导入 → 完成（`libraryHeadline`）；纯状态机测试。
-- **S2-02 备份**（backup-import）：`persome model export --out <dir>/model-snapshot.json`（execFile、PERSOME_ROOT）+ 复制 Lens 数据白名单 + manifest；恢复只合并 workflows/peers；私钥 / grants / audit 不进备份；临时目录写完再 rename。
-- **S2-03 问**（onboard-ask）：≥4 个固定 prompt 卡片（工具名、复制、去 Connections、"Lens 不调用 LLM"）；微信群 recipe 写明 OCR/AX 限制。
-- **S2-04 资料库画像 + Workflow**（library-today）：画像区块（Root / Top 3 Faces / counts → Model）；技能列合并 Workflow store（observed / imported / shared 徽章，去重，深链 Playbook）。
-- **S2-05 E2E**（e2e，最后）：今天 / 资料库 / 导入 / 朋友 / Workflow / `.lensskill` / onboarding / 问 / 备份；标 `[real]`/`[mock]`。
-- **S2-06 文档**（docs + lead）：GAP-vs-S1 S1-06/08/11 → PARTIAL；README 漂移；DEVIATIONS D32+。
-- **S2-07 Workflow 抽取**（workflows）：prompt + schema → 外部 Agent → 粘贴 JSON → 校验保存（user_edited / imported），不覆盖 observed id。
-- **S2-08 下一步**（library-today）：只从 `- [ ]` / `TODO:` / `待办：` 与已学 habits；每条「未核实」；不叫 Performance。
-- **S2-09 订阅文件夹**（peers-sub）：选文件夹 → 手动刷新 → 验签导入 `.persomecard` / `.lensskill`，hash 去重，默认关闭，不联网。
-- **S2-10 导入后构建开关**（backup-import）：默认关；打开二次确认；失败显示退出码 / stderr。
-- **S2-11 / S2-12**（docs）：`PERFORMANCE.md`、`upstream/HABIT-3-DATES.md`、`upstream/CAPTURE-L2L3.md`。
+- **S2-01 Onboarding** (onboard-ask): `<LensStore>/onboarding.json` (0600) decides first launch; skippable steps: Welcome → Permissions → Connect → Import → Done (`libraryHeadline`); pure state machine tests.
+- **S2-02 Backup** (backup-import): `persome model export --out <dir>/model-snapshot.json` (execFile, PERSOME_ROOT) + copy an allowlist of Lens data + manifest; restore only merges workflows/peers; private keys / grants / audit are not backed up; write to a temporary directory, then rename.
+- **S2-03 Ask** (onboard-ask): ≥4 fixed prompt cards (tool names, copy, go to Connections, "Lens does not call an LLM"); the WeChat group recipe states the OCR/AX limits.
+- **S2-04 Library profile + Workflow** (library-today): Profile block (Root / Top 3 Faces / counts → Model); the skills column merges the Workflow store (observed / imported / shared badges, dedup, deep link to Playbook).
+- **S2-05 E2E** (e2e, last): Today / Library / Import / Peers / Workflow / `.lensskill` / onboarding / Ask / Backup; labeled `[real]`/`[mock]`.
+- **S2-06 Docs** (docs + lead): GAP-vs-S1 S1-06/08/11 → PARTIAL; README drift; DEVIATIONS D32+.
+- **S2-07 Workflow extraction** (workflows): prompt + schema → external Agent → paste JSON → validate and save (user_edited / imported), never overwrites an observed id.
+- **S2-08 Next steps** (library-today): only from `- [ ]` / `TODO:` / the Chinese to-do prefix and learned habits; every item "unverified"; not called Performance.
+- **S2-09 Subscription folder** (peers-sub): choose a folder → manual refresh → verify and import `.persomecard` / `.lensskill`, hash dedup, off by default, no network.
+- **S2-10 Build-after-import switch** (backup-import): off by default; turning it on needs a second confirmation; failures show exit code / stderr.
+- **S2-11 / S2-12** (docs): `PERFORMANCE.md`, `upstream/HABIT-3-DATES.md`, `upstream/CAPTURE-L2L3.md`.
 
-## 3. S1 目标逐条（Round 1 → Round 2）
+## 3. S1 goals item by item (Round 1 → Round 2)
 
-状态：DONE = 机制 + 自动化证据（单测 / E2E）；PARTIAL = 机制有、但有已知缺口；BLOCKED = 需要用户决策 / 上游 / 人工权限。“页面看起来像文章”不算 DONE。
+Status: DONE = mechanism + automated evidence (unit tests / E2E); PARTIAL = mechanism exists but has known gaps; BLOCKED = needs a user decision / upstream / manual permissions. "The page looks like the article" does not count as DONE.
 
 ### U1 Personal Database
-| 目标 | Round 1 | Round 2 | 状态 | 证据 |
+| Goal | Round 1 | Round 2 | Status | Evidence |
 |---|---|---|---|---|
-| 欢迎 / 首启 | 无 | 5 步可跳过引导（欢迎 / 权限 / 连接 / 导入 / 完成 + `libraryHeadline`），`onboarding.json` 0600，老 Store 不打扰，设置里可重开 | DONE (S2-01) | `tests/onboarding/*`（41）；E2E 2 步 |
-| 采集 L2/L3 | BLOCKED | 未改；补人工验收清单 `docs/upstream/CAPTURE-L2L3.md` | BLOCKED（TCC 人工） | — |
-| 导入历史 | PARTIAL | +「导入后构建」开关（默认关、不保存、二次确认） | PARTIAL（构建要 Runtime LLM；工具输出/思考/子代理不导入；增长会话重导会重复，D27） | `tests/import/build-after.test.ts`；E2E scan+prepare |
-| 自然语言提问 | TODO | 「问」页 4 个 prompt 卡（工具名对照 catalog），交给外部 Agent；Lens 不调 LLM | PARTIAL（Lens 内无回答视图；结果在外部 Agent 里） | `tests/ask/*`；E2E |
-| 微信群整理 | TODO | recipe 卡：`search_captures` + `read_recent_capture`，写明 AX/OCR/保留期限制 | PARTIAL（只覆盖屏幕上出现过的内容；OCR 默认关） | `tests/ask/*` |
-| 每日 brief + 下一步 | DONE（brief） | 「下一步」只来自 `- [ ]` / `TODO:` / `待办：` + 习惯原文，每条未核实 + 来源 | DONE (S2-08)；主动推送不做（X9） | `tests/library/nextSteps.test.ts`；E2E 导出含 `## 下一步` |
-| 资料库 人/项目/画像/技能 | PARTIAL | 画像（Root 原文 + Top3 Faces Runtime 排序 + 计数）；技能合并 Workflow store（观察/导入/分享/编辑/外部抽取徽章），深链 Playbook；分段容错 | DONE (S2-04) | `tests/library/{skills,portrait}`；E2E |
-| 全量导出 / 备份 | 无 | 模型快照（`persome model export`）+ Lens 白名单 + sha256 manifest；恢复合并 workflows/peers；私钥/grants/audit 不进备份 | DONE (S2-02)；恢复丢 Workflow 历史（D36） | `tests/backup/*`（25）；E2E 导出 |
-| 证据链 | PARTIAL | 未改 | BLOCKED 上游（MOD-07） | — |
+| Welcome / first launch | None | 5-step skippable onboarding (Welcome / Permissions / Connect / Import / Done + `libraryHeadline`), `onboarding.json` 0600, existing Stores are not disturbed, can be reopened from Settings | DONE (S2-01) | `tests/onboarding/*` (41); 2 E2E steps |
+| Capture L2/L3 | BLOCKED | Unchanged; added a manual acceptance checklist `docs/upstream/CAPTURE-L2L3.md` | BLOCKED (manual TCC) | — |
+| Import history | PARTIAL | + "Build after import" switch (off by default, not saved, second confirmation) | PARTIAL (build needs the Runtime LLM; tool output/thinking/subagents are not imported; re-importing a growing session duplicates it, D27) | `tests/import/build-after.test.ts`; E2E scan+prepare |
+| Natural-language questions | TODO | "Ask" page with 4 prompt cards (tool names checked against the catalog), handed to an external Agent; Lens does not call an LLM | PARTIAL (no answer view inside Lens; results live in the external Agent) | `tests/ask/*`; E2E |
+| WeChat group digest | TODO | Recipe card: `search_captures` + `read_recent_capture`, states the AX/OCR/retention limits | PARTIAL (only covers content that appeared on screen; OCR is off by default) | `tests/ask/*` |
+| Daily brief + next steps | DONE (brief) | "Next steps" come only from `- [ ]` / `TODO:` / the Chinese to-do prefix + habit original text, each item unverified + source | DONE (S2-08); proactive push not done (X9) | `tests/library/nextSteps.test.ts`; E2E export contains the Next steps heading |
+| Library people/projects/profile/skills | PARTIAL | Profile (Root original text + Top3 Faces in Runtime order + counts); skills merge the Workflow store (observed/imported/shared/edited/external-extraction badges), deep link to Playbook; per-section fault tolerance | DONE (S2-04) | `tests/library/{skills,portrait}`; E2E |
+| Full export / backup | None | Model snapshot (`persome model export`) + Lens allowlist + sha256 manifest; restore merges workflows/peers; private keys/grants/audit are not backed up | DONE (S2-02); restore drops Workflow history (D36) | `tests/backup/*` (25); E2E export |
+| Evidence chain | PARTIAL | Unchanged | BLOCKED upstream (MOD-07) | — |
 
 ### U2 Workflow / Skills
-| 目标 | Round 1 | Round 2 | 状态 | 证据 |
+| Goal | Round 1 | Round 2 | Status | Evidence |
 |---|---|---|---|---|
-| 任务结构有内容 | PARTIAL（大多空） | 外部 Agent 抽取：prompt + zod 派生 JSON Schema → 粘贴回 → 校验 → `ext-*`（不覆盖 `rt-*`）；parser 支持 `###`/纯文本 Steps | PARTIAL：靠用户手动跑外部 Agent；Runtime 观察到的仍为空（上游只写 Pattern/Context/Evidence/Confidence） | `tests/workflows/extract*`、`parse-sections`；E2E 4 steps 的 fixture skill |
-| 资料库/Agent 可读 | DONE | 技能列显示 `.lensskill`；Broker `get_workflow` E2E 覆盖 | DONE | E2E |
-| 习惯 ≥3 日期 | PARTIAL | 上游提议 `docs/upstream/HABIT-3-DATES.md` | PARTIAL / BLOCKED（X6、X10） | — |
-| 越用越厚 / 分享 | DONE | 订阅文件夹可带 `.lensskill`（仅来自已在朋友列表的签名者） | DONE | `tests/peers/subscription.test.ts` |
+| Task structure has content | PARTIAL (mostly empty) | External Agent extraction: prompt + zod-derived JSON Schema → paste back → validate → `ext-*` (does not overwrite `rt-*`); parser supports `###`/plain-text Steps | PARTIAL: relies on the user running an external Agent manually; what Runtime observes is still empty (upstream only writes Pattern/Context/Evidence/Confidence) | `tests/workflows/extract*`, `parse-sections`; E2E fixture skill with 4 steps |
+| Readable by Library/Agents | DONE | Skills column shows `.lensskill`; Broker `get_workflow` covered by E2E | DONE | E2E |
+| Habits on ≥3 dates | PARTIAL | Upstream proposal `docs/upstream/HABIT-3-DATES.md` | PARTIAL / BLOCKED (X6, X10) | — |
+| Grows with use / sharing | DONE | Subscription folder can carry `.lensskill` (only from signers already in the peer list) | DONE | `tests/peers/subscription.test.ts` |
 
 ### U3 Shared moments
-| 目标 | Round 1 | Round 2 | 状态 |
+| Goal | Round 1 | Round 2 | Status |
 |---|---|---|---|
-| 朋友卡片 | PARTIAL | E2E 覆盖导入/篡改拒绝 | DONE |
-| 每周信 | DONE（草稿） | 未改；不发送 | PARTIAL（无送达，X1） |
-| 订阅 | `unsupported` | 本地订阅文件夹，手动刷新，验签，hash 去重，不联网 | PARTIAL（无后台同步，X2） |
+| Peer cards | PARTIAL | E2E covers import/tamper rejection | DONE |
+| Weekly letter | DONE (draft) | Unchanged; not sent | PARTIAL (no delivery, X1) |
+| Subscriptions | `unsupported` | Local subscription folder, manual refresh, signature verification, hash dedup, no network | PARTIAL (no background sync, X2) |
 
-### 可计量
-| 目标 | 状态 |
+### Measurable
+| Goal | Status |
 |---|---|
-| HET 分钟数 | BLOCKED（X3）；页面「未测量」；HET 页去掉 “Performance” 字样（D40） |
-| Performance | BLOCKED（X4）：`docs/design/PERFORMANCE.md` 三选项 + 推荐，不实现 |
-| 主动层（Tray / 通知 / 快捷键） | 不做（X9） |
+| HET minutes | BLOCKED (X3); page shows "Unmeasured"; the word "Performance" removed from the HET page (D40) |
+| Performance | BLOCKED (X4): `docs/design/PERFORMANCE.md` with three options + a recommendation, not implemented |
+| Proactive layer (Tray / notifications / shortcuts) | Not done (X9) |
 
 ## 4. Task log
 
-| 任务 | Agent | 状态 | 关键文件 | 测试 |
+| Task | Agent | Status | Key files | Tests |
 |---|---|---|---|---|
-| S2-01 Onboarding | onboard-ask | DONE | `src/main/onboarding/store.ts:47-110`、`ipc.ts`；`components/onboarding/flow.ts:51`；`pages/Onboarding.tsx`；Settings 重开（lead） | `tests/onboarding/*` 41 |
-| S2-02 备份 | backup-import | DONE | `src/main/backup/service.ts`（`scanForSecrets`、`exportTo`、`validate`、`restore`）；`components/backup/*` | `tests/backup/*` 25 |
-| S2-03 问 | onboard-ask | DONE | `components/ask/prompts.ts:39`、`askView.ts`；`pages/Ask.tsx` | `tests/ask/*` 9 |
-| S2-04 资料库 | library-today | DONE | `src/main/library/skills.ts`、`aggregate.ts:84-180`、`ipc.ts:44-80`；`components/library/viewModel.ts`；`pages/Library.tsx` | `tests/library/{skills,portrait}` |
-| S2-05 E2E | e2e | DONE（37 PASS / 5 SKIP） | `tests/e2e/smoke.e2e.mjs`、mocks、`fixtures/model-graph.json`、`packaged-check.sh`（仅 `bash -n`） | — |
-| S2-06 文档 | docs + lead | DONE | `GAP-vs-S1.md`（S1-06/08/11 → PARTIAL）、README、DEVIATIONS D32–D40 | — |
-| S2-07 抽取 | workflows | PARTIAL（机制 DONE；内容靠外部 Agent） | `src/main/workflows/extract.ts`、`store.ts:309`、`parse.ts:183-185`；`ExtractPanel.tsx`；`Playbook.tsx` 深链 | `tests/workflows/extract*` 等 31 |
-| S2-08 下一步 | library-today | DONE | `src/main/library/brief.ts:199`；`pages/Today.tsx:83-118` | `tests/library/nextSteps` 9 |
-| S2-09 订阅 | peers-sub | DONE（本地，手动） | `src/main/peers/subscription.ts`；`components/peers/SubscriptionSection.tsx` | `tests/peers/subscription` 13 |
-| S2-10 导入后构建 | backup-import | DONE | `pages/importView.ts:136-204` | `tests/import/build-after` 10 |
-| S2-11 Performance | docs | DONE（文档；指标 BLOCKED） | `docs/design/PERFORMANCE.md` | — |
-| S2-12 上游 | docs | DONE（文档；未提交） | `docs/upstream/{HABIT-3-DATES,CAPTURE-L2L3}.md` | — |
-| 安全审查 + 修复 | security-reviewer + security-fix | M1 M2 L2 L3 L4 已修；L1 L5 记录 | `s2-log/S2-SEC.md` | `tests/security/redact-errors` 等 16 |
+| S2-01 Onboarding | onboard-ask | DONE | `src/main/onboarding/store.ts:47-110`, `ipc.ts`; `components/onboarding/flow.ts:51`; `pages/Onboarding.tsx`; reopen from Settings (lead) | `tests/onboarding/*` 41 |
+| S2-02 Backup | backup-import | DONE | `src/main/backup/service.ts` (`scanForSecrets`, `exportTo`, `validate`, `restore`); `components/backup/*` | `tests/backup/*` 25 |
+| S2-03 Ask | onboard-ask | DONE | `components/ask/prompts.ts:39`, `askView.ts`; `pages/Ask.tsx` | `tests/ask/*` 9 |
+| S2-04 Library | library-today | DONE | `src/main/library/skills.ts`, `aggregate.ts:84-180`, `ipc.ts:44-80`; `components/library/viewModel.ts`; `pages/Library.tsx` | `tests/library/{skills,portrait}` |
+| S2-05 E2E | e2e | DONE (37 PASS / 5 SKIP) | `tests/e2e/smoke.e2e.mjs`, mocks, `fixtures/model-graph.json`, `packaged-check.sh` (only `bash -n`) | — |
+| S2-06 Docs | docs + lead | DONE | `GAP-vs-S1.md` (S1-06/08/11 → PARTIAL), README, DEVIATIONS D32–D40 | — |
+| S2-07 Extraction | workflows | PARTIAL (mechanism DONE; content relies on an external Agent) | `src/main/workflows/extract.ts`, `store.ts:309`, `parse.ts:183-185`; `ExtractPanel.tsx`; `Playbook.tsx` deep link | `tests/workflows/extract*` etc. 31 |
+| S2-08 Next steps | library-today | DONE | `src/main/library/brief.ts:199`; `pages/Today.tsx:83-118` | `tests/library/nextSteps` 9 |
+| S2-09 Subscriptions | peers-sub | DONE (local, manual) | `src/main/peers/subscription.ts`; `components/peers/SubscriptionSection.tsx` | `tests/peers/subscription` 13 |
+| S2-10 Build after import | backup-import | DONE | `pages/importView.ts:136-204` | `tests/import/build-after` 10 |
+| S2-11 Performance | docs | DONE (docs; metrics BLOCKED) | `docs/design/PERFORMANCE.md` | — |
+| S2-12 Upstream | docs | DONE (docs; not submitted) | `docs/upstream/{HABIT-3-DATES,CAPTURE-L2L3}.md` | — |
+| Security review + fixes | security-reviewer + security-fix | M1 M2 L2 L3 L4 fixed; L1 L5 recorded | `s2-log/S2-SEC.md` | `tests/security/redact-errors` etc. 16 |
 
-## 5. 结论
+## 5. Conclusion
 
-| 项 | 基线 | 结束 |
+| Item | Baseline | End |
 |---|---|---|
-| typecheck | 0 错误 | 0 错误 |
-| `npm test` | 772 passed / 5 skipped（79 files） | 932 passed / 5 skipped（96 files，4 skipped files） |
-| `npm run build` | 通过 | 通过 |
-| E2E（`E2E_NO_FOCUS=1`） | 22 PASS / 4 SKIP | 37 PASS / 5 SKIP / 0 FAIL（新 SKIP = 备份恢复，理由见 S2-05；恢复由单测覆盖） |
+| typecheck | 0 errors | 0 errors |
+| `npm test` | 772 passed / 5 skipped (79 files) | 932 passed / 5 skipped (96 files, 4 skipped files) |
+| `npm run build` | Passes | Passes |
+| E2E (`E2E_NO_FOCUS=1`) | 22 PASS / 4 SKIP | 37 PASS / 5 SKIP / 0 FAIL (the new SKIP = backup restore, reason in S2-05; restore is covered by unit tests) |
 
-剩余风险：备份对超大快照（>~512 MiB）必失败且同步 I/O 卡 UI（L1）；快照脱敏依赖 Runtime 默认（L5）；`packaged-check.sh` 未在打包产物上实跑；renderer 提供的 `confirm:true` 是 IPC 固有信任边界。
+Remaining risks: backup is certain to fail on very large snapshots (>~512 MiB) and its synchronous I/O freezes the UI (L1); snapshot redaction relies on Runtime defaults (L5); `packaged-check.sh` has not actually been run on a packaged build; the `confirm:true` supplied by the renderer is an inherent IPC trust boundary.
 
-下一步：用户拍板 `DECISIONS-ROUND2.md`；上游 Runtime 输出结构化 Steps/Artifacts/Rules/Problems；打包后跑 `npm run e2e:packaged` 与 CAP-01/08/09 人工清单。
+Next steps: the user decides on `DECISIONS-ROUND2.md`; upstream Runtime outputs structured Steps/Artifacts/Rules/Problems; after packaging, run `npm run e2e:packaged` and the CAP-01/08/09 manual checklist.
