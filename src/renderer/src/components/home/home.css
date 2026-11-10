@@ -1,0 +1,132 @@
+/* OG-01 Home dashboard */
+.home-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-items: start;
+}
+
+.home-card.wide {
+  grid-column: 1 / -1;
+}
+
+.home-card .card-head .btn {
+  flex-shrink: 0;
+}
+
+.home-figure {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.home-figure.unmeasured {
+  color: var(--muted);
+}
+
+.home-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.home-list li {
+  min-width: 0;
+}
+
+.home-list .line {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-kv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 8px 0 0;
+}
+
+.heat {
+  display: grid;
+  grid-template-columns: 78px repeat(24, minmax(0, 1fr));
+  gap: 2px;
+  font-size: var(--fs-2xs);
+  color: var(--muted);
+}
+
+.heat-cell {
+  height: 14px;
+  border-radius: var(--radius-xs);
+  background: var(--card-2);
+  border: 1px solid var(--line);
+}
+
+.heat-cell.l1 { background: var(--heat-1); border-color: var(--heat-1); }
+.heat-cell.l2 { background: var(--heat-2); border-color: var(--heat-2); }
+.heat-cell.l3 { background: var(--heat-3); border-color: var(--heat-3); }
+.heat-cell.l4 { background: var(--accent); border-color: var(--accent); }
+
+.heat .hour {
+  text-align: center;
+}
+
+.heat-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.heat-legend .heat-cell {
+  width: 12px;
+  height: 12px;
+}
+
+/* S1-R3-04 本周 AI 工作计数 */
+.ai-counts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ai-count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: default;
+  text-align: left;
+}
+
+.ai-count:hover {
+  border-color: var(--accent);
+}
+
+.ai-count-n {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.ai-counts-disclaimer {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* Card subtitle: 12px (not the 11px .tiny utility), the audit's legibility floor for body text. */
+.home-card .card-head .hint {
+  display: block;
+  margin-top: 1px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}

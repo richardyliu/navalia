@@ -1,0 +1,374 @@
+/* Personal Card (lens-identity). Classes are prefixed pcard- to avoid the global .card panel. */
+
+.pcard-layout {
+  display: grid;
+  grid-template-columns: minmax(380px, 460px) minmax(260px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.pcard-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pcard {
+  perspective: 1400px;
+  width: 100%;
+  aspect-ratio: 1.42 / 1;
+  min-height: 300px;
+}
+
+.pcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.pcard.flipped .pcard-inner {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcard-inner {
+    transition: none;
+  }
+}
+
+.pcard-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 22px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(150deg, var(--card) 0%, var(--fill) 100%);
+  box-shadow: var(--shadow-md);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.pcard-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(150deg, var(--card-2) 0%, var(--sidebar) 100%);
+}
+
+.pcard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pcard-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.pcard-name {
+  font-size: var(--fs-lg);
+  letter-spacing: 0.01em;
+}
+
+.pcard-summary {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.55;
+}
+
+.pcard-summary.empty {
+  color: var(--muted);
+  font-size: var(--fs-base);
+}
+
+.pcard-highlights {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pcard-highlights li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: baseline;
+  font-size: var(--fs-sm);
+}
+
+.pcard-hl-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pcard-asof {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  border-top: 1px dashed var(--line-strong);
+  padding-top: 8px;
+}
+
+.pcard-map {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.pcard-map-edge {
+  stroke: var(--faint);
+  stroke-width: 0.8;
+  opacity: 0.6;
+}
+
+.pcard-map-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  text-align: center;
+  padding: 12px;
+}
+
+.pcard-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.pcard-fp {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--card);
+}
+
+.pcard-fp code {
+  font-size: var(--fs-xs);
+  /* wrap only between 4-char groups so a group is never split */
+  word-break: normal;
+  overflow-wrap: normal;
+  letter-spacing: 0.02em;
+}
+
+.pcard-flip {
+  align-self: flex-start;
+}
+
+.pcard-empty {
+  max-width: 620px;
+}
+
+.pcard-empty h3 {
+  margin: 4px 0 8px;
+  font-size: var(--fs-lg);
+}
+
+.pcard-empty p {
+  line-height: 1.6;
+}
+
+.pcard-dl {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 6px 10px;
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.pcard-dl dt {
+  color: var(--muted);
+}
+
+.pcard-dl dd {
+  margin: 0;
+  min-width: 0;
+  word-break: break-all;
+}
+
+.pcard-dl dd.pcard-fp-full {
+  font-size: var(--fs-xs);
+  word-break: normal;
+}
+
+.pcard-prev {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pcard-page .btn.danger {
+  background: var(--bad);
+  border-color: var(--bad);
+  color: var(--on-accent);
+}
+
+.pcard-page .btn.danger:disabled {
+  opacity: 0.45;
+}
+
+.pcard-reset-list {
+  margin: 8px 0 12px;
+  padding-left: 18px;
+  line-height: 1.7;
+}
+
+.pcard-reset-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+@media (max-width: 1100px) {
+  .pcard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Swipe Your Card */
+.swipe-page .card + .card,
+.swipe-page .swipe-layout + .card,
+.swipe-page .card + .swipe-layout {
+  margin-top: 16px;
+}
+
+.swipe-agents {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.swipe-agent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--card-2);
+}
+
+.swipe-agent.not_installed {
+  opacity: 0.6;
+}
+
+.swipe-layout {
+  display: grid;
+  grid-template-columns: minmax(380px, 460px) minmax(260px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.swipe-share {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.swipe-qr {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.swipe-payload {
+  font-size: var(--fs-xs);
+  word-break: break-all;
+  color: var(--muted);
+}
+
+.swipe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.swipe-drop {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+}
+
+.swipe-drop.over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.swipe-result {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.swipe-result-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.swipe-qr-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.swipe-qr-input textarea {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  resize: vertical;
+}
+
+.swipe-match {
+  align-self: flex-start;
+  white-space: normal;
+}
+
+.swipe-invalid {
+  margin: 0;
+  color: var(--bad);
+}
+
+@media (max-width: 1100px) {
+  .swipe-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.pcard-deviation { margin-left: 6px; }

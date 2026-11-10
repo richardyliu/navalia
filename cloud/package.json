@@ -1,0 +1,18 @@
+{
+  "name": "persome-cloud",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Navalia opt-in cloud service (auth, chat proxy, card relay, letter subscriptions)",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.ts",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "../node_modules/.bin/tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "nodemailer": "10.2.1"
+  }
+}

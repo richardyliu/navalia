@@ -1,0 +1,34 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.tinyspeck.slackmacgap",
+      "focused_element" : {
+        "AXPlaceholderValue" : "Message #general",
+        "is_editable" : true,
+        "role" : "AXTextArea"
+      },
+      "is_frontmost" : true,
+      "name" : "Slack",
+      "pid" : 777,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "domClassList" : [
+                "p-client",
+                "workspace",
+                "theme-dark"
+              ],
+              "domIdentifier" : "app-root",
+              "role" : "AXWebArea",
+              "title" : "Slack | general"
+            }
+          ],
+          "focused" : true,
+          "title" : "general - Acme - Slack"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T21:00:00Z"
+}

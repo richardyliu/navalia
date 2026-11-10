@@ -1,0 +1,223 @@
+{
+ "timestamp": "2026-11-04T21:00:00Z",
+ "frontmostPid": 777,
+ "apps": [
+  {
+   "pid": 777,
+   "localizedName": "Slack",
+   "bundleId": "com.tinyspeck.slackmacgap",
+   "executable": "Slack",
+   "regular": true,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXTitle": "Slack",
+     "AXFocusedWindow": {
+      "$ref": "sw"
+     },
+     "AXFocusedUIElement": {
+      "$ref": "search"
+     },
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "general - Acme - Slack",
+        "AXFocused": true,
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXGroup",
+           "AXChildren": [
+            {
+             "attrs": {
+              "AXRole": "AXWebArea",
+              "AXTitle": "Slack | general",
+              "AXDOMIdentifier": "app-root",
+              "AXDOMClassList": "p-client　workspace theme-dark  \t",
+              "AXChildren": [
+               {
+                "attrs": {
+                 "AXRole": "AXGroup",
+                 "AXDOMIdentifier": "app-shell-sidebar",
+                 "AXDOMClassList": [
+                  "sidebar",
+                  "",
+                  "  "
+                 ],
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXLink",
+                    "AXTitle": "# general"
+                   }
+                  },
+                  {
+                   "attrs": {
+                    "AXRole": "AXLink",
+                    "AXTitle": "# random"
+                   }
+                  },
+                  {
+                   "attrs": {
+                    "AXRole": "AXImage",
+                    "AXDescription": "avatar"
+                   }
+                  }
+                 ]
+                }
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXGroup",
+                 "AXDOMClassList": [
+                  "placeholder:text-token-input-placeholder-foreground"
+                 ],
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXStaticText",
+                    "AXValue": "Alice: shipping the build tonight"
+                   }
+                  },
+                  {
+                   "attrs": {
+                    "AXRole": "AXStaticText",
+                    "AXValue": "Bob: 👍 sounds good"
+                   }
+                  }
+                 ]
+                }
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXGroup",
+                 "identifier": null,
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXGroup",
+                    "AXChildren": [
+                     {
+                      "attrs": {
+                       "AXRole": "AXGroup",
+                       "AXChildren": [
+                        {
+                         "attrs": {
+                          "AXRole": "AXStaticText",
+                          "AXValue": "deeply nested single chain"
+                         }
+                        }
+                       ]
+                      }
+                     }
+                    ]
+                   }
+                  }
+                 ]
+                }
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXTextArea",
+                 "AXValue": "Message #general",
+                 "AXPlaceholderValue": "Message #general",
+                 "AXDOMClassList": [
+                  "editor",
+                  "ProseMirror"
+                 ],
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXGroup",
+                    "AXDOMClassList": "placeholder",
+                    "AXChildren": [
+                     {
+                      "attrs": {
+                       "AXRole": "AXStaticText",
+                       "AXValue": "Message #general"
+                      }
+                     }
+                    ]
+                   }
+                  }
+                 ]
+                },
+                "id": "composer"
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXTextField",
+                 "AXTitle": "Search",
+                 "AXDescription": "Search",
+                 "AXValue": "",
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXGroup",
+                    "AXDOMClassList": [
+                     "  Placeholder  "
+                    ],
+                    "AXChildren": [
+                     {
+                      "attrs": {
+                       "AXRole": "AXStaticText",
+                       "AXValue": "Search"
+                      }
+                     }
+                    ]
+                   }
+                  },
+                  {
+                   "attrs": {
+                    "AXRole": "AXTextField",
+                    "AXChildren": [
+                     {
+                      "attrs": {
+                       "AXRole": "AXGroup",
+                       "AXDOMClassList": "placeholder",
+                       "AXChildren": [
+                        {
+                         "attrs": {
+                          "AXRole": "AXStaticText",
+                          "AXValue": "inner"
+                         }
+                        }
+                       ]
+                      }
+                     }
+                    ]
+                   }
+                  }
+                 ]
+                },
+                "id": "search"
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXComboBox",
+                 "AXPlaceholderValue": "  Pick one  "
+                }
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXSearchField",
+                 "AXPlaceholderValue": "Filter"
+                }
+               }
+              ]
+             }
+            }
+           ]
+          }
+         }
+        ]
+       },
+       "id": "sw"
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

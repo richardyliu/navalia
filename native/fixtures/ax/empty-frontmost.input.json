@@ -1,0 +1,252 @@
+{
+ "timestamp": "2026-11-05T00:00:00Z",
+ "frontmostPid": 9002,
+ "apps": [
+  {
+   "pid": 9001,
+   "localizedName": "Edge Case",
+   "bundleId": "dev.navalia.edge",
+   "executable": "EdgeCase",
+   "regular": true,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXFocusedWindow": {
+      "$ref": "ghost"
+     },
+     "AXFocusedUIElement": {
+      "$ref": "pw"
+     },
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "First (fallback) window",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXUnknown",
+           "AXTitle": null,
+           "AXChildren": [
+            {
+             "attrs": {
+              "AXRole": "AXGroup",
+              "AXTitle": "g3",
+              "AXChildren": [
+               {
+                "attrs": {
+                 "AXRole": "AXUnknown",
+                 "AXTitle": null,
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXGroup",
+                    "AXTitle": null,
+                    "AXChildren": [
+                     {
+                      "attrs": {
+                       "AXRole": "AXUnknown",
+                       "AXTitle": "g6",
+                       "AXChildren": [
+                        {
+                         "attrs": {
+                          "AXRole": "AXGroup",
+                          "AXTitle": null,
+                          "AXChildren": [
+                           {
+                            "attrs": {
+                             "AXRole": "AXUnknown",
+                             "AXTitle": null,
+                             "AXChildren": [
+                              {
+                               "attrs": {
+                                "AXRole": "AXGroup",
+                                "AXTitle": "g9",
+                                "AXChildren": [
+                                 {
+                                  "attrs": {
+                                   "AXRole": "AXUnknown",
+                                   "AXTitle": null,
+                                   "AXChildren": [
+                                    {
+                                     "attrs": {
+                                      "AXRole": "AXGroup",
+                                      "AXTitle": null,
+                                      "AXChildren": [
+                                       {
+                                        "attrs": {
+                                         "AXRole": "AXStaticText",
+                                         "AXValue": "level 12"
+                                        }
+                                       },
+                                       {
+                                        "attrs": {
+                                         "AXRole": "AXStaticText",
+                                         "AXValue": "level 11 sibling"
+                                        }
+                                       }
+                                      ]
+                                     }
+                                    },
+                                    {
+                                     "attrs": {
+                                      "AXRole": "AXStaticText",
+                                      "AXValue": "level 10 sibling"
+                                     }
+                                    }
+                                   ]
+                                  }
+                                 },
+                                 {
+                                  "attrs": {
+                                   "AXRole": "AXStaticText",
+                                   "AXValue": "level 9 sibling"
+                                  }
+                                 }
+                                ]
+                               }
+                              },
+                              {
+                               "attrs": {
+                                "AXRole": "AXStaticText",
+                                "AXValue": "level 8 sibling"
+                               }
+                              }
+                             ]
+                            }
+                           },
+                           {
+                            "attrs": {
+                             "AXRole": "AXStaticText",
+                             "AXValue": "level 7 sibling"
+                            }
+                           }
+                          ]
+                         }
+                        },
+                        {
+                         "attrs": {
+                          "AXRole": "AXStaticText",
+                          "AXValue": "level 6 sibling"
+                         }
+                        }
+                       ]
+                      }
+                     },
+                     {
+                      "attrs": {
+                       "AXRole": "AXStaticText",
+                       "AXValue": "level 5 sibling"
+                      }
+                     }
+                    ]
+                   }
+                  },
+                  {
+                   "attrs": {
+                    "AXRole": "AXStaticText",
+                    "AXValue": "level 4 sibling"
+                   }
+                  }
+                 ]
+                }
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXStaticText",
+                 "AXValue": "level 3 sibling"
+                }
+               }
+              ]
+             }
+            },
+            {
+             "attrs": {
+              "AXRole": "AXStaticText",
+              "AXValue": "level 2 sibling"
+             }
+            }
+           ]
+          }
+         }
+        ]
+       }
+      },
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "Another",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "x"
+          }
+         }
+        ]
+       }
+      },
+      {
+       "attrs": {
+        "AXRole": "AXDrawer",
+        "AXTitle": "drawer is not a window"
+       }
+      }
+     ],
+     "AXExtraRefs": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "Ghost"
+       },
+       "id": "ghost"
+      },
+      {
+       "attrs": {
+        "AXRole": "AXTextField",
+        "AXSubrole": "AXSecureTextField",
+        "AXValue": "p@ssw0rd",
+        "AXTitle": "Password"
+       },
+       "id": "pw"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "pid": 9002,
+   "localizedName": "Empty",
+   "bundleId": "dev.navalia.empty",
+   "executable": "Empty",
+   "regular": true,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXImage"
+          }
+         }
+        ]
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "pid": 9003,
+   "localizedName": "No Element",
+   "bundleId": "dev.navalia.noel",
+   "executable": "NoEl",
+   "regular": true
+  }
+ ]
+}

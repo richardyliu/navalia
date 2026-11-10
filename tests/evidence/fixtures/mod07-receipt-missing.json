@@ -1,0 +1,18 @@
+{
+ "reference": "⟨f67c5d3d13749e6a2f700fc7a577324d:model_candidate_evidence⟩",
+ "canonical_reference": "⟨f67c5d3d13749e6a2f700fc7a577324d:model_candidate_evidence⟩",
+ "kind": "unknown",
+ "id": "f67c5d3d13749e6a2f700fc7a577324d",
+ "status": "missing",
+ "label": "Model Candidate Evidence",
+ "summary": "",
+ "timestamp": null,
+ "path": "model_candidate_evidence",
+ "metadata": {
+  "reason": "source_not_found_or_retained",
+  "receipt_preserved": true
+ },
+ "sources": [],
+ "context": [],
+ "history": []
+}

@@ -1,0 +1,49 @@
+/* S2-03 「问」page (onboard-ask). Reuses app.css tokens. */
+.ask-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 14px;
+}
+
+.ask-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ask-card h3 {
+  margin: 0;
+}
+
+.ask-prompt {
+  margin: 0;
+  padding: 10px 12px;
+  white-space: pre-wrap;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.ask-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.ask-limits {
+  margin: 0;
+  padding-left: 18px;
+  font-size: var(--fs-sm);
+  color: var(--warn);
+}
+
+.ask-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}

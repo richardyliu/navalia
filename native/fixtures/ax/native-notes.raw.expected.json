@@ -1,0 +1,213 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.apple.Notes",
+      "focused_element" : {
+        "has_selection" : true,
+        "is_editable" : true,
+        "role" : "AXTextArea",
+        "value" : "Milk\nEggs \/ Bread \"fresh\" \\ 2x",
+        "value_length" : 30
+      },
+      "is_frontmost" : true,
+      "name" : "Notes",
+      "pid" : 501,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXValue"
+              ],
+              "role" : "AXStaticText",
+              "value" : "background text"
+            }
+          ],
+          "title" : "Second window"
+        },
+        {
+          "elements" : [
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXTitle"
+              ],
+              "role" : "AXImage",
+              "title" : "icon"
+            },
+            {
+              "attributeNames" : [
+                "AXChildren",
+                "AXRole"
+              ],
+              "children" : [
+                {
+                  "attributeNames" : [
+                    "AXChildren",
+                    "AXRole",
+                    "AXTitle"
+                  ],
+                  "children" : [
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXRole"
+                      ],
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXRole",
+                            "AXSelectedTextRange",
+                            "AXValue"
+                          ],
+                          "role" : "AXTextArea",
+                          "value" : "Milk\nEggs \/ Bread \"fresh\" \\ 2x"
+                        }
+                      ],
+                      "role" : "AXScrollArea"
+                    }
+                  ],
+                  "role" : "AXGroup",
+                  "title" : "NSViewBackingLayer"
+                },
+                {
+                  "attributeNames" : [
+                    "AXChildren",
+                    "AXRole"
+                  ],
+                  "children" : [
+                    {
+                      "attributeNames" : [
+                        "AXRole",
+                        "AXValue"
+                      ],
+                      "role" : "AXStaticText",
+                      "value" : "Folders"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXDescription",
+                        "AXRole"
+                      ],
+                      "description" : "New Folder",
+                      "role" : "AXButton"
+                    }
+                  ],
+                  "role" : "AXGroup"
+                },
+                {
+                  "attributeNames" : [
+                    "AXChildren",
+                    "AXRole"
+                  ],
+                  "role" : "AXList"
+                },
+                {
+                  "attributeNames" : [
+                    "AXChildren",
+                    "AXRole",
+                    "AXSubrole"
+                  ],
+                  "children" : [
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXRole"
+                      ],
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXChildren",
+                            "AXRole"
+                          ],
+                          "children" : [
+                            {
+                              "attributeNames" : [
+                                "AXRole",
+                                "AXValue"
+                              ],
+                              "role" : "AXStaticText",
+                              "value" : "iCloud"
+                            }
+                          ],
+                          "role" : "AXCell"
+                        }
+                      ],
+                      "role" : "AXRow"
+                    }
+                  ],
+                  "role" : "AXOutline",
+                  "subrole" : "AXOutlineRow"
+                }
+              ],
+              "role" : "AXSplitGroup"
+            },
+            {
+              "attributeNames" : [
+                "AXChildren",
+                "AXRole"
+              ],
+              "children" : [
+                {
+                  "attributeNames" : [
+                    "AXRole",
+                    "AXTitle"
+                  ],
+                  "role" : "AXButton",
+                  "title" : "Share"
+                },
+                {
+                  "attributeNames" : [
+                    "AXRole",
+                    "AXSubrole",
+                    "AXValue"
+                  ],
+                  "role" : "AXTextField",
+                  "subrole" : "AXSecureTextField",
+                  "value" : "[REDACTED]"
+                }
+              ],
+              "role" : "AXToolbar"
+            },
+            {
+              "attributeNames" : [
+                "AXIdentifier",
+                "AXRole"
+              ],
+              "identifier" : "custom-id",
+              "role" : "AXUnknownCustomRole"
+            },
+            {
+              "attributeNames" : [
+                "AXChildren"
+              ],
+              "children" : [
+                {
+                  "attributeNames" : [
+                    "AXRole",
+                    "AXValue"
+                  ],
+                  "role" : "AXStaticText",
+                  "value" : "orphan role-less parent"
+                }
+              ]
+            },
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXTitle"
+              ],
+              "role" : "AXLink",
+              "title" : "https:\/\/example.com\/a\/b?c=d&e=f"
+            }
+          ],
+          "focused" : true,
+          "subrole" : "AXStandardWindow",
+          "title" : "Shopping list — Notes"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T20:15:30Z"
+}

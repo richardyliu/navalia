@@ -1,0 +1,140 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.tinyspeck.slackmacgap",
+      "focused_element" : {
+        "AXPlaceholderValue" : "Message #general",
+        "is_editable" : true,
+        "role" : "AXTextArea"
+      },
+      "is_frontmost" : true,
+      "name" : "Slack",
+      "pid" : 777,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "role" : "AXLink",
+                      "title" : "# general"
+                    },
+                    {
+                      "role" : "AXLink",
+                      "title" : "# random"
+                    }
+                  ],
+                  "domClassList" : [
+                    "sidebar"
+                  ],
+                  "domIdentifier" : "app-shell-sidebar",
+                  "role" : "AXGroup"
+                },
+                {
+                  "children" : [
+                    {
+                      "role" : "AXStaticText",
+                      "value" : "Alice: shipping the build tonight"
+                    },
+                    {
+                      "role" : "AXStaticText",
+                      "value" : "Bob: 👍 sounds good"
+                    }
+                  ],
+                  "domClassList" : [
+                    "placeholder:text-token-input-placeholder-foreground"
+                  ],
+                  "role" : "AXGroup"
+                },
+                {
+                  "role" : "AXStaticText",
+                  "value" : "deeply nested single chain"
+                },
+                {
+                  "AXPlaceholderValue" : "Message #general",
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "role" : "AXStaticText",
+                          "value" : "Message #general"
+                        }
+                      ],
+                      "domClassList" : [
+                        "placeholder"
+                      ],
+                      "role" : "AXGroup"
+                    }
+                  ],
+                  "domClassList" : [
+                    "editor",
+                    "ProseMirror"
+                  ],
+                  "role" : "AXTextArea",
+                  "value" : "Message #general"
+                },
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "role" : "AXStaticText",
+                          "value" : "Search"
+                        }
+                      ],
+                      "domClassList" : [
+                        "Placeholder"
+                      ],
+                      "role" : "AXGroup"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "children" : [
+                            {
+                              "role" : "AXStaticText",
+                              "value" : "inner"
+                            }
+                          ],
+                          "domClassList" : [
+                            "placeholder"
+                          ],
+                          "role" : "AXGroup"
+                        }
+                      ],
+                      "role" : "AXTextField"
+                    }
+                  ],
+                  "description" : "Search",
+                  "role" : "AXTextField",
+                  "title" : "Search"
+                },
+                {
+                  "AXPlaceholderValue" : "Pick one",
+                  "role" : "AXComboBox"
+                },
+                {
+                  "AXPlaceholderValue" : "Filter",
+                  "role" : "AXSearchField"
+                }
+              ],
+              "domClassList" : [
+                "p-client",
+                "workspace",
+                "theme-dark"
+              ],
+              "domIdentifier" : "app-root",
+              "role" : "AXWebArea",
+              "title" : "Slack | general"
+            }
+          ],
+          "focused" : true,
+          "title" : "general - Acme - Slack"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T21:00:00Z"
+}

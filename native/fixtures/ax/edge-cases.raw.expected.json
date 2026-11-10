@@ -1,0 +1,230 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "dev.navalia.edge",
+      "focused_element" : {
+        "is_editable" : true,
+        "role" : "AXTextField",
+        "subrole" : "AXSecureTextField",
+        "title" : "Password",
+        "value" : "[REDACTED]",
+        "value_length" : 10
+      },
+      "is_frontmost" : true,
+      "name" : "Edge Case",
+      "pid" : 9001,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "attributeNames" : [
+                "AXChildren",
+                "AXRole",
+                "AXTitle"
+              ],
+              "children" : [
+                {
+                  "attributeNames" : [
+                    "AXChildren",
+                    "AXRole",
+                    "AXTitle"
+                  ],
+                  "children" : [
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXRole",
+                        "AXTitle"
+                      ],
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXChildren",
+                            "AXRole",
+                            "AXTitle"
+                          ],
+                          "children" : [
+                            {
+                              "attributeNames" : [
+                                "AXChildren",
+                                "AXRole",
+                                "AXTitle"
+                              ],
+                              "children" : [
+                                {
+                                  "attributeNames" : [
+                                    "AXChildren",
+                                    "AXRole",
+                                    "AXTitle"
+                                  ],
+                                  "children" : [
+                                    {
+                                      "attributeNames" : [
+                                        "AXChildren",
+                                        "AXRole",
+                                        "AXTitle"
+                                      ],
+                                      "children" : [
+                                        {
+                                          "attributeNames" : [
+                                            "AXChildren",
+                                            "AXRole",
+                                            "AXTitle"
+                                          ],
+                                          "children" : [
+                                            {
+                                              "attributeNames" : [
+                                                "AXChildren",
+                                                "AXRole",
+                                                "AXTitle"
+                                              ],
+                                              "children" : [
+                                                {
+                                                  "attributeNames" : [
+                                                    "AXChildren",
+                                                    "AXRole",
+                                                    "AXTitle"
+                                                  ],
+                                                  "children" : [
+                                                    {
+                                                      "attributeNames" : [
+                                                        "AXRole",
+                                                        "AXValue"
+                                                      ],
+                                                      "role" : "AXStaticText",
+                                                      "value" : "level 12"
+                                                    },
+                                                    {
+                                                      "attributeNames" : [
+                                                        "AXRole",
+                                                        "AXValue"
+                                                      ],
+                                                      "role" : "AXStaticText",
+                                                      "value" : "level 11 sibling"
+                                                    }
+                                                  ],
+                                                  "role" : "AXGroup"
+                                                },
+                                                {
+                                                  "attributeNames" : [
+                                                    "AXRole",
+                                                    "AXValue"
+                                                  ],
+                                                  "role" : "AXStaticText",
+                                                  "value" : "level 10 sibling"
+                                                }
+                                              ],
+                                              "role" : "AXUnknown"
+                                            },
+                                            {
+                                              "attributeNames" : [
+                                                "AXRole",
+                                                "AXValue"
+                                              ],
+                                              "role" : "AXStaticText",
+                                              "value" : "level 9 sibling"
+                                            }
+                                          ],
+                                          "role" : "AXGroup",
+                                          "title" : "g9"
+                                        },
+                                        {
+                                          "attributeNames" : [
+                                            "AXRole",
+                                            "AXValue"
+                                          ],
+                                          "role" : "AXStaticText",
+                                          "value" : "level 8 sibling"
+                                        }
+                                      ],
+                                      "role" : "AXUnknown"
+                                    },
+                                    {
+                                      "attributeNames" : [
+                                        "AXRole",
+                                        "AXValue"
+                                      ],
+                                      "role" : "AXStaticText",
+                                      "value" : "level 7 sibling"
+                                    }
+                                  ],
+                                  "role" : "AXGroup"
+                                },
+                                {
+                                  "attributeNames" : [
+                                    "AXRole",
+                                    "AXValue"
+                                  ],
+                                  "role" : "AXStaticText",
+                                  "value" : "level 6 sibling"
+                                }
+                              ],
+                              "role" : "AXUnknown",
+                              "title" : "g6"
+                            },
+                            {
+                              "attributeNames" : [
+                                "AXRole",
+                                "AXValue"
+                              ],
+                              "role" : "AXStaticText",
+                              "value" : "level 5 sibling"
+                            }
+                          ],
+                          "role" : "AXGroup"
+                        },
+                        {
+                          "attributeNames" : [
+                            "AXRole",
+                            "AXValue"
+                          ],
+                          "role" : "AXStaticText",
+                          "value" : "level 4 sibling"
+                        }
+                      ],
+                      "role" : "AXUnknown"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXRole",
+                        "AXValue"
+                      ],
+                      "role" : "AXStaticText",
+                      "value" : "level 3 sibling"
+                    }
+                  ],
+                  "role" : "AXGroup",
+                  "title" : "g3"
+                },
+                {
+                  "attributeNames" : [
+                    "AXRole",
+                    "AXValue"
+                  ],
+                  "role" : "AXStaticText",
+                  "value" : "level 2 sibling"
+                }
+              ],
+              "role" : "AXUnknown"
+            }
+          ],
+          "title" : "First (fallback) window"
+        },
+        {
+          "elements" : [
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXValue"
+              ],
+              "role" : "AXStaticText",
+              "value" : "x"
+            }
+          ],
+          "title" : "Another"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T23:59:59Z"
+}

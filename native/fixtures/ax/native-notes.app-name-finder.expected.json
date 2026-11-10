@@ -1,0 +1,23 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.apple.finder",
+      "is_frontmost" : false,
+      "name" : "Finder",
+      "pid" : 502,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "role" : "AXStaticText",
+              "value" : "report.pdf"
+            }
+          ],
+          "focused" : true,
+          "title" : "Downloads"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T20:15:30Z"
+}

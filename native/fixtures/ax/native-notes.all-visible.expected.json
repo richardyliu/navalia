@@ -1,0 +1,137 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.apple.Notes",
+      "focused_element" : {
+        "has_selection" : true,
+        "is_editable" : true,
+        "role" : "AXTextArea",
+        "value" : "Milk\nEggs \/ Bread \"fresh\" \\ 2x",
+        "value_length" : 30
+      },
+      "is_frontmost" : true,
+      "name" : "Notes",
+      "pid" : 501,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "role" : "AXStaticText",
+              "value" : "background text"
+            }
+          ],
+          "title" : "Second window"
+        },
+        {
+          "elements" : [
+            {
+              "children" : [
+                {
+                  "role" : "AXTextArea",
+                  "value" : "Milk\nEggs \/ Bread \"fresh\" \\ 2x"
+                },
+                {
+                  "children" : [
+                    {
+                      "role" : "AXStaticText",
+                      "value" : "Folders"
+                    },
+                    {
+                      "description" : "New Folder",
+                      "role" : "AXButton",
+                      "title" : "New Folder"
+                    }
+                  ],
+                  "role" : "AXGroup"
+                },
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "children" : [
+                            {
+                              "role" : "AXStaticText",
+                              "value" : "iCloud"
+                            }
+                          ],
+                          "role" : "AXCell"
+                        }
+                      ],
+                      "role" : "AXRow"
+                    }
+                  ],
+                  "role" : "AXOutline",
+                  "subrole" : "AXOutlineRow"
+                }
+              ],
+              "role" : "AXSplitGroup"
+            },
+            {
+              "children" : [
+                {
+                  "role" : "AXButton",
+                  "title" : "Share"
+                },
+                {
+                  "role" : "AXTextField",
+                  "subrole" : "AXSecureTextField",
+                  "value" : "[REDACTED]"
+                }
+              ],
+              "role" : "AXToolbar"
+            },
+            {
+              "identifier" : "custom-id",
+              "role" : "AXUnknownCustomRole"
+            },
+            {
+              "children" : [
+                {
+                  "role" : "AXStaticText",
+                  "value" : "orphan role-less parent"
+                }
+              ]
+            },
+            {
+              "role" : "AXLink",
+              "title" : "https:\/\/example.com\/a\/b?c=d&e=f"
+            }
+          ],
+          "focused" : true,
+          "subrole" : "AXStandardWindow",
+          "title" : "Shopping list — Notes"
+        }
+      ]
+    },
+    {
+      "bundle_id" : "com.apple.finder",
+      "is_frontmost" : false,
+      "name" : "Finder",
+      "pid" : 502,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "role" : "AXStaticText",
+              "value" : "report.pdf"
+            }
+          ],
+          "focused" : true,
+          "title" : "Downloads"
+        }
+      ]
+    },
+    {
+      "is_frontmost" : false,
+      "name" : "Unknown",
+      "pid" : 504,
+      "windows" : [
+        {
+          "title" : "Untitled"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T20:15:30Z"
+}

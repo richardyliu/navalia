@@ -1,0 +1,336 @@
+{
+ "timestamp": "2026-11-04T20:15:30Z",
+ "frontmostPid": 501,
+ "apps": [
+  {
+   "pid": 501,
+   "localizedName": "Notes",
+   "bundleId": "com.apple.Notes",
+   "executable": "Notes",
+   "regular": true,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXTitle": "Notes",
+     "AXFocusedWindow": {
+      "$ref": "w1"
+     },
+     "AXFocusedUIElement": {
+      "$ref": "ta"
+     },
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "Second window",
+        "AXFocused": false,
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "background text"
+          }
+         }
+        ]
+       },
+       "id": "w2"
+      },
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "Shopping list — Notes",
+        "AXFocused": true,
+        "AXSubrole": "AXStandardWindow",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXImage",
+           "AXTitle": "icon"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXScrollBar"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXSplitGroup",
+           "AXChildren": [
+            {
+             "attrs": {
+              "AXRole": "AXGroup",
+              "AXTitle": "NSViewBackingLayer",
+              "AXChildren": [
+               {
+                "attrs": {
+                 "AXRole": "AXScrollArea",
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXTextArea",
+                    "AXValue": "  Milk\nEggs / Bread \"fresh\" \\ 2x  ",
+                    "AXSelectedTextRange": "{0,0}"
+                   },
+                   "id": "ta"
+                  }
+                 ]
+                }
+               }
+              ]
+             }
+            },
+            {
+             "attrs": {
+              "AXRole": "AXGroup",
+              "AXChildren": [
+               {
+                "attrs": {
+                 "AXRole": "AXStaticText",
+                 "AXValue": "Folders"
+                }
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXButton",
+                 "AXDescription": "New Folder"
+                }
+               },
+               {
+                "attrs": {
+                 "AXRole": "AXButton"
+                }
+               }
+              ]
+             }
+            },
+            {
+             "attrs": {
+              "AXRole": "AXList",
+              "AXChildren": []
+             }
+            },
+            {
+             "attrs": {
+              "AXRole": "AXOutline",
+              "AXSubrole": "AXOutlineRow",
+              "AXChildren": [
+               {
+                "attrs": {
+                 "AXRole": "AXRow",
+                 "AXChildren": [
+                  {
+                   "attrs": {
+                    "AXRole": "AXCell",
+                    "AXChildren": [
+                     {
+                      "attrs": {
+                       "AXRole": "AXStaticText",
+                       "AXValue": "iCloud"
+                      }
+                     }
+                    ]
+                   }
+                  }
+                 ]
+                }
+               }
+              ]
+             }
+            }
+           ]
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXToolbar",
+           "AXChildren": [
+            {
+             "attrs": {
+              "AXRole": "AXButton",
+              "AXTitle": "  Share  "
+             }
+            },
+            {
+             "attrs": {
+              "AXRole": "AXTextField",
+              "AXSubrole": "AXSecureTextField",
+              "AXValue": "hunter2"
+             }
+            },
+            {
+             "attrs": {
+              "AXRole": "AXPopUpButton",
+              "AXTitle": "",
+              "AXValue": ""
+             }
+            }
+           ]
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXUnknownCustomRole",
+           "AXIdentifier": "  custom-id  "
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXUnknownCustomRole"
+          }
+         },
+         {
+          "attrs": {
+           "AXChildren": [
+            {
+             "attrs": {
+              "AXRole": "AXStaticText",
+              "AXValue": "orphan role-less parent"
+             }
+            }
+           ]
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXHeading",
+           "AXTitle": "   "
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXCheckBox",
+           "AXValue": 1
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXLink",
+           "AXTitle": "https://example.com/a/b?c=d&e=f"
+          }
+         }
+        ]
+       },
+       "id": "w1"
+      },
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXImage"
+          }
+         }
+        ]
+       }
+      },
+      {
+       "attrs": {
+        "AXRole": "AXSheet",
+        "AXTitle": "not a window"
+       }
+      },
+      {
+       "attrs": {
+        "AXRole": "AXMenuBar",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXMenuItem",
+           "AXTitle": "File"
+          }
+         }
+        ]
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "pid": 502,
+   "localizedName": "Finder",
+   "bundleId": "com.apple.finder",
+   "executable": "Finder",
+   "regular": true,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXTitle": "Finder",
+     "AXFocusedWindow": {
+      "$ref": "fw"
+     },
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "Downloads",
+        "AXFocused": true,
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "report.pdf"
+          }
+         }
+        ]
+       },
+       "id": "fw"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "pid": 503,
+   "localizedName": "Background Agent",
+   "bundleId": "com.example.agent",
+   "executable": "agent",
+   "regular": false,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "Agent",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "hidden"
+          }
+         }
+        ]
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "pid": 504,
+   "localizedName": null,
+   "bundleId": null,
+   "executable": "nameless",
+   "regular": true,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "Untitled",
+        "AXChildren": []
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

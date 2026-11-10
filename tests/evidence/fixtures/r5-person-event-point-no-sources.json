@@ -1,0 +1,28 @@
+{
+ "reference": "20261105-1907-5196a1",
+ "canonical_reference": "⟨20261105-1907-5196a1:person-redacted.md⟩",
+ "kind": "point",
+ "id": "20261105-1907-5196a1",
+ "status": "active",
+ "label": "<redacted personal text>",
+ "summary": "<redacted personal text>",
+ "timestamp": "2026-11-04T17:36:00+00:00",
+ "path": "person-redacted.md",
+ "metadata": {
+  "layer": "l5_knowledge",
+  "is_latest": true,
+  "tags": [
+   "person-event"
+  ],
+  "confidence": null,
+  "conflicted": false,
+  "occurred_at": "2026-11-04T17:36:00+00:00",
+  "valid_from": null,
+  "valid_until": null,
+  "observed_from": null,
+  "observed_until": null
+ },
+ "sources": [],
+ "context": [],
+ "history": []
+}

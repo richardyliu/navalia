@@ -1,0 +1,27 @@
+{
+ "reference": "20261105-1039-5b1c2a",
+ "canonical_reference": "⟨20261105-1039-5b1c2a:person-zhang-wei.md⟩",
+ "kind": "point",
+ "id": "20261105-1039-5b1c2a",
+ "status": "active",
+ "label": "Zhang Wei confirmed the review verdict",
+ "summary": "Zhang Wei confirmed the review verdict",
+ "timestamp": "2026-11-05T18:39:59.737405+00:00",
+ "path": "person-zhang-wei.md",
+ "metadata": {
+  "layer": "l5_knowledge",
+  "is_latest": true,
+  "tags": [
+   "fact",
+   "confidence:0.80"
+  ],
+  "confidence": null,
+  "conflicted": false,
+  "occurred_at": null,
+  "valid_from": null,
+  "valid_until": null
+ },
+ "sources": [],
+ "context": [],
+ "history": []
+}

@@ -1,0 +1,87 @@
+{
+  "name": "navalia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local, login-free viewer for the Persome open-source runtime",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json --noEmit",
+    "dist": "npm run native:build && npm run build && electron-builder --mac --arm64",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "native:build": "bash native/scripts/build.sh",
+    "native:oracle": "bash native/scripts/build-oracle.sh && bash native/scripts/record-ax-fixtures.sh",
+    "pretest": "bash native/scripts/build.sh",
+    "e2e": "node tests/e2e/smoke.e2e.mjs",
+    "e2e:packaged": "bash tests/e2e/packaged-check.sh \"dist/mac-arm64/Navalia.app\""
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "@tanstack/react-query": "^5.106.0",
+    "cmdk": "^1.1.1",
+    "lucide-react": "^1.69.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sonner": "^2.0.8",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "5.2.0",
+    "electron": "43.3.0",
+    "electron-builder": "^26.18.0",
+    "electron-vite": "6.0.0",
+    "node-gyp": "12.4.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.7",
+    "vitest": "^5.1.0"
+  },
+  "build": {
+    "appId": "dev.navalia.app",
+    "productName": "Navalia",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "native/build/Release/navalia-native.node",
+        "to": "native/navalia-native.node"
+      }
+    ],
+    "afterPack": "build/after-pack.cjs",
+    "electronFuses": {
+      "runAsNode": false,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "grantFileProtocolExtraPrivileges": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true,
+      "resetAdHocDarwinSignature": true
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "identity": null,
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Navalia 只在你开始「会议」录音并确认已告知参会者后使用麦克风；音频分片会上传到你配置的云端做转写。"
+      },
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ]
+    }
+  }
+}

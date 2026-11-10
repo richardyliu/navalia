@@ -1,0 +1,44 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "dev.navalia.edge",
+      "focused_element" : {
+        "is_editable" : true,
+        "role" : "AXTextField",
+        "subrole" : "AXSecureTextField",
+        "title" : "Password",
+        "value" : "[REDACTED]",
+        "value_length" : 10
+      },
+      "is_frontmost" : true,
+      "name" : "Edge Case",
+      "pid" : 9001,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "children" : [
+                {
+                  "role" : "AXStaticText",
+                  "value" : "level 2 sibling"
+                }
+              ],
+              "role" : "AXUnknown"
+            }
+          ],
+          "title" : "First (fallback) window"
+        },
+        {
+          "elements" : [
+            {
+              "role" : "AXStaticText",
+              "value" : "x"
+            }
+          ],
+          "title" : "Another"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T23:59:59Z"
+}

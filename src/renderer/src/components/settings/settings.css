@@ -1,0 +1,93 @@
+.settings-privacy {
+  margin-top: 14px;
+}
+
+.settings-privacy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.settings-privacy-grid h4 {
+  margin: 0 0 6px;
+}
+
+.settings-privacy-lower {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.settings-privacy .btn.danger {
+  color: var(--bad);
+}
+
+.settings-output {
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow: auto;
+}
+
+/* S1-R3-01 身份别名 */
+.settings-aliases {
+  margin-top: 14px;
+}
+
+.alias-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.alias-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.alias-row {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+
+.alias-row-head {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.alias-quote {
+  margin: 6px 0;
+}
+
+.alias-quote blockquote.untrusted {
+  margin: 0;
+  padding: 4px 8px;
+  border-left: 3px dashed var(--line);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* B16 云端 */
+.settings-cloud {
+  margin-top: 14px;
+}
+
+.settings-cloud h4 {
+  margin: 14px 0 6px;
+}
+
+.settings-cloud .btn.danger {
+  color: var(--bad);
+}
+
+.settings-cloud-features {
+  margin: 0 0 8px;
+  padding-left: 18px;
+}
+
+.settings-cloud-features li {
+  margin: 2px 0;
+}

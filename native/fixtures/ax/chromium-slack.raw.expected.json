@@ -1,0 +1,278 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.tinyspeck.slackmacgap",
+      "focused_element" : {
+        "AXPlaceholderValue" : "Message #general",
+        "is_editable" : true,
+        "role" : "AXTextArea",
+        "value" : "Message #general",
+        "value_length" : 16
+      },
+      "is_frontmost" : true,
+      "name" : "Slack",
+      "pid" : 777,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "attributeNames" : [
+                "AXChildren",
+                "AXRole"
+              ],
+              "children" : [
+                {
+                  "attributeNames" : [
+                    "AXChildren",
+                    "AXDOMClassList",
+                    "AXDOMIdentifier",
+                    "AXRole",
+                    "AXTitle"
+                  ],
+                  "children" : [
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXDOMClassList",
+                        "AXDOMIdentifier",
+                        "AXRole"
+                      ],
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXRole",
+                            "AXTitle"
+                          ],
+                          "role" : "AXLink",
+                          "title" : "# general"
+                        },
+                        {
+                          "attributeNames" : [
+                            "AXRole",
+                            "AXTitle"
+                          ],
+                          "role" : "AXLink",
+                          "title" : "# random"
+                        },
+                        {
+                          "attributeNames" : [
+                            "AXDescription",
+                            "AXRole"
+                          ],
+                          "description" : "avatar",
+                          "role" : "AXImage"
+                        }
+                      ],
+                      "domClassList" : [
+                        "sidebar"
+                      ],
+                      "domIdentifier" : "app-shell-sidebar",
+                      "role" : "AXGroup"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXDOMClassList",
+                        "AXRole"
+                      ],
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXRole",
+                            "AXValue"
+                          ],
+                          "role" : "AXStaticText",
+                          "value" : "Alice: shipping the build tonight"
+                        },
+                        {
+                          "attributeNames" : [
+                            "AXRole",
+                            "AXValue"
+                          ],
+                          "role" : "AXStaticText",
+                          "value" : "Bob: 👍 sounds good"
+                        }
+                      ],
+                      "domClassList" : [
+                        "placeholder:text-token-input-placeholder-foreground"
+                      ],
+                      "role" : "AXGroup"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXRole",
+                        "identifier"
+                      ],
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXChildren",
+                            "AXRole"
+                          ],
+                          "children" : [
+                            {
+                              "attributeNames" : [
+                                "AXChildren",
+                                "AXRole"
+                              ],
+                              "children" : [
+                                {
+                                  "attributeNames" : [
+                                    "AXRole",
+                                    "AXValue"
+                                  ],
+                                  "role" : "AXStaticText",
+                                  "value" : "deeply nested single chain"
+                                }
+                              ],
+                              "role" : "AXGroup"
+                            }
+                          ],
+                          "role" : "AXGroup"
+                        }
+                      ],
+                      "role" : "AXGroup"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXDOMClassList",
+                        "AXPlaceholderValue",
+                        "AXRole",
+                        "AXValue"
+                      ],
+                      "AXPlaceholderValue" : "Message #general",
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXChildren",
+                            "AXDOMClassList",
+                            "AXRole"
+                          ],
+                          "children" : [
+                            {
+                              "attributeNames" : [
+                                "AXRole",
+                                "AXValue"
+                              ],
+                              "role" : "AXStaticText",
+                              "value" : "Message #general"
+                            }
+                          ],
+                          "domClassList" : [
+                            "placeholder"
+                          ],
+                          "role" : "AXGroup"
+                        }
+                      ],
+                      "domClassList" : [
+                        "editor",
+                        "ProseMirror"
+                      ],
+                      "role" : "AXTextArea",
+                      "value" : "Message #general"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXChildren",
+                        "AXDescription",
+                        "AXRole",
+                        "AXTitle",
+                        "AXValue"
+                      ],
+                      "children" : [
+                        {
+                          "attributeNames" : [
+                            "AXChildren",
+                            "AXDOMClassList",
+                            "AXRole"
+                          ],
+                          "children" : [
+                            {
+                              "attributeNames" : [
+                                "AXRole",
+                                "AXValue"
+                              ],
+                              "role" : "AXStaticText",
+                              "value" : "Search"
+                            }
+                          ],
+                          "domClassList" : [
+                            "Placeholder"
+                          ],
+                          "role" : "AXGroup"
+                        },
+                        {
+                          "attributeNames" : [
+                            "AXChildren",
+                            "AXRole"
+                          ],
+                          "children" : [
+                            {
+                              "attributeNames" : [
+                                "AXChildren",
+                                "AXDOMClassList",
+                                "AXRole"
+                              ],
+                              "children" : [
+                                {
+                                  "attributeNames" : [
+                                    "AXRole",
+                                    "AXValue"
+                                  ],
+                                  "role" : "AXStaticText",
+                                  "value" : "inner"
+                                }
+                              ],
+                              "domClassList" : [
+                                "placeholder"
+                              ],
+                              "role" : "AXGroup"
+                            }
+                          ],
+                          "role" : "AXTextField"
+                        }
+                      ],
+                      "description" : "Search",
+                      "role" : "AXTextField",
+                      "title" : "Search"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXPlaceholderValue",
+                        "AXRole"
+                      ],
+                      "AXPlaceholderValue" : "Pick one",
+                      "role" : "AXComboBox"
+                    },
+                    {
+                      "attributeNames" : [
+                        "AXPlaceholderValue",
+                        "AXRole"
+                      ],
+                      "AXPlaceholderValue" : "Filter",
+                      "role" : "AXSearchField"
+                    }
+                  ],
+                  "domClassList" : [
+                    "p-client",
+                    "workspace",
+                    "theme-dark"
+                  ],
+                  "domIdentifier" : "app-root",
+                  "role" : "AXWebArea",
+                  "title" : "Slack | general"
+                }
+              ],
+              "role" : "AXGroup"
+            }
+          ],
+          "focused" : true,
+          "title" : "general - Acme - Slack"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T21:00:00Z"
+}

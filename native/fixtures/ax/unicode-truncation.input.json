@@ -1,0 +1,111 @@
+{
+ "timestamp": "2026-11-04T22:05:09Z",
+ "frontmostPid": 42,
+ "apps": [
+  {
+   "pid": 42,
+   "localizedName": "TextEdit",
+   "bundleId": "com.apple.TextEdit",
+   "executable": "TextEdit",
+   "regular": true,
+   "element": {
+    "attrs": {
+     "AXRole": "AXApplication",
+     "AXTitle": "TextEdit",
+     "AXFocusedWindow": {
+      "$ref": "uw"
+     },
+     "AXFocusedUIElement": {
+      "$ref": "uf"
+     },
+     "AXChildren": [
+      {
+       "attrs": {
+        "AXRole": "AXWindow",
+        "AXTitle": "  Résumé — 漢字 / “quotes”  ",
+        "AXFocused": 1,
+        "AXDescription": " doc ",
+        "AXIdentifier": "",
+        "AXChildren": [
+         {
+          "attrs": {
+           "AXRole": "AXTextArea",
+           "AXValue": "éé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/béé🇯🇵👩‍👩‍👧‍👦漢字한각a/b"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "\ttabs\tand\nnewlines\r\n and \u0000nul? no: \u0001ctrl"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "　ideographic space trimmed　"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "backslash \\ slash / quote \" apostrophe ' less < amp &"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXValue": "astral 𝄞 𠀀 and lone surrogate pair 😀"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXStaticText",
+           "AXTitle": 12345,
+           "AXValue": [
+            "not",
+            "a",
+            "string"
+           ]
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXButton",
+           "AXDescription": "  only description  "
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXRow",
+           "AXChildren": "not-an-array"
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXGroup",
+           "AXChildren": [
+            "not",
+            "elements"
+           ]
+          }
+         },
+         {
+          "attrs": {
+           "AXRole": "AXTextField",
+           "AXValue": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx👩‍👩‍👧‍👦🇺🇸abcdef",
+           "AXTitle": "  Title  ",
+           "AXDescription": " Desc ",
+           "AXSubrole": "AXSearchField"
+          },
+          "id": "uf"
+         }
+        ]
+       },
+       "id": "uw"
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-11-02T09:00:00-08:00",
+  "model": {
+    "root": { "signature": "Demo persona: a developer who builds local-first tools and wants every claim traceable to a source.", "observations": 21, "confidence": 0.8 },
+    "faces": [
+      { "signature": "Prefers small, verifiable steps over large rewrites.", "observations": 12, "confidence": 0.82 },
+      { "signature": "Reads the original source before trusting a summary.", "observations": 9, "confidence": 0.74 }
+    ],
+    "volumes": [
+      { "signature": "Reliability and auditability come before feature count.", "observations": 11, "confidence": 0.7 }
+    ],
+    "stats": { "points": 3, "evolution_lines": 0, "relation_lines": 0, "faces": 2, "volumes": 1, "roots": 1 }
+  }
+}

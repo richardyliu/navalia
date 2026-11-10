@@ -1,0 +1,89 @@
+{
+  "root": null,
+  "faces": [],
+  "skills": [
+    {
+      "path": "skills/skill-morning-bug-triage.md",
+      "description": "Morning Linear bug triage with a Slack summary",
+      "updated": "2026-11-05",
+      "entry_id": "20261105-1555-628bfd",
+      "observed_at": "2026-11-05T15:55",
+      "playbook": "stage: observed\n\n**Pattern**: On weekday mornings the user triages the Linear bug queue, updates triage notes, and posts a summary in Slack.\n**Context**: start of the work day, around 09:00\n**Steps**:\n1. Open the Linear triage view — evidence: `cap-triage-d2`, `cap-triage-d1`, `cap-triage-d0`\n2. Merge duplicate issues before assigning owners — evidence: `⟨20261105-1555-b18767:event-triage-d1.md⟩`\n3. Update triage-notes.md with the queue size — evidence: `⟨20261105-1555-b2902e:event-triage-d0.md⟩`, `cap-notes-d0`\n4. Post the summary in #eng-triage — evidence: `⟨20261105-1555-76a016:event-triage-d2.md⟩`\n**Artifacts**:\n- url: https://linear.app/acme/view/triage — evidence: `cap-triage-d0`\n- path: triage-notes.md — evidence: `cap-notes-d1`\n- name: #eng-triage summary post — evidence: `⟨20261105-1555-76a016:event-triage-d2.md⟩`\n**Rules**:\n- P0 issues are assigned the same morning — evidence: `⟨20261105-1555-76a016:event-triage-d2.md⟩`\n**Problems**:\n- Duplicate issues clutter the queue → merge them before assigning owners — evidence: `⟨20261105-1555-b18767:event-triage-d1.md⟩`\n**Evidence**: 3 sessions on 3 distinct dates; receipts ⟨20261105-1555-76a016:event-triage-d2.md⟩ ⟨20261105-1555-b18767:event-triage-d1.md⟩ ⟨20261105-1555-b2902e:event-triage-d0.md⟩\n**Confidence**: medium",
+      "steps": [
+        {
+          "order": 1,
+          "text": "Open the Linear triage view",
+          "evidence": [
+            "cap-triage-d2",
+            "cap-triage-d1",
+            "cap-triage-d0"
+          ]
+        },
+        {
+          "order": 2,
+          "text": "Merge duplicate issues before assigning owners",
+          "evidence": [
+            "⟨20261105-1555-b18767:event-triage-d1.md⟩"
+          ]
+        },
+        {
+          "order": 3,
+          "text": "Update triage-notes.md with the queue size",
+          "evidence": [
+            "⟨20261105-1555-b2902e:event-triage-d0.md⟩",
+            "cap-notes-d0"
+          ]
+        },
+        {
+          "order": 4,
+          "text": "Post the summary in #eng-triage",
+          "evidence": [
+            "⟨20261105-1555-76a016:event-triage-d2.md⟩"
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "kind": "url",
+          "value": "https://linear.app/acme/view/triage",
+          "evidence": [
+            "cap-triage-d0"
+          ]
+        },
+        {
+          "kind": "path",
+          "value": "triage-notes.md",
+          "evidence": [
+            "cap-notes-d1"
+          ]
+        },
+        {
+          "kind": "name",
+          "value": "#eng-triage summary post",
+          "evidence": [
+            "⟨20261105-1555-76a016:event-triage-d2.md⟩"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "text": "P0 issues are assigned the same morning",
+          "evidence": [
+            "⟨20261105-1555-76a016:event-triage-d2.md⟩"
+          ]
+        }
+      ],
+      "problems": [
+        {
+          "problem": "Duplicate issues clutter the queue",
+          "solution": "merge them before assigning owners",
+          "evidence": [
+            "⟨20261105-1555-b18767:event-triage-d1.md⟩"
+          ]
+        }
+      ],
+      "structure_dropped": 0
+    }
+  ],
+  "rendered": "Observed workflow: Morning Linear bug triage with a Slack summary\nstage: observed\n\n**Pattern**: On weekday mornings the user triages the Linear bug queue, updates triage notes, and posts a summary in Slack.\n**Context**: start of the work day, around 09:00\n**Steps**:\n1. Open the Linear triage view — evidence: `cap-triage-d2`, `cap-triage-d1`, `cap-triage-d0`\n2. Merge duplicate issues before assigning owners — evidence: `⟨20261105-1555-b18767:event-triage-d1.md⟩`\n3. Update triage-notes.md with the queue size — evidence: `⟨20261105-1555-b2902e:event-triage-d0.md⟩`, `cap-notes-d0`\n4. Post the summary in #eng-triage — evidence: `⟨20261105-1555-76a016:event-triage-d2.md⟩`\n**Artifacts**:\n- url: https://linear.app/acme/view/triage — evidence: `cap-triage-d0`\n- path: triage-notes.md — evidence: `cap-notes-d1`\n- name: #eng-triage summary post — evidence: `⟨20261105-1555-76a016:event-triage-d2.md⟩`\n**Rules**:\n- P0 issues are assigned the same morning — evidence: `⟨20261105-1555-76a016:event-triage-d2.md⟩`\n**Problems**:\n- Duplicate issues clutter the queue → merge them before assigning owners — evidence: `⟨20261105-1555-b18767:event-triage-d1.md⟩`\n**Evidence**: 3 sessions on 3 distinct dates; receipts ⟨20261105-1555-76a016:event-triage-d2.md⟩ ⟨20261105-1555-b18767:event-triage-d1.md⟩ ⟨20261105-1555-b2902e:event-triage-d0.md⟩\n**Confidence**: medium"
+}

@@ -1,0 +1,43 @@
+.import-page .card {
+  margin-bottom: 14px;
+}
+
+.import-source-row,
+.import-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.import-toolbar .input {
+  min-width: 220px;
+  flex: 1;
+}
+
+.import-table td:first-child,
+.import-table th:first-child {
+  width: 28px;
+}
+
+.import-steps .page-actions {
+  margin-bottom: 10px;
+}
+
+.import-run {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.import-docs {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.import-build-after {
+  display: block;
+  margin: 6px 0;
+}

@@ -1,0 +1,85 @@
+.connectors-page .conn-consent dl {
+  margin: 6px 0;
+}
+.connectors-page .conn-consent dt {
+  font-weight: 600;
+  margin-top: 6px;
+}
+.connectors-page .conn-consent dd {
+  margin: 2px 0 2px 16px;
+}
+.connectors-page .conn-consent.granted {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.connectors-page .conn-imap-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px 12px;
+  align-items: end;
+}
+.connectors-page .conn-imap-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+.connectors-page .conn-imap-form .page-actions,
+.connectors-page .conn-imap-form .conn-errs,
+.connectors-page .conn-imap-form > .muted {
+  grid-column: 1 / -1;
+}
+.connectors-page .conn-imap-current,
+.connectors-page .conn-imap-fetch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+.connectors-page .conn-num {
+  width: 80px;
+}
+.connectors-page .conn-port {
+  max-width: 120px;
+}
+.connectors-page .conn-csv-roles {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.connectors-page .conn-csv-roles label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.connectors-page .conn-csv-body {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.connectors-page .conn-csv-sample {
+  overflow-x: auto;
+  max-height: 220px;
+}
+.connectors-page .conn-col-used {
+  color: var(--accent, inherit);
+}
+.connectors-page .conn-imported-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border, rgba(127, 127, 127, 0.2));
+}
+.connectors-page .conn-imported-row:first-of-type {
+  border-top: none;
+}
+.connectors-page .conn-remaining {
+  margin-top: 6px;
+}

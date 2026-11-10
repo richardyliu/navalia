@@ -1,0 +1,13 @@
+node_modules
+out
+dist
+.DS_Store
+*.log
+native/build/
+.dsh/
+
+# Internal working material — kept locally, not published
+/docs/test-evidence/
+/docs/design/*-log/
+/docs/reference/
+/.claude/

@@ -1,0 +1,55 @@
+{
+ "reference": "20261104-1753-db5e89",
+ "canonical_reference": "⟨20261104-1753-db5e89:topic-agent-findings.md⟩",
+ "kind": "memory",
+ "id": "20261104-1753-db5e89",
+ "status": "active",
+ "label": "<redacted personal text>",
+ "summary": "<redacted personal text>",
+ "timestamp": "2026-11-04T17:53",
+ "path": "topic-agent-findings.md",
+ "metadata": {
+  "tags": [
+   "source:agent-run",
+   "project",
+   "persome"
+  ],
+  "superseded": false,
+  "valid_from": "2026-11-04T17:53",
+  "valid_until": null
+ },
+ "sources": [],
+ "context": [
+  {
+   "relation": "nearby_context",
+   "kind": "capture",
+   "id": "2026-11-05T01-52-26.177915p00-00",
+   "reference": "2026-11-05T01-52-26.177915p00-00",
+   "label": "<redacted>",
+   "timestamp": "2026-11-05T01:52:26.177915+00:00",
+   "status": null,
+   "resolvable": true
+  },
+  {
+   "relation": "nearby_context",
+   "kind": "capture",
+   "id": "2026-11-05T01-52-18.299776p00-00",
+   "reference": "2026-11-05T01-52-18.299776p00-00",
+   "label": "<redacted>",
+   "timestamp": "2026-11-05T01:52:18.299776+00:00",
+   "status": null,
+   "resolvable": true
+  },
+  {
+   "relation": "nearby_context",
+   "kind": "capture",
+   "id": "2026-11-05T01-52-00.512465p00-00",
+   "reference": "2026-11-05T01-52-00.512465p00-00",
+   "label": "<redacted>",
+   "timestamp": "2026-11-05T01:52:00.512465+00:00",
+   "status": null,
+   "resolvable": true
+  }
+ ],
+ "history": []
+}

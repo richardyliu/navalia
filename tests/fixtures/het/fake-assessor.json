@@ -1,0 +1,31 @@
+{
+  "byTaskId": {
+    "het_0ebde115074148232698": {
+      "kind": "coding",
+      "size": "m",
+      "complexity": "medium",
+      "agent_share": 0.9,
+      "adoption": "strong",
+      "evidence": [
+        "signal:git_commit",
+        "signal:pr_link"
+      ]
+    },
+    "het_c6321821a6a457af5367": {
+      "kind": "research",
+      "size": "xs",
+      "complexity": "low",
+      "agent_share": 1,
+      "adoption": "unknown",
+      "evidence": []
+    }
+  },
+  "default": {
+    "kind": "writing",
+    "size": "s",
+    "complexity": "low",
+    "agent_share": 1,
+    "adoption": "unknown",
+    "evidence": []
+  }
+}

@@ -1,0 +1,131 @@
+/* S1-FULL C5 Lens Chat page. Reuses app.css tokens / classes (page, card, btn, chip, muted, …). */
+.chat-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+.chat-list-item {
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.chat-list-item:hover {
+  background: var(--fill-subtle);
+}
+
+.chat-list-item.active {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+}
+
+.chat-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-msg {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+.chat-msg.user {
+  background: var(--fill);
+  align-self: flex-end;
+  max-width: 80%;
+}
+
+.chat-msg-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.chat-cite {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 0 6px;
+  font-size: var(--fs-xs, 11px);
+  font-family: var(--mono);
+  line-height: 1.6;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  cursor: pointer;
+}
+
+.chat-cite.unknown {
+  border-color: var(--warn-line);
+  background: var(--warn-soft);
+  color: var(--warn);
+  cursor: default;
+}
+
+.chat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.chat-item-text {
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-family: var(--mono);
+  font-size: var(--fs-sm, 12px);
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.chat-preview-item {
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+
+.chat-preview-item label {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  cursor: pointer;
+}
+
+.chat-compose textarea {
+  width: 100%;
+  min-height: 72px;
+  resize: vertical;
+}
+
+@media (max-width: 760px) {
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+}

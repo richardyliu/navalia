@@ -1,0 +1,70 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.apple.Notes",
+      "focused_element" : {
+        "has_selection" : true,
+        "is_editable" : true,
+        "role" : "AXTextArea",
+        "value" : "Milk\nEggs \/ Bread \"fresh\" \\ 2x",
+        "value_length" : 30
+      },
+      "is_frontmost" : true,
+      "name" : "Notes",
+      "pid" : 501,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "role" : "AXStaticText",
+              "value" : "background text"
+            }
+          ],
+          "title" : "Second window"
+        },
+        {
+          "elements" : [
+            {
+              "role" : "AXOutline",
+              "subrole" : "AXOutlineRow"
+            },
+            {
+              "children" : [
+                {
+                  "role" : "AXButton",
+                  "title" : "Share"
+                },
+                {
+                  "role" : "AXTextField",
+                  "subrole" : "AXSecureTextField",
+                  "value" : "[REDACTED]"
+                }
+              ],
+              "role" : "AXToolbar"
+            },
+            {
+              "identifier" : "custom-id",
+              "role" : "AXUnknownCustomRole"
+            },
+            {
+              "children" : [
+                {
+                  "role" : "AXStaticText",
+                  "value" : "orphan role-less parent"
+                }
+              ]
+            },
+            {
+              "role" : "AXLink",
+              "title" : "https:\/\/example.com\/a\/b?c=d&e=f"
+            }
+          ],
+          "focused" : true,
+          "subrole" : "AXStandardWindow",
+          "title" : "Shopping list — Notes"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T20:15:30Z"
+}

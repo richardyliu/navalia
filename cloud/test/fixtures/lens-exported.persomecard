@@ -1,0 +1,44 @@
+{
+  "card": {
+    "format": "persome-lens.card",
+    "version": 1,
+    "card_id": "card_04d4683b03af88a456f6fa6fa26ded83",
+    "issued_at": "2026-11-05T05:10:23.852Z",
+    "issuer": {
+      "alg": "Ed25519",
+      "public_key": "7c_MmyHMnbk7I_b3mYrrykhEs1fFwfqcR0nOV9TeoFI",
+      "fingerprint": "db2e460bc81124103d8697c614d6de248d181302bfa3c3c9ed7084f176845b07"
+    },
+    "content": {
+      "front": {
+        "display_name": null,
+        "summary": null,
+        "summary_confidence": null,
+        "summary_observations": null,
+        "highlights": [],
+        "as_of": "2026-11-05T05:10:19.002Z",
+        "model_status": "degraded",
+        "degraded": true
+      },
+      "back": {
+        "mini_map": {
+          "nodes": [],
+          "edges": []
+        },
+        "stats": {
+          "points": 14,
+          "evolution_lines": 1,
+          "relation_lines": 9,
+          "faces": 0,
+          "volumes": 0,
+          "roots": 0
+        }
+      }
+    }
+  },
+  "signature": {
+    "alg": "Ed25519",
+    "key_fingerprint": "db2e460bc81124103d8697c614d6de248d181302bfa3c3c9ed7084f176845b07",
+    "value": "Rl2GHbrTrnJULu55KptZnlaShV0BnToIvH8EloGpbwPFSGrm7JAbPBjttGPI_5vZDILUEmaqCbJT_FKRiM2zCQ"
+  }
+}

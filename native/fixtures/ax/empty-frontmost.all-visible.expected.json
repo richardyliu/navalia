@@ -1,0 +1,130 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "dev.navalia.edge",
+      "focused_element" : {
+        "is_editable" : true,
+        "role" : "AXTextField",
+        "subrole" : "AXSecureTextField",
+        "title" : "Password",
+        "value" : "[REDACTED]",
+        "value_length" : 10
+      },
+      "is_frontmost" : false,
+      "name" : "Edge Case",
+      "pid" : 9001,
+      "windows" : [
+        {
+          "elements" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "children" : [
+                            {
+                              "children" : [
+                                {
+                                  "children" : [
+                                    {
+                                      "children" : [
+                                        {
+                                          "children" : [
+                                            {
+                                              "children" : [
+                                                {
+                                                  "children" : [
+                                                    {
+                                                      "role" : "AXStaticText",
+                                                      "value" : "level 12"
+                                                    },
+                                                    {
+                                                      "role" : "AXStaticText",
+                                                      "value" : "level 11 sibling"
+                                                    }
+                                                  ],
+                                                  "role" : "AXGroup"
+                                                },
+                                                {
+                                                  "role" : "AXStaticText",
+                                                  "value" : "level 10 sibling"
+                                                }
+                                              ],
+                                              "role" : "AXUnknown"
+                                            },
+                                            {
+                                              "role" : "AXStaticText",
+                                              "value" : "level 9 sibling"
+                                            }
+                                          ],
+                                          "role" : "AXGroup"
+                                        },
+                                        {
+                                          "role" : "AXStaticText",
+                                          "value" : "level 8 sibling"
+                                        }
+                                      ],
+                                      "role" : "AXUnknown"
+                                    },
+                                    {
+                                      "role" : "AXStaticText",
+                                      "value" : "level 7 sibling"
+                                    }
+                                  ],
+                                  "role" : "AXGroup"
+                                },
+                                {
+                                  "role" : "AXStaticText",
+                                  "value" : "level 6 sibling"
+                                }
+                              ],
+                              "role" : "AXUnknown",
+                              "title" : "g6"
+                            },
+                            {
+                              "role" : "AXStaticText",
+                              "value" : "level 5 sibling"
+                            }
+                          ],
+                          "role" : "AXGroup"
+                        },
+                        {
+                          "role" : "AXStaticText",
+                          "value" : "level 4 sibling"
+                        }
+                      ],
+                      "role" : "AXUnknown"
+                    },
+                    {
+                      "role" : "AXStaticText",
+                      "value" : "level 3 sibling"
+                    }
+                  ],
+                  "role" : "AXGroup"
+                },
+                {
+                  "role" : "AXStaticText",
+                  "value" : "level 2 sibling"
+                }
+              ],
+              "role" : "AXUnknown"
+            }
+          ],
+          "title" : "First (fallback) window"
+        },
+        {
+          "elements" : [
+            {
+              "role" : "AXStaticText",
+              "value" : "x"
+            }
+          ],
+          "title" : "Another"
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-05T00:00:00Z"
+}

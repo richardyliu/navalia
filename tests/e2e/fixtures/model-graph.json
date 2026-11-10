@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-11-05T08:00:00Z",
+  "model": {
+    "schema_version": 1,
+    "generated_at": "2026-11-05T08:00:00Z",
+    "build": { "status": "complete" },
+    "points": [
+      { "id": "pt-e2e-1", "content": "E2E Demo Project 是一个合成的演示项目。", "layer": "fact", "status": "active", "is_latest": true, "occurred_at": "2026-11-04T10:00:00Z", "file_name": "project-e2e-demo-project.md", "tags": [], "confidence": 0.8, "conflicted": false, "receipt": "⟨pt-e2e-1:project-e2e-demo-project.md⟩" },
+      { "id": "pt-e2e-2", "content": "Demo Friend 是合成的演示联系人。", "layer": "fact", "status": "active", "is_latest": true, "occurred_at": "2026-11-03T10:00:00Z", "file_name": "person-demo-friend.md", "tags": [], "confidence": 0.7, "conflicted": false, "receipt": "⟨pt-e2e-2:person-demo-friend.md⟩" }
+    ],
+    "lines": [
+      { "id": "edge-e2e-1", "kind": "relation", "source": "Demo Friend", "target": "E2E Demo Project", "source_entity_kind": "person", "target_entity_kind": "project", "predicate": "works_on" }
+    ],
+    "faces": [
+      { "id": "face-e2e-b", "signature": "E2E 合成画像 B：先跑测试再提交。", "observations": 4, "confidence": 0.6, "source_receipts": ["r1"] },
+      { "id": "face-e2e-a", "signature": "E2E 合成画像 A：偏好本地优先工具。", "observations": 9, "confidence": 0.8, "source_receipts": ["r2", "r3"] }
+    ],
+    "volumes": [],
+    "root": { "id": "root-e2e", "signature": "E2E 合成 Root：一个重视证据链的本地优先构建者。", "observations": 12, "confidence": 0.75, "source_receipts": ["r4"] },
+    "receipts": [],
+    "stats": { "points": 2, "evolution_lines": 0, "relation_lines": 1, "faces": 2, "volumes": 0, "roots": 1, "receipts": 4 }
+  }
+}

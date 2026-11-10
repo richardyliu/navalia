@@ -1,0 +1,155 @@
+/* S2-01 onboarding overlay (onboard-ask). Reuses app.css tokens. */
+.onb-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--scrim-strong);
+}
+
+.onb-panel {
+  width: min(680px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+
+.onb-head,
+.onb-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+}
+
+.onb-head {
+  border-bottom: 1px solid var(--line);
+}
+
+.onb-foot {
+  border-top: 1px solid var(--line);
+}
+
+.onb-foot-actions,
+.onb-actions-inline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.onb-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.onb-steps li {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.onb-steps li.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.onb-steps li.past {
+  color: var(--ink);
+}
+
+.onb-body {
+  padding: 22px 24px;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.onb-body h2 {
+  margin: 0;
+}
+
+.onb-title {
+  margin: 0;
+  font-size: var(--fs-2xl);
+}
+
+.onb-sub {
+  margin: 0;
+  font-size: var(--fs-lg);
+  color: var(--accent);
+}
+
+.onb-list {
+  width: 100%;
+  margin: 4px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.onb-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.onb-headline {
+  margin: 4px 0;
+  font-size: var(--fs-xl);
+  font-weight: 600;
+}
+
+.onb-pill {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-md);
+  font-size: var(--fs-sm);
+}
+
+/* C23: 资料库 preview on the import step */
+.onb-preview-title {
+  margin: 18px 0 4px;
+  font-size: 14px;
+}
+.onb-preview li > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.onb-samples {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.onb-preview-headline {
+  margin: 4px 0;
+}

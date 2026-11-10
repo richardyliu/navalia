@@ -1,0 +1,11 @@
+{
+  "default": {
+    "kind": "coding",
+    "size": "m",
+    "complexity": "medium",
+    "agent_share": 1,
+    "adoption": "unknown",
+    "evidence": [],
+    "minutes": 120
+  }
+}

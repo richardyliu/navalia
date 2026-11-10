@@ -1,0 +1,8 @@
+{"timestamp":"2025-10-02T08:00:00.000Z","type":"session_meta","payload":{"id":"bbbbbbbb-2222-4222-8222-222222222222","cwd":"/work/codex-proj"}}
+{"timestamp":"2025-10-02T08:00:01.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"<environment_context>cwd</environment_context>"}]}}
+{"timestamp":"2025-10-02T08:00:02.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"Add a README section about setup."}]}}
+{"timestamp":"2025-10-02T08:00:03.000Z","type":"response_item","payload":{"type":"reasoning","summary":[{"type":"summary_text","text":"REASONING_MARKER"}]}}
+{"timestamp":"2025-10-02T08:00:04.000Z","type":"response_item","payload":{"type":"function_call","name":"shell","arguments":"{\"command\":[\"cat\",\"README.md\"]}","call_id":"c1"}}
+{"timestamp":"2025-10-02T08:00:05.000Z","type":"response_item","payload":{"type":"function_call_output","call_id":"c1","output":"{\"output\":\"FUNCTION_OUTPUT_MARKER\",\"metadata\":{\"exit_code\":0}}"}}
+{"timestamp":"2025-10-02T08:00:06.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Added a Setup section."}]}}
+{"timestamp":"2025-10-02T08:00:07.000Z","type":"event_msg","payload":{"type":"token_count"}}

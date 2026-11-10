@@ -1,0 +1,84 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`weekly letter draft > empty data yields honest empty sections, no invented content 1`] = `
+"# 每周信 · 致 朋友（aaaaaaaa）
+
+> 草稿 · 2026-10-30 至 2026-11-05（Asia/Shanghai）· 生成于 2026-11-05 10:00 · 按固定模板从本机数据生成，未调用 LLM，不会发送到任何地方。
+> 标「未核实」的行来自 Runtime 自动整理的记忆，寄出前请自己核对、改写或删掉。
+
+朋友（aaaaaaaa），你好：
+
+<!-- 在这里写一句开场白 -->
+
+## 这周我在做的事
+
+- 这 7 天没有记录到活动。
+
+## 这周和你的共同经历
+
+- 这 7 天没有双方签名确认、并且允许写进周信的共同经历。
+
+## 我想说的
+
+<!-- 自己写：这周最想和 TA 分享的一件事，或者一个感受 -->
+
+## 想问你的
+
+<!-- 自己写：想问 TA 的问题 -->
+
+## 下周打算
+
+<!-- 自己写 -->
+
+——
+<!-- 署名 -->
+
+---
+
+- 来源 recent_activity：0 条（7 天内 0 条，时间未知 0 条未列入）
+- 共同经历：0 条（双方签名确认、可见范围「可以写进周信」、日期在这 7 天内）
+- 对方卡片：card_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb，签发于 2026-11-01T09:00:00.000Z，密钥指纹 aaaaaaaaaaaaaaaa…
+"
+`;
+
+exports[`weekly letter draft > matches the snapshot (deterministic template, quoted lines, user-filled sections) 1`] = `
+"# 每周信 · 致 Alice
+
+> 草稿 · 2026-10-30 至 2026-11-05（Asia/Shanghai）· 生成于 2026-11-05 10:00 · 按固定模板从本机数据生成，未调用 LLM，不会发送到任何地方。
+> 标「未核实」的行来自 Runtime 自动整理的记忆，寄出前请自己核对、改写或删掉。
+
+Alice，你好：
+
+<!-- 在这里写一句开场白 -->
+
+## 这周我在做的事
+
+- 11-01 14:00 · \`project-navalia.md\`：“整理知识图谱的可视化方案” ⟨e-2⟩（未核实）
+- 11-04 09:30 · \`project-navalia.md\`：“给 Peers 页面写了验签测试” ⟨e-1⟩（未核实）
+
+## 这周和你的共同经历
+
+- 2026-11-01 · 「一起去爬了香山」（双方签名确认）
+
+## 我想说的
+
+<!-- 自己写：这周最想和 TA 分享的一件事，或者一个感受 -->
+
+## 想问你的
+
+<!-- 自己写：想问 TA 的问题 -->
+
+## 下周打算
+
+<!-- 自己写 -->
+
+——
+<!-- 署名 -->
+
+---
+
+- 来源 recent_activity：5 条（7 天内 2 条，时间未知 1 条未列入）
+- 共同经历：1 条（双方签名确认、可见范围「可以写进周信」、日期在这 7 天内）
+- 对方卡片：card_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb，签发于 2026-11-01T09:00:00.000Z，密钥指纹 aaaaaaaaaaaaaaaa…
+"
+`;

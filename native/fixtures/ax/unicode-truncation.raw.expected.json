@@ -1,0 +1,98 @@
+{
+  "apps" : [
+    {
+      "bundle_id" : "com.apple.TextEdit",
+      "focused_element" : {
+        "description" : "Desc",
+        "is_editable" : true,
+        "role" : "AXTextField",
+        "subrole" : "AXSearchField",
+        "title" : "Title",
+        "value" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx👩‍👩‍👧‍👦🇺🇸abc...",
+        "value_length" : 1003
+      },
+      "is_frontmost" : true,
+      "name" : "TextEdit",
+      "pid" : 42,
+      "windows" : [
+        {
+          "description" : "doc",
+          "elements" : [
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXValue"
+              ],
+              "role" : "AXTextArea",
+              "value" : "éé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/béé🇯🇵👩‍👩‍👧‍👦漢字한각a\/..."
+            },
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXValue"
+              ],
+              "role" : "AXStaticText",
+              "value" : "tabs\tand\nnewlines\r\n and \u0000nul? no: \u0001ctrl"
+            },
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXValue"
+              ],
+              "role" : "AXStaticText",
+              "value" : "ideographic space trimmed"
+            },
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXValue"
+              ],
+              "role" : "AXStaticText",
+              "value" : "backslash \\ slash \/ quote \" apostrophe ' less < amp &"
+            },
+            {
+              "attributeNames" : [
+                "AXRole",
+                "AXValue"
+              ],
+              "role" : "AXStaticText",
+              "value" : "astral 𝄞 𠀀 and lone surrogate pair 😀"
+            },
+            {
+              "attributeNames" : [
+                "AXDescription",
+                "AXRole"
+              ],
+              "description" : "only description",
+              "role" : "AXButton"
+            },
+            {
+              "attributeNames" : [
+                "AXChildren",
+                "AXRole"
+              ],
+              "role" : "AXGroup"
+            },
+            {
+              "attributeNames" : [
+                "AXDescription",
+                "AXRole",
+                "AXSubrole",
+                "AXTitle",
+                "AXValue"
+              ],
+              "description" : "Desc",
+              "role" : "AXTextField",
+              "subrole" : "AXSearchField",
+              "title" : "Title",
+              "value" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx👩‍👩‍👧‍👦🇺🇸abc..."
+            }
+          ],
+          "focused" : true,
+          "title" : "  Résumé — 漢字 \/ “quotes”  "
+        }
+      ]
+    }
+  ],
+  "timestamp" : "2026-11-04T22:05:09Z"
+}

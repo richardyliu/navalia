@@ -1,0 +1,60 @@
+Return-Path: <synthetic.person@example.com>
+Message-ID: <zephyrquill-week3.20261103@lens.example.invalid>
+Date: Tue, 03 Nov 2026 10:15:00 +0800
+From: =?utf-8?q?=E6=9D=8E=E5=9B=9B?= <synthetic.person@example.com>
+To: "Wang, Wu" <wangwu@example.com>, Zhao Liu <zhaoliu@example.com>
+Cc: a@example.com, b@example.com
+Subject: =?UTF-8?B?6aG555uu5ZGo5oql77yaWmVwaHlycXVpbGwg6L+b5bqm?= =?UTF-8?Q?=E7=AC=AC_3_=E5=91=A8?=
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="==outer=="
+X-Synthetic: true (fixture for tests; not a real message)
+
+This is a multi-part message in MIME format.
+--==outer==
+Content-Type: multipart/alternative; boundary="==alt=="
+
+--==alt==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+=E4=BD=A0=E5=A5=BD=EF=BC=8C
+
+=E8=BF=99=E6=98=AF Zephyrquill =E9=A1=B9=E7=9B=AE=E7=AC=AC 3 =E5=91=A8=E7=
+=9A=84=E8=BF=9B=E5=BA=A6=E3=80=82=E9=83=A8=E7=BD=B2=E7=94=A8=E7=9A=84 key =
+=E6=98=AF sk-ant-api03-FAKEFAKEFAKEFAKEFAKE1234=EF=BC=8C
+=E6=9C=89=E9=97=AE=E9=A2=98=E8=AF=B7=E8=81=94=E7=B3=BB synthetic.person@exa=
+mple.com =E6=88=96=E8=80=85 +86 138 0013 8000=E3=80=82
+
+=E8=BF=99=E4=B8=80=E8=A1=8C=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=
+=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=
+=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=
+=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=
+=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=
+=88=E9=95=BF=E5=BE=88=E9=95=BF=E5=BE=88=E9=95=BF=EF=BC=8C=E7=94=A8=E6=9D=A5=
+=E6=B5=8B=E8=AF=95=E8=BD=AF=E6=8D=A2=E8=A1=8C=E3=80=82
+
+=E2=80=94 =E6=9D=8E=E5=9B=9B
+
+--==alt==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><p>HTML_ONLY_MARKER =E8=BF=99=E4=B8=80=E6=AE=B5=E5=8F=AA=E5=9C=
+=A8 HTML =E9=87=8C</p></body></html>
+--==alt==--
+
+--==outer==
+Content-Type: application/pdf; name="report.pdf"
+Content-Disposition: attachment; filename*=utf-8''%E5%91%A8%E6%8A%A5.pdf
+Content-Transfer-Encoding: base64
+
+QVRUQUNITUVOVF9DT05URU5UX01BUktFUjogdGhpcyBmaWxlIGNvbnRlbnQgbXVzdCBuZXZlciBi
+ZSB3cml0dGVuLgo=
+--==outer==
+Content-Type: image/png
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+UE5HX0JZVEVTX01BUktFUg==
+--==outer==--

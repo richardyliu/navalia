@@ -1,0 +1,65 @@
+/* OG-04 Quick Box window (frameless). The head row doubles as the drag region. */
+.quickbox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  overflow: hidden;
+}
+
+.quickbox-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  -webkit-app-region: drag;
+}
+
+.quickbox-head button,
+.quickbox-head .segmented {
+  -webkit-app-region: no-drag;
+}
+
+.quickbox-input {
+  resize: none;
+}
+
+.quickbox-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quickbox-tools .tiny {
+  flex: 1;
+  min-width: 0;
+}
+
+.quickbox-out {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.quickbox-hits,
+.quickbox-pages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quickbox-pages {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.quickbox-hits li {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}

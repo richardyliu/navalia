@@ -1,0 +1,182 @@
+/* S1-06 Workflow panel (Playbook page). Reuses app.css tokens. */
+.wf-layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.6fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.wf-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 640px;
+  overflow: auto;
+}
+
+.wf-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: var(--card-2);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  cursor: default;
+  font: inherit;
+  color: inherit;
+}
+
+.wf-item.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.wf-detail {
+  min-width: 0;
+}
+
+.wf-view,
+.wf-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.wf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.wf-block-title {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.wf-block ul,
+.wf-block ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.wf-evidence {
+  max-height: 160px;
+  overflow: auto;
+}
+
+.wf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.wf-field textarea {
+  font: inherit;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  padding: 6px 8px;
+  resize: vertical;
+}
+
+@media (max-width: 900px) {
+  .wf-layout,
+  .wf-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* S1-10: skills headline + provenance badges + signer banner */
+.wf-headline {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.wf-badge-shared {
+  font-weight: 600;
+}
+.wf-signer .mono {
+  word-break: break-all;
+}
+
+/* S2-07 从会话 / 文本抽取 */
+.wf-badge-extracted {
+  border-style: dashed;
+}
+
+.wf-extract {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 12px;
+  padding: 12px;
+  border: 1px dashed currentColor;
+  border-radius: var(--radius-sm);
+}
+
+.wf-extract-pre {
+  max-height: 280px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.wf-extract-errors {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* S1-R3-03: per-item evidence pointers (Runtime R8) */
+.wf-item-evidence {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.wf-evidence-link {
+  cursor: default;
+  font-size: var(--fs-xs);
+  border: none;
+}
+.playbook-structure {
+  display: grid;
+  gap: 4px;
+  margin: 6px 0;
+}
+
+/* S1-FULL C15 云端抽取 */
+.wf-badge-cloud {
+  border-style: dotted;
+  font-weight: 600;
+}
+.wf-edited-mark {
+  margin-left: 6px;
+}
+.wf-cloud-items,
+.wf-cloud-list {
+  display: grid;
+  gap: 8px;
+  padding-left: 18px;
+}
+.wf-cloud-list li {
+  display: grid;
+  gap: 4px;
+}
+.wf-cloud-actions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.wf-cloud-draft,
+.wf-cloud-preview {
+  display: grid;
+  gap: 8px;
+}

@@ -1,0 +1,29 @@
+.backup-section {
+  margin-top: 14px;
+}
+
+.backup-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.backup-lists ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.backup-restore-head {
+  margin-top: 16px;
+}
+
+.backup-error {
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+/* C21: passphrase inputs */
+.backup-section .backup-pass {
+  width: 200px;
+  max-width: 100%;
+}

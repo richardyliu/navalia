@@ -1,0 +1,13 @@
+[
+  { "name": "default", "args": [], "options": {} },
+  { "name": "daemon", "args": ["--focused-window-only", "--depth", "100", "--timeout", "3"],
+    "options": { "focusedWindowOnly": true, "maxDepth": 100, "timeout": 3 } },
+  { "name": "raw", "args": ["--raw"], "options": { "raw": true } },
+  { "name": "all-visible", "args": ["--all-visible"], "options": { "allVisible": true } },
+  { "name": "depth-3", "args": ["--depth", "3"], "options": { "maxDepth": 3 } },
+  { "name": "depth-unlimited", "args": ["--depth", "0"], "options": { "maxDepth": 0 } },
+  { "name": "app-name-finder", "args": ["--app-name", "FINDER"], "options": { "appName": "FINDER" } },
+  { "name": "app-name-bundle-suffix", "args": ["--app-name", "slackmacgap"], "options": { "appName": "slackmacgap" } },
+  { "name": "app-name-missing", "args": ["--app-name", "Nope"], "options": { "appName": "Nope" } },
+  { "name": "no-force-ax", "args": ["--no-force-app-ax"], "options": { "forceAppAccessibility": false } }
+]

@@ -1,0 +1,78 @@
+.peers-page .card {
+  margin-bottom: 14px;
+}
+
+.peers-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.peers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.peers-item {
+  text-align: left;
+  cursor: default;
+  font: inherit;
+  color: inherit;
+  margin-bottom: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.peers-item.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.peers-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.peers-headline {
+  margin: 8px 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--line-strong);
+}
+
+.peers-topics,
+.peers-activity {
+  margin: 6px 0 12px;
+  padding-left: 18px;
+}
+
+.peers-letter-text {
+  width: 100%;
+  min-height: 360px;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  margin: 8px 0;
+}
+
+/* S2-09 subscription folder */
+.peers-sub { margin-bottom: 12px; }
+.peers-sub-report ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
+
+/* S1-R3-05 共同话题 / 共同经历 */
+.peers-moment-group {
+  margin: 10px 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.peers-moment-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
